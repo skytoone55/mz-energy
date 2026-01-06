@@ -135,10 +135,9 @@ export function exportSimulationPDF(
     
     const bodyData: (string | number)[][] = [
       ['Panneaux', `${scenario.nombrePanneaux} × 600W (${scenario.puissanceKwc.toFixed(1)} kWc)`],
-      ['Surface utilisée', `${scenario.surfaceUtilisee} m²`],
+      ['Surface utilisée', `${scenario.surfaceNecessaire} m²`],
       ['Onduleur', scenario.equipement.onduleur],
       ['Production annuelle', `${formatNumber(scenario.productionAnnuelle)} kWh`],
-      ['Autoconsommation', `${formatNumber(scenario.autoconsommation)} kWh`],
       ['Économies annuelles', formatShekel(scenario.economiesAnnuelles)],
     ]
     
@@ -146,8 +145,8 @@ export function exportSimulationPDF(
       bodyData.splice(3, 0, ['Batterie', scenario.equipement.batterie])
     }
     
-    if (scenario.reventeKwh > 0) {
-      bodyData.splice(-1, 0, ['Revente réseau', `${formatNumber(scenario.reventeKwh)} kWh`])
+    if (scenario.revenusReventeAnnuels > 0) {
+      bodyData.splice(-1, 0, ['Revenus revente', formatShekel(scenario.revenusReventeAnnuels)])
     }
     
     // Add prices if commercial
@@ -172,7 +171,7 @@ export function exportSimulationPDF(
   })
 
   // Footer
-  const pageCount = doc.getNumberOfPages()
+  const pageCount = (doc as any).internal.getNumberOfPages()
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i)
     doc.setFontSize(8)
@@ -180,7 +179,7 @@ export function exportSimulationPDF(
     doc.text(
       `MZ Energy - Simulation Photovoltaïque - Page ${i}/${pageCount}`,
       pageWidth / 2,
-      doc.internal.pageSize.height - 10,
+      (doc as any).internal.pageSize.height - 10,
       { align: 'center' }
     )
   }

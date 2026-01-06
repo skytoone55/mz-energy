@@ -16,23 +16,23 @@ export const leadSchema = z.object({
 // Validation du formulaire Simulation (étape 2)
 export const simulationSchema = z.object({
   consoAnnuelle: z
-    .number({ invalid_type_error: 'Veuillez entrer un nombre' })
+    .number({ message: 'Veuillez entrer un nombre' })
     .min(1000, 'La consommation minimale est de 1 000 kWh/an')
     .max(10000000, 'La consommation maximale est de 10 000 000 kWh/an'),
   partJour: z
-    .number({ invalid_type_error: 'Veuillez entrer un nombre' })
+    .number({ message: 'Veuillez entrer un nombre' })
     .min(10, 'La part jour minimale est de 10%')
     .max(90, 'La part jour maximale est de 90%'),
   surfaceToit: z
-    .number({ invalid_type_error: 'Veuillez entrer un nombre' })
+    .number({ message: 'Veuillez entrer un nombre' })
     .min(9, 'La surface minimale est de 9 m² (3 panneaux)')
     .max(10000, 'La surface maximale est de 10 000 m²'),
   prixAchatKwh: z
-    .number({ invalid_type_error: 'Veuillez entrer un nombre' })
+    .number({ message: 'Veuillez entrer un nombre' })
     .min(0.1, 'Le prix minimum est de 0.10 ₪/kWh')
     .max(5, 'Le prix maximum est de 5 ₪/kWh'),
   prixReventeKwh: z
-    .number({ invalid_type_error: 'Veuillez entrer un nombre' })
+    .number({ message: 'Veuillez entrer un nombre' })
     .min(0.1, 'Le prix minimum est de 0.10 ₪/kWh')
     .max(5, 'Le prix maximum est de 5 ₪/kWh'),
 })
