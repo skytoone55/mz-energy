@@ -479,9 +479,9 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                                     </SelectItem>
                                   ))
                                 ) : (
-                                  <SelectItem value="none" disabled>
+                                  <div className="p-2 text-sm text-muted-foreground">
                                     Aucun utilisateur disponible
-                                  </SelectItem>
+                                  </div>
                                 )}
                               </SelectContent>
                             </Select>

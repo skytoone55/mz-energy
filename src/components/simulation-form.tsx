@@ -348,14 +348,8 @@ export function SimulationForm({
                 type="button"
                 className="w-full bg-solar-gradient hover:opacity-90 text-white"
                 onClick={() => {
-                  if (mode === 'create' && step === 0) {
-                    // Si on est à l'étape 0, aller à l'étape 1
-                    if (selectedContactId) {
-                      setStep(1)
-                    }
-                  } else {
-                    setStep(2)
-                  }
+                  // Ici on est dans l'étape 1, on passe simplement à l'étape 2
+                  setStep(2)
                 }}
               >
                 Continuer
