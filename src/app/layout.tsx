@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { MobileStickyCTA } from "@/components/layout/MobileStickyCTA";
+import { PublicLayout } from "@/components/layout/PublicLayout";
 
 const outfit = Outfit({
   variable: "--font-geist-sans",
@@ -30,12 +28,9 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={`${outfit.variable} ${jetbrainsMono.variable} font-sans`}>
-        <Header />
-        <main className="pt-16">
+        <PublicLayout>
           {children}
-        </main>
-        <Footer />
-        <MobileStickyCTA />
+        </PublicLayout>
       </body>
     </html>
   );

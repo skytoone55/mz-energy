@@ -56,7 +56,7 @@ export function Header() {
             >
               <button
                 className={cn(
-                  'text-sm font-medium transition-colors flex items-center gap-1',
+                  'text-sm font-medium transition-colors flex items-center gap-1 cursor-pointer',
                   pathname.startsWith('/professionnels') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
                 )}
               >
@@ -70,14 +70,14 @@ export function Header() {
                   <div className="absolute top-full left-0 mt-2 w-48 bg-card border rounded-lg shadow-lg py-2 z-50">
                     <Link
                       href="/professionnels/entreprises"
-                      className="block px-4 py-2 text-sm hover:bg-secondary transition-colors"
+                      className="block px-4 py-2 text-sm hover:bg-secondary transition-colors cursor-pointer"
                       onClick={() => setProfessionnelsOpen(false)}
                     >
                       Entreprises
                     </Link>
                     <Link
                       href="/professionnels/investisseurs"
-                      className="block px-4 py-2 text-sm hover:bg-secondary transition-colors"
+                      className="block px-4 py-2 text-sm hover:bg-secondary transition-colors cursor-pointer"
                       onClick={() => setProfessionnelsOpen(false)}
                     >
                       Investisseurs
@@ -95,7 +95,7 @@ export function Header() {
             >
               <button
                 className={cn(
-                  'text-sm font-medium transition-colors flex items-center gap-1',
+                  'text-sm font-medium transition-colors flex items-center gap-1 cursor-pointer',
                   pathname.startsWith('/a-propos') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
                 )}
               >
@@ -109,14 +109,14 @@ export function Header() {
                   <div className="absolute top-full left-0 mt-2 w-48 bg-card border rounded-lg shadow-lg py-2 z-50">
                     <Link
                       href="/a-propos"
-                      className="block px-4 py-2 text-sm hover:bg-secondary transition-colors"
+                      className="block px-4 py-2 text-sm hover:bg-secondary transition-colors cursor-pointer"
                       onClick={() => setAproposOpen(false)}
                     >
                       Notre histoire
                     </Link>
                     <Link
                       href="/a-propos/carrieres"
-                      className="block px-4 py-2 text-sm hover:bg-secondary transition-colors"
+                      className="block px-4 py-2 text-sm hover:bg-secondary transition-colors cursor-pointer"
                       onClick={() => setAproposOpen(false)}
                     >
                       Carrières
@@ -136,8 +136,14 @@ export function Header() {
               Contact
             </Link>
 
+            <Link href="/login">
+              <Button size="default" className="bg-green-600 hover:bg-green-700 text-white px-6">
+                Connexion
+              </Button>
+            </Link>
+
             <Link href="/simulation">
-              <Button size="sm" className="bg-solar-gradient hover:opacity-90 text-white">
+              <Button size="default" className="bg-solar-gradient hover:opacity-90 text-white px-6">
                 Simuler
               </Button>
             </Link>
@@ -215,6 +221,11 @@ export function Header() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Contact
+            </Link>
+            <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+              <Button className="w-full bg-green-600 hover:bg-green-700 text-white mt-2">
+                Connexion
+              </Button>
             </Link>
             <Link href="/simulation" onClick={() => setMobileMenuOpen(false)}>
               <Button className="w-full bg-solar-gradient hover:opacity-90 text-white mt-2">

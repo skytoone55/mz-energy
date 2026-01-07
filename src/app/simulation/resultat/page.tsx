@@ -21,6 +21,7 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { formatShekel, formatNumber, type SimulationResult } from '@/lib/pv-engine'
 import type { LeadFormValues } from '@/lib/validations'
+import { CallbackModal } from '@/components/layout/CallbackModal'
 
 interface ApiResponse {
   success: boolean
@@ -33,6 +34,7 @@ export default function ResultatPage() {
   const [result, setResult] = useState<ApiResponse | null>(null)
   const [leadData, setLeadData] = useState<LeadFormValues | null>(null)
   const [loading, setLoading] = useState(true)
+  const [callbackOpen, setCallbackOpen] = useState(false)
 
   useEffect(() => {
     const storedResult = sessionStorage.getItem('simulationResult')
@@ -374,14 +376,24 @@ export default function ResultatPage() {
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button variant="secondary" size="lg" className="gap-2">
-                    <Phone className="w-4 h-4" />
+                  <Button 
+                    size="lg" 
+                    className="gap-2 bg-green-600 hover:bg-green-700 text-white border-0 text-lg px-8 py-6"
+                    onClick={() => setCallbackOpen(true)}
+                  >
+                    <Phone className="w-5 h-5" />
                     Être rappelé
                   </Button>
-                  <Button variant="secondary" size="lg" className="gap-2 bg-white/10 hover:bg-white/20 text-primary-foreground border-primary-foreground/30">
-                    <Mail className="w-4 h-4" />
-                    Nous contacter
-                  </Button>
+                  <Link href="/contact">
+                    <Button 
+                      variant="secondary" 
+                      size="lg" 
+                      className="gap-2 bg-white/10 hover:bg-white/20 text-primary-foreground border-primary-foreground/30 text-lg px-8 py-6"
+                    >
+                      <Mail className="w-5 h-5" />
+                      Nous contacter
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </CardContent>
@@ -415,6 +427,7 @@ export default function ResultatPage() {
           </div>
         </div>
       </main>
+      <CallbackModal open={callbackOpen} onOpenChange={setCallbackOpen} />
     </div>
   )
 }

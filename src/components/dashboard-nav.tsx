@@ -135,6 +135,23 @@ export function DashboardNav({ user }: DashboardNavProps) {
                   ))}
                 </>
               )}
+              
+              {/* User info and logout in mobile menu */}
+              <div className="pt-4 mt-4 border-t">
+                <div className="px-3 mb-3">
+                  <p className="font-medium text-sm">{user.prenom} {user.nom}</p>
+                  <p className="text-xs text-muted-foreground">{user.email}</p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-center gap-2"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="w-4 h-4" />
+                  Se déconnecter
+                </Button>
+              </div>
             </nav>
           </div>
         </div>
@@ -154,18 +171,29 @@ export function DashboardNav({ user }: DashboardNavProps) {
           </div>
 
           {/* User info */}
-          <div className="p-4 rounded-xl bg-secondary/50">
-            <p className="font-medium">{user.prenom} {user.nom}</p>
-            <p className="text-sm text-muted-foreground">{user.email}</p>
-            {user.societe && (
-              <p className="text-sm font-medium text-primary mt-1">{user.societe}</p>
-            )}
-            <span className={cn(
-              'inline-block mt-2 px-2 py-1 rounded-full text-xs font-medium',
-              isAdmin ? 'bg-energy/10 text-energy' : 'bg-solar/10 text-solar-foreground'
-            )}>
-              {isAdmin ? 'Administrateur' : 'Commercial'}
-            </span>
+          <div className="p-4 rounded-xl bg-secondary/50 space-y-3">
+            <div>
+              <p className="font-medium">{user.prenom} {user.nom}</p>
+              <p className="text-sm text-muted-foreground">{user.email}</p>
+              {user.societe && (
+                <p className="text-sm font-medium text-primary mt-1">{user.societe}</p>
+              )}
+              <span className={cn(
+                'inline-block mt-2 px-2 py-1 rounded-full text-xs font-medium',
+                isAdmin ? 'bg-energy/10 text-energy' : 'bg-solar/10 text-solar-foreground'
+              )}>
+                {isAdmin ? 'Administrateur' : 'Commercial'}
+              </span>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-center gap-2"
+              onClick={handleLogout}
+            >
+              <LogOut className="w-4 h-4" />
+              Se déconnecter
+            </Button>
           </div>
 
           {/* Navigation */}
@@ -217,17 +245,6 @@ export function DashboardNav({ user }: DashboardNavProps) {
                   </ul>
                 </li>
               )}
-
-              <li className="mt-auto">
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start gap-3 text-muted-foreground hover:text-foreground"
-                  onClick={handleLogout}
-                >
-                  <LogOut className="w-5 h-5" />
-                  Déconnexion
-                </Button>
-              </li>
             </ul>
           </nav>
         </div>

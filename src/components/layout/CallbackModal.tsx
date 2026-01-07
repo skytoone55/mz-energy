@@ -46,18 +46,31 @@ export function CallbackModal({ open, onOpenChange }: CallbackModalProps) {
       return
     }
 
-    // TODO: Intégrer avec l'API pour créer un lead
-    // Pour l'instant, simulation d'un envoi
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    try {
+      const response = await fetch('/api/callback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
 
-    setSubmitting(false)
-    setSubmitted(true)
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Erreur lors de la demande de rappel')
+      }
 
-    setTimeout(() => {
-      setSubmitted(false)
-      onOpenChange(false)
-      setFormData({ prenom: '', telephone: '', type: '', creneau: '' })
-    }, 2000)
+      setSubmitted(true)
+
+      setTimeout(() => {
+        setSubmitted(false)
+        onOpenChange(false)
+        setFormData({ prenom: '', telephone: '', type: '', creneau: '' })
+      }, 3000)
+    } catch (error) {
+      console.error('Erreur:', error)
+      alert('Une erreur est survenue. Veuillez réessayer.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (

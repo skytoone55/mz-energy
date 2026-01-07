@@ -34,6 +34,7 @@ export default function HomePage() {
           text: '📞 Être rappelé',
           action: 'callback',
         }}
+        secondaryVariant="green"
         backgroundImage="/images/home/home_01_hero.jpg"
         showScrollIndicator={true}
       />
@@ -216,7 +217,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 gap-8">
             {/* Card Particuliers */}
             <Card className="group hover:shadow-xl transition-all overflow-hidden">
-              <div className="relative h-48">
+              <div className="relative h-64">
                 <Image
                   src="/images/home/home_03_particuliers.jpg"
                   alt="Particuliers"
@@ -248,7 +249,7 @@ export default function HomePage() {
 
             {/* Card Professionnels */}
             <Card className="group hover:shadow-xl transition-all overflow-hidden">
-              <div className="relative h-48">
+              <div className="relative h-64">
                 <Image
                   src="/images/home/home_04_professionnels.jpg"
                   alt="Professionnels"
@@ -355,6 +356,7 @@ export default function HomePage() {
           text: '📞 Être rappelé',
           action: 'callback',
         }}
+        secondaryVariant="green"
         backgroundImage="/images/home/home_06_cta_sunset.jpg"
       />
     </div>

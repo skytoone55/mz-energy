@@ -19,6 +19,7 @@ interface HeroSectionProps {
     action: 'callback' | 'link'
     href?: string
   }
+  secondaryVariant?: 'outline' | 'green' | 'orange'
   backgroundImage?: string
   showScrollIndicator?: boolean
 }
@@ -28,6 +29,7 @@ export function HeroSection({
   subtitle,
   primaryCTA,
   secondaryCTA,
+  secondaryVariant = 'outline',
   backgroundImage,
   showScrollIndicator = false,
 }: HeroSectionProps) {
@@ -62,9 +64,9 @@ export function HeroSection({
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {primaryCTA && (
               <Link href={primaryCTA.href}>
-                <Button size="lg" className="bg-solar-gradient hover:opacity-90 text-white">
+                <Button size="lg" className="bg-solar-gradient hover:opacity-90 text-white text-lg px-8 py-7">
                   {primaryCTA.text}
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
             )}
@@ -74,7 +76,13 @@ export function HeroSection({
                   <Button
                     size="lg"
                     variant="outline"
-                    className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20"
+                    className={
+                      secondaryVariant === 'green'
+                        ? 'bg-green-600 hover:bg-green-700 text-white border-0 text-lg px-8 py-7 cursor-pointer'
+                        : secondaryVariant === 'orange'
+                        ? 'bg-solar-gradient text-white border-0 text-lg px-8 py-7 cursor-pointer'
+                        : 'bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 text-lg px-8 py-7 cursor-pointer'
+                    }
                     onClick={() => setCallbackOpen(true)}
                   >
                     {secondaryCTA.text}
@@ -84,7 +92,13 @@ export function HeroSection({
                     <Button
                       size="lg"
                       variant="outline"
-                      className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20"
+                      className={
+                        secondaryVariant === 'green'
+                          ? 'bg-green-600 hover:bg-green-700 text-white border-0 text-lg px-8 py-7 cursor-pointer'
+                          : secondaryVariant === 'orange'
+                          ? 'bg-solar-gradient text-white border-0 text-lg px-8 py-7 cursor-pointer'
+                          : 'bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 text-lg px-8 py-7 cursor-pointer'
+                      }
                     >
                       {secondaryCTA.text}
                     </Button>

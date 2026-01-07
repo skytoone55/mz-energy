@@ -68,6 +68,11 @@ export function Footer() {
                   Contact
                 </Link>
               </li>
+              <li>
+                <Link href="/login" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">
+                  Connexion
+                </Link>
+              </li>
             </ul>
           </div>
 
