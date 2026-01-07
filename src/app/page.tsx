@@ -1,5 +1,10 @@
 'use client'
 
+/**
+ * MZ Energy - Page d'accueil officielle
+ * Gère la présentation du service et l'accès à la simulation pour les particuliers.
+ */
+
 import Link from 'next/link'
 import { Sun, Zap, TrendingUp, Shield, ArrowRight, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
