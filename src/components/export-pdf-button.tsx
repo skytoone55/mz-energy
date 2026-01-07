@@ -54,8 +54,11 @@ export function ExportPDFButton({ simulation, showPrices = false }: ExportPDFBut
       element = document.getElementById('simulation-pdf-content')
       if (!element) {
         console.error('Élément simulation-pdf-content non trouvé')
+        alert('Élément de simulation non trouvé. Veuillez recharger la page.')
         return
       }
+
+      console.log('Export PDF: Élément trouvé, dimensions:', element.offsetWidth, 'x', element.offsetHeight)
 
       // Ajouter une classe au body pour masquer les boutons
       document.body.classList.add('pdf-exporting')
@@ -70,14 +73,18 @@ export function ExportPDFButton({ simulation, showPrices = false }: ExportPDFBut
       }
       
       // Attendre un peu pour que les styles se appliquent et que le rendu soit stable
-      await new Promise(resolve => setTimeout(resolve, 300))
+      await new Promise(resolve => setTimeout(resolve, 500))
+
+      console.log('Export PDF: Démarrage capture html2canvas...')
 
       // Capturer l'élément avec html2canvas
       const canvas = await html2canvas(element, {
         useCORS: true,
-        logging: false,
-        allowTaint: false,
+        logging: true, // Activer le logging pour debug
+        allowTaint: true, // Permettre les images cross-origin
       })
+
+      console.log('Export PDF: Canvas créé, dimensions:', canvas.width, 'x', canvas.height)
 
       // Restaurer l'affichage des boutons et le padding
       document.body.classList.remove('pdf-exporting')
@@ -89,7 +96,13 @@ export function ExportPDFButton({ simulation, showPrices = false }: ExportPDFBut
         }
       }
 
+      // Vérifier que le canvas n'est pas vide
+      if (canvas.width === 0 || canvas.height === 0) {
+        throw new Error('Canvas vide - impossible de capturer l\'élément')
+      }
+
       // Créer le PDF
+      console.log('Export PDF: Création du PDF...')
       const imgData = canvas.toDataURL('image/png')
       const pdf = new jsPDF('p', 'mm', 'a4')
       
@@ -181,9 +194,13 @@ export function ExportPDFButton({ simulation, showPrices = false }: ExportPDFBut
       // Télécharger le PDF
       const projectTitle = simulation.nom_projet || `Simulation #${simulation.id.slice(0, 8)}`
       const fileName = `MZ-Energy_${projectTitle.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`
+      
+      console.log('Export PDF: Téléchargement du fichier:', fileName)
       pdf.save(fileName)
-    } catch (error) {
-      console.error('Erreur export PDF:', error)
+      console.log('Export PDF: Terminé avec succès!')
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue'
+      console.error('Erreur export PDF:', errorMessage, error)
       // S'assurer de restaurer l'affichage en cas d'erreur
       document.body.classList.remove('pdf-exporting')
       if (parentElement) {
