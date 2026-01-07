@@ -53,7 +53,11 @@ export async function GET() {
       .from('leads')
       .select(`
         *,
-        simulations(id, user_id)
+        simulations(
+          id, 
+          user_id,
+          user_profiles:user_id(prenom, nom)
+        )
       `)
       .order('created_at', { ascending: false })
     
@@ -62,7 +66,24 @@ export async function GET() {
       return NextResponse.json({ error: 'Erreur lors de la récupération' }, { status: 500 })
     }
     
-    return NextResponse.json({ leads: leads || [] })
+    // Formater les leads pour inclure les informations de simulation et commercial
+    const formattedLeads = (leads || []).map((lead: any) => {
+      const simulation = lead.simulations?.[0]
+      return {
+        ...lead,
+        simulations: undefined, // Retirer le tableau simulations
+        simulationId: simulation?.id || null,
+        commercialAssigne: simulation?.user_profiles 
+          ? {
+              id: simulation.user_id,
+              prenom: simulation.user_profiles.prenom,
+              nom: simulation.user_profiles.nom,
+            }
+          : null,
+      }
+    })
+    
+    return NextResponse.json({ leads: formattedLeads })
     
   } catch (error) {
     console.error('Erreur API admin leads GET:', error)

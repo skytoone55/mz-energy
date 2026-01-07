@@ -47,13 +47,8 @@ export default function AdminLeadsPage() {
         .map((u: any) => ({ id: u.id, prenom: u.prenom, nom: u.nom }))
       setCommercials(activeCommercials)
 
-      // Map leads to include simulationId and assigned commercial
-      const formattedLeads = leadsData.leads.map((lead: any) => ({
-        ...lead,
-        simulationId: lead.simulations?.[0]?.id || null,
-        commercialAssigne: activeCommercials.find((c: any) => c.id === lead.simulations?.[0]?.user_id) || null,
-      }))
-      setLeads(formattedLeads)
+      // Les leads sont déjà formatés par l'API
+      setLeads(leadsData.leads)
 
     } catch (err) {
       console.error('Error loading admin leads data:', err)
@@ -73,75 +68,6 @@ export default function AdminLeadsPage() {
       </div>
     )
   }
-  const supabase = await createClient()
-  
-  // Vérifier que l'utilisateur est admin
-  const { data: { user } } = await supabase.auth.getUser()
-  
-  if (!user) {
-    return null
-  }
-  
-  const { data: profile } = await supabase
-    .from('user_profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-  
-  // Utiliser service role pour contourner RLS et récupérer toutes les données
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-  const adminSupabase = serviceRoleKey ? createAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    serviceRoleKey
-  ) : supabase
-  
-  const { data: leads, count } = await adminSupabase
-    .from('leads')
-    .select('*', { count: 'exact' })
-    .order('created_at', { ascending: false })
-  
-  // Pour chaque lead, récupérer sa simulation associée et le commercial assigné
-  const leadsWithData = await Promise.all(
-    (leads || []).map(async (lead: any) => {
-      const { data: simulation } = await adminSupabase
-        .from('simulations')
-        .select(`
-          id, 
-          user_id,
-          user_profiles:user_id(prenom, nom)
-        `)
-        .eq('lead_id', lead.id)
-        .maybeSingle()
-      
-      let commercialAssigne = null
-      if (simulation?.user_id && simulation.user_profiles) {
-        commercialAssigne = {
-          id: simulation.user_id,
-          prenom: (simulation.user_profiles as any).prenom,
-          nom: (simulation.user_profiles as any).nom,
-        }
-      }
-      
-      return {
-        ...lead,
-        simulationId: simulation?.id || null,
-        commercialAssigne,
-      }
-    })
-  )
-
-  // Récupérer la liste des commerciaux actifs
-  const { data: allUsers } = await adminSupabase
-    .from('user_profiles')
-    .select('id, prenom, nom')
-    .eq('role', 'commercial')
-    .eq('actif', true)
-  
-  const commercials = (allUsers || []).map((u: any) => ({
-    id: u.id,
-    prenom: u.prenom,
-    nom: u.nom,
-  }))
 
   return (
     <div className="space-y-6 pt-16 lg:pt-0">
@@ -153,7 +79,7 @@ export default function AdminLeadsPage() {
             Gestion des Leads
           </h1>
           <p className="text-muted-foreground mt-1">
-            {count || 0} lead{(count || 0) > 1 ? 's' : ''} au total
+            {leads.length} lead{(leads.length > 1 ? 's' : '')} au total
           </p>
         </div>
       </div>
@@ -167,7 +93,7 @@ export default function AdminLeadsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{count || 0}</p>
+            <p className="text-3xl font-bold">{leads.length}</p>
           </CardContent>
         </Card>
         <Card>
