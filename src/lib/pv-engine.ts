@@ -97,17 +97,17 @@ const ONDULEURS_HYBRIDES = [
   { reference: 'SUN 100K (combo)', pvMaxKwc: 130 },
 ]
 
-// Batteries
+// Batteries (avec prix de revient pour l'optimisation)
 const BATTERIES = [
-  { reference: 'HVM60S100BL', capaciteKwh: 19.2 },
-  { reference: 'HVM75S100BL', capaciteKwh: 24 },
-  { reference: 'HVM90S100BL', capaciteKwh: 28.8 },
-  { reference: 'HVM105S100BL', capaciteKwh: 33.6 },
-  { reference: 'HVM120S100BL', capaciteKwh: 38.4 },
-  { reference: 'HVM96S314BL-U', capaciteKwh: 96.5 },
-  { reference: 'HVM144S314BL', capaciteKwh: 144.7 },
-  { reference: 'HVM192S314BL', capaciteKwh: 193 },
-  { reference: 'HVM240S314BL', capaciteKwh: 241.2 },
+  { reference: 'HVM60S100BL', capaciteKwh: 19.2, prixRevient: 11873 },
+  { reference: 'HVM75S100BL', capaciteKwh: 24, prixRevient: 14559 },
+  { reference: 'HVM90S100BL', capaciteKwh: 28.8, prixRevient: 16928 },
+  { reference: 'HVM105S100BL', capaciteKwh: 33.6, prixRevient: 19287 },
+  { reference: 'HVM120S100BL', capaciteKwh: 38.4, prixRevient: 21646 },
+  { reference: 'HVM96S314BL-U', capaciteKwh: 96.5, prixRevient: 38142 },
+  { reference: 'HVM144S314BL', capaciteKwh: 144.7, prixRevient: 55011 },
+  { reference: 'HVM192S314BL', capaciteKwh: 193, prixRevient: 72545 },
+  { reference: 'HVM240S314BL', capaciteKwh: 241.2, prixRevient: 88776 },
 ]
 
 // ============================================
@@ -130,8 +130,84 @@ function selectOnduleur(puissanceKwc: number, hybride: boolean) {
   return onduleur || liste[liste.length - 1]
 }
 
+interface BatteryOption {
+  price: number
+  config: string
+  reference: string
+}
+
 /**
- * Sélectionne la batterie la plus petite couvrant le besoin
+ * Sélectionne la batterie optimisée par le coût
+ * Combine batteries du catalogue et modules unitaires de 4.8 kWh
+ */
+function selectBatterieOptimisee(
+  capaciteKwh: number,
+  moduleKwh: number = 4.8,
+  modulePrice: number = 2359
+): { reference: string; price: number } | null {
+  if (capaciteKwh <= 0) {
+    return null
+  }
+
+  const options: BatteryOption[] = []
+
+  // Séparer petites batteries (série 100: jusqu'à 38.4) et grandes (série 314: 96.5+)
+  const smallBatteries = BATTERIES.filter(b => b.capaciteKwh <= 38.4)
+  const largeBatteries = BATTERIES.filter(b => b.capaciteKwh > 38.4)
+
+  // Option 1: Batterie unique >= besoin
+  for (const bat of BATTERIES) {
+    if (bat.capaciteKwh >= capaciteKwh) {
+      options.push({
+        price: bat.prixRevient,
+        config: `1x ${bat.capaciteKwh} kWh`,
+        reference: bat.reference
+      })
+    }
+  }
+
+  // Option 2: Multiples de petites batteries (max 4)
+  for (const bat of smallBatteries) {
+    const nb = Math.ceil(capaciteKwh / bat.capaciteKwh)
+    if (nb <= 4) {
+      options.push({
+        price: nb * bat.prixRevient,
+        config: `${nb}x ${bat.capaciteKwh} kWh`,
+        reference: `${nb}x ${bat.reference}`
+      })
+    }
+  }
+
+  // Option 3: Petite batterie + modules 4.8 kWh (max 12 modules)
+  for (const bat of smallBatteries) {
+    if (bat.capaciteKwh < capaciteKwh) {
+      const manque = capaciteKwh - bat.capaciteKwh
+      const nbModules = Math.ceil(manque / moduleKwh)
+      if (nbModules <= 12) {
+        options.push({
+          price: bat.prixRevient + (nbModules * modulePrice),
+          config: `1x ${bat.capaciteKwh} kWh + ${nbModules} modules`,
+          reference: `${bat.reference} + ${nbModules}x modules 4.8kWh`
+        })
+      }
+    }
+  }
+
+  if (options.length === 0) {
+    return null
+  }
+
+  // Retourner l'option la moins chère
+  options.sort((a, b) => a.price - b.price)
+  return {
+    reference: options[0].reference,
+    price: options[0].price
+  }
+}
+
+/**
+ * Sélectionne la batterie la plus petite couvrant le besoin (ancienne méthode, gardée pour compatibilité)
+ * @deprecated Utiliser selectBatterieOptimisee pour une optimisation par le coût
  */
 function selectBatterie(capaciteNecessaire: number) {
   const batterie = BATTERIES.find(b => b.capaciteKwh >= capaciteNecessaire)
@@ -274,7 +350,13 @@ function calculerScenarioC(input: SimulationInput): ScenarioResult {
   // Capacité batterie nécessaire (conso nuit journalière moyenne)
   const consoNuitJournaliere = consoNuit / 365
   const capaciteBatterieNecessaire = consoNuitJournaliere / (CONFIG.dodBatterie * CONFIG.rendementBatterie)
-  const batterie = selectBatterie(capaciteBatterieNecessaire)
+  
+  // Sélection optimisée de la batterie
+  const batteryResult = selectBatterieOptimisee(capaciteBatterieNecessaire)
+  
+  // Pour obtenir la capacité réelle, on doit la calculer à partir de la référence ou utiliser le besoin
+  // La référence optimisée peut contenir des modules, donc on garde le besoin minimum comme capacité
+  const capaciteBatterieReelle = batteryResult ? capaciteBatterieNecessaire : 0
   
   // Économies = toute la conso évitée
   const economiesAnnuelles = input.consoAnnuelle * input.prixAchatKwh
@@ -283,7 +365,7 @@ function calculerScenarioC(input: SimulationInput): ScenarioResult {
   const onduleur = selectOnduleur(puissanceReelle, true)
   
   // Faisabilité
-  const realisable = surfaceNecessaire <= input.surfaceToit
+  const realisable = surfaceNecessaire <= input.surfaceToit && batteryResult !== null
   
   return {
     id: 'C',
@@ -295,14 +377,14 @@ function calculerScenarioC(input: SimulationInput): ScenarioResult {
     nombrePanneaux,
     puissanceKwc: Math.round(puissanceReelle * 10) / 10,
     productionAnnuelle: Math.round(productionAnnuelle),
-    capaciteBatterie: Math.round(batterie.capaciteKwh * 10) / 10,
+    capaciteBatterie: Math.round(capaciteBatterieReelle * 10) / 10,
     economiesAnnuelles: Math.round(economiesAnnuelles),
     economies20Ans: calculerEconomies20Ans(economiesAnnuelles),
     revenusReventeAnnuels: 0,
     equipement: {
       panneau: PANNEAU.reference,
       onduleur: onduleur.reference,
-      batterie: batterie.reference,
+      batterie: batteryResult?.reference || '',
     }
   }
 }
@@ -330,7 +412,13 @@ function calculerScenarioD(input: SimulationInput): ScenarioResult {
   // Capacité batterie nécessaire
   const consoNuitJournaliere = consoNuit / 365
   const capaciteBatterieNecessaire = consoNuitJournaliere / (CONFIG.dodBatterie * CONFIG.rendementBatterie)
-  const batterie = selectBatterie(capaciteBatterieNecessaire)
+  
+  // Sélection optimisée de la batterie
+  const batteryResult = selectBatterieOptimisee(capaciteBatterieNecessaire)
+  
+  // Pour obtenir la capacité réelle, on doit la calculer à partir de la référence ou utiliser le besoin
+  // La référence optimisée peut contenir des modules, donc on garde le besoin minimum comme capacité
+  const capaciteBatterieReelle = batteryResult ? capaciteBatterieNecessaire : 0
   
   // Économies = toute la conso évitée + revente surplus
   const economiesAnnuelles = input.consoAnnuelle * input.prixAchatKwh
@@ -340,7 +428,7 @@ function calculerScenarioD(input: SimulationInput): ScenarioResult {
   const onduleur = selectOnduleur(puissanceReelle, true)
   
   // Faisabilité
-  const realisable = surfaceNecessaire <= input.surfaceToit
+  const realisable = surfaceNecessaire <= input.surfaceToit && batteryResult !== null
   
   return {
     id: 'D',
@@ -352,14 +440,14 @@ function calculerScenarioD(input: SimulationInput): ScenarioResult {
     nombrePanneaux,
     puissanceKwc: Math.round(puissanceReelle * 10) / 10,
     productionAnnuelle: Math.round(productionAnnuelle),
-    capaciteBatterie: Math.round(batterie.capaciteKwh * 10) / 10,
+    capaciteBatterie: Math.round(capaciteBatterieReelle * 10) / 10,
     economiesAnnuelles: Math.round(economiesAnnuelles + revenusRevente),
     economies20Ans: calculerEconomies20Ans(economiesAnnuelles + revenusRevente),
     revenusReventeAnnuels: Math.round(revenusRevente),
     equipement: {
       panneau: PANNEAU.reference,
       onduleur: onduleur.reference,
-      batterie: batterie.reference,
+      batterie: batteryResult?.reference || '',
     }
   }
 }

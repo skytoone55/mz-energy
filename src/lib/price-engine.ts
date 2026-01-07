@@ -86,6 +86,57 @@ function getOnduleurPrice(reference: string, hybride: boolean): number {
 
 function getBatteriePrice(reference: string | undefined): number {
   if (!reference) return 0
+  
+  // Prix du module unitaire (4.8 kWh)
+  const MODULE_PRICE = 2359
+  
+  // Parser les références optimisées qui peuvent contenir :
+  // - "HVM60S100BL" (référence simple)
+  // - "2x HVM60S100BL" (multiples batteries)
+  // - "HVM60S100BL + 6x modules 4.8kWh" (batterie + modules)
+  
+  // Vérifier si c'est une configuration avec modules
+  if (reference.includes('modules 4.8kWh') || reference.includes('modules')) {
+    const parts = reference.split('+')
+    let totalPrice = 0
+    
+    // Partie batterie
+    const batteryPart = parts[0].trim()
+    const batteryMatch = batteryPart.match(/(\d+)x\s*(.+)|(.+)/)
+    if (batteryMatch) {
+      const count = batteryMatch[1] ? parseInt(batteryMatch[1]) : 1
+      const batteryRef = batteryMatch[2] || batteryMatch[3]
+      const batterie = BATTERIES.find(b => b.reference === batteryRef.trim())
+      if (batterie) {
+        totalPrice += count * batterie.prixRevient
+      }
+    }
+    
+    // Partie modules
+    const modulePart = parts[1]?.trim()
+    if (modulePart) {
+      const moduleMatch = modulePart.match(/(\d+)x/)
+      if (moduleMatch) {
+        const moduleCount = parseInt(moduleMatch[1])
+        totalPrice += moduleCount * MODULE_PRICE
+      }
+    }
+    
+    return totalPrice
+  }
+  
+  // Vérifier si c'est une configuration multiple (ex: "2x HVM60S100BL")
+  const multipleMatch = reference.match(/(\d+)x\s*(.+)/)
+  if (multipleMatch) {
+    const count = parseInt(multipleMatch[1])
+    const batteryRef = multipleMatch[2].trim()
+    const batterie = BATTERIES.find(b => b.reference === batteryRef)
+    if (batterie) {
+      return count * batterie.prixRevient
+    }
+  }
+  
+  // Référence simple
   const batterie = BATTERIES.find(b => b.reference === reference)
   return batterie?.prixRevient || 0
 }
