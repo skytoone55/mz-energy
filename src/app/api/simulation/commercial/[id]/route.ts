@@ -97,7 +97,7 @@ export async function PUT(
     }
     
     // Mettre à jour la simulation
-    const { data: simulation, error: updateError } = await supabase
+    const { error: updateError } = await supabase
       .from('simulations')
       .update({
         nom_projet: body.nomProjet || null,
@@ -109,8 +109,6 @@ export async function PUT(
         resultats: resultatsComplets,
       })
       .eq('id', id)
-      .select()
-      .single()
     
     if (updateError) {
       console.error('Erreur mise à jour simulation:', updateError)
@@ -122,7 +120,7 @@ export async function PUT(
     
     return NextResponse.json({
       success: true,
-      simulationId: simulation.id,
+      simulationId: id,
       resultats: resultatsComplets,
     })
     

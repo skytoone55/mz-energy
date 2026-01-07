@@ -20,6 +20,8 @@ export default function SimulationPage() {
   const [leadData, setLeadData] = useState<LeadFormValues | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [consoInputMode, setConsoInputMode] = useState<'kwh' | 'shekels'>('kwh')
+  const TARIF_FIXE = 0.64 // ₪/kWh
 
   // Form pour étape 1 (Lead)
   const leadForm = useForm<LeadFormValues>({
@@ -45,6 +47,31 @@ export default function SimulationPage() {
     },
   })
 
+  const consoValue = simulationForm.watch('consoAnnuelle')
+  
+  // Calcul de la conversion pour l'affichage
+  const consoKwh = consoInputMode === 'kwh' 
+    ? consoValue 
+    : (consoValue / TARIF_FIXE)
+  
+  const consoShekels = consoInputMode === 'kwh'
+    ? (consoValue * TARIF_FIXE)
+    : consoValue
+  
+  // Mettre à jour la valeur dans le formulaire quand on change de mode
+  const handleConsoModeChange = (mode: 'kwh' | 'shekels') => {
+    const currentValue = consoValue || 0
+    if (currentValue > 0) {
+      // Si on passe de kWh à Shekels : multiplier par 0.64
+      // Si on passe de Shekels à kWh : diviser par 0.64
+      const newValue = mode === 'shekels'
+        ? Math.round(currentValue * TARIF_FIXE)
+        : Math.round(currentValue / TARIF_FIXE)
+      simulationForm.setValue('consoAnnuelle', newValue)
+    }
+    setConsoInputMode(mode)
+  }
+
   const handleLeadSubmit = (data: LeadFormValues) => {
     setLeadData(data)
     setStep('simulation')
@@ -56,11 +83,20 @@ export default function SimulationPage() {
     setIsSubmitting(true)
     setError(null)
     
+    // Convertir en kWh si nécessaire
+    const consoKwh = consoInputMode === 'kwh' 
+      ? data.consoAnnuelle 
+      : data.consoAnnuelle / TARIF_FIXE
+    
     try {
       const response = await fetch('/api/simulation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...leadData, ...data }),
+        body: JSON.stringify({ 
+          ...leadData, 
+          ...data, 
+          consoAnnuelle: Math.round(consoKwh) // Toujours envoyer en kWh
+        }),
       })
       
       if (!response.ok) {
@@ -233,17 +269,54 @@ export default function SimulationPage() {
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={simulationForm.handleSubmit(handleSimulationSubmit)} className="space-y-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="consoAnnuelle">Consommation annuelle (kWh/an) *</Label>
+                    <div className="space-y-3">
+                      <Label>Consommation annuelle *</Label>
+                      
+                      {/* Sélecteur de mode */}
+                      <div className="flex gap-2 mb-2">
+                        <Button
+                          type="button"
+                          variant={consoInputMode === 'kwh' ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => handleConsoModeChange('kwh')}
+                          className="flex-1"
+                        >
+                          Je connais ma consommation en kWh/an
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={consoInputMode === 'shekels' ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => handleConsoModeChange('shekels')}
+                          className="flex-1"
+                        >
+                          Je connais ma facture annuelle en ₪/an
+                        </Button>
+                      </div>
+                      
                       <Input
                         id="consoAnnuelle"
                         type="number"
-                        placeholder="12000"
-                        {...simulationForm.register('consoAnnuelle', { valueAsNumber: true })}
+                        placeholder={consoInputMode === 'kwh' ? "12000" : "7680"}
+                        {...simulationForm.register('consoAnnuelle', { 
+                          valueAsNumber: true,
+                          onChange: (e) => {
+                            const value = parseFloat(e.target.value) || 0
+                            simulationForm.setValue('consoAnnuelle', value)
+                          }
+                        })}
                       />
-                      <p className="text-xs text-muted-foreground">
-                        Vous trouverez cette info sur votre facture d&apos;électricité annuelle
-                      </p>
+                      
+                      {/* Affichage de la conversion */}
+                      {consoValue && consoValue > 0 && (
+                        <p className="text-sm text-muted-foreground">
+                          {consoInputMode === 'kwh' 
+                            ? `${consoValue.toLocaleString('fr-FR')} kWh/an soit environ ${Math.round(consoShekels).toLocaleString('fr-FR')} ₪/an`
+                            : `${Math.round(consoValue).toLocaleString('fr-FR')} ₪/an soit environ ${Math.round(consoKwh).toLocaleString('fr-FR')} kWh/an`
+                          }
+                        </p>
+                      )}
+                      
                       {simulationForm.formState.errors.consoAnnuelle && (
                         <p className="text-sm text-destructive">{simulationForm.formState.errors.consoAnnuelle.message}</p>
                       )}

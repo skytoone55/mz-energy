@@ -64,9 +64,29 @@ export default function ResultatPage() {
   const { resultats } = result
   const meilleurScenario = resultats.scenarios.find(s => s.id === resultats.meilleurScenario)!
   
-  // Scénarios réalisables
-  const scenariosOK = resultats.scenarios.filter(s => s.statut === 'OK')
-  const scenariosPartiels = resultats.scenarios.filter(s => s.statut === 'PARTIEL')
+  // Récupérer la surface requise pour le scénario C
+  const scenarioC = resultats.scenarios.find(s => s.id === 'C')
+  const scenarioD = resultats.scenarios.find(s => s.id === 'D')
+  const surfaceRequiseC = scenarioC?.surfaceNecessaire || Infinity
+  
+  // Logique d'affichage : 2 scénarios selon la surface
+  // Si surface < surface requise pour C : Afficher A et B uniquement
+  // Sinon : Afficher C et (D si D est OK, sinon D-2 si D-2 est visible)
+  const surfaceToit = resultats.input.surfaceToit
+  const scenariosAffiches = surfaceToit < surfaceRequiseC
+    ? resultats.scenarios.filter(s => s.id === 'A' || s.id === 'B')
+    : resultats.scenarios.filter(s => {
+        if (s.id === 'C') return true
+        // Si D est OK, afficher D (pas D-2 qui serait identique)
+        if (scenarioD?.statut === 'OK' && s.id === 'D') return true
+        // Sinon, afficher D-2 s'il est visible (différent de D)
+        if (scenarioD?.statut !== 'OK' && s.id === 'D-2' && s.showInResults !== false) return true
+        return false
+      })
+  
+  // Scénarios réalisables (pour les summary cards)
+  const scenariosOK = scenariosAffiches.filter(s => s.statut === 'OK')
+  const scenariosPartiels = scenariosAffiches.filter(s => s.statut === 'PARTIEL')
 
   return (
     <div className="min-h-screen bg-hero-gradient">
@@ -158,25 +178,25 @@ export default function ResultatPage() {
           </Card>
 
           {/* Scenarios Comparison */}
-          <h2 className="text-2xl font-bold mb-6">Comparaison des 4 scénarios</h2>
+          <h2 className="text-2xl font-bold mb-6">Comparaison des scénarios recommandés</h2>
           
-          <Tabs defaultValue={meilleurScenario.id} className="mb-8">
-            <TabsList className="grid grid-cols-4 mb-6">
-              {resultats.scenarios.map((scenario) => (
+          <Tabs defaultValue={scenariosAffiches.find(s => s.id === resultats.meilleurScenario)?.id || scenariosAffiches[0]?.id} className="mb-8">
+            <TabsList className={`grid ${scenariosAffiches.length === 2 ? 'grid-cols-2' : 'grid-cols-4'} mb-6`}>
+              {scenariosAffiches.map((scenario) => (
                 <TabsTrigger 
                   key={scenario.id} 
                   value={scenario.id}
                   className="relative"
                 >
                   <span>Scénario {scenario.id}</span>
-                  {scenario.id === meilleurScenario.id && (
+                  {scenario.id === resultats.meilleurScenario && (
                     <span className="absolute -top-1 -right-1 w-2 h-2 bg-energy rounded-full" />
                   )}
                 </TabsTrigger>
               ))}
             </TabsList>
             
-            {resultats.scenarios.map((scenario) => (
+            {scenariosAffiches.map((scenario) => (
               <TabsContent key={scenario.id} value={scenario.id}>
                 <Card>
                   <CardHeader>

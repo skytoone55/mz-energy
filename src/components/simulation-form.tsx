@@ -57,13 +57,15 @@ export function SimulationForm({
   const [step, setStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [consoInputMode, setConsoInputMode] = useState<'kwh' | 'shekels'>('kwh')
+  const TARIF_FIXE = 0.64 // ₪/kWh
 
   const form = useForm<FormData>({
     resolver: zodResolver(simulationSchema),
     defaultValues: initialValues || {
       nomProjet: '',
       consoAnnuelle: 15000,
-      partJour: 40,
+      partJour: 50,
       surfaceToit: 50,
       prixAchatKwh: defaultPrixAchatKwh,
       prixReventeKwh: defaultPrixReventeKwh,
@@ -75,10 +77,36 @@ export function SimulationForm({
   const partJour = watch('partJour')
   const consoAnnuelle = watch('consoAnnuelle')
   const surfaceToit = watch('surfaceToit')
+  
+  // Calcul de la conversion pour l'affichage
+  const consoKwh = consoInputMode === 'kwh' 
+    ? consoAnnuelle 
+    : (consoAnnuelle / TARIF_FIXE)
+  
+  const consoShekels = consoInputMode === 'kwh'
+    ? (consoAnnuelle * TARIF_FIXE)
+    : consoAnnuelle
+  
+  // Mettre à jour la valeur dans le formulaire quand on change de mode
+  const handleConsoModeChange = (mode: 'kwh' | 'shekels') => {
+    const currentValue = consoAnnuelle || 0
+    if (currentValue > 0) {
+      const newValue = mode === 'shekels'
+        ? Math.round(currentValue * TARIF_FIXE)
+        : Math.round(currentValue / TARIF_FIXE)
+      setValue('consoAnnuelle', newValue)
+    }
+    setConsoInputMode(mode)
+  }
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true)
     setError(null)
+
+    // Convertir en kWh si nécessaire
+    const consoKwh = consoInputMode === 'kwh' 
+      ? data.consoAnnuelle 
+      : data.consoAnnuelle / TARIF_FIXE
 
     try {
       const url = mode === 'edit' && simulationId
@@ -90,7 +118,10 @@ export function SimulationForm({
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          consoAnnuelle: Math.round(consoKwh) // Toujours envoyer en kWh
+        }),
       })
 
       const result = await response.json()
@@ -99,7 +130,8 @@ export function SimulationForm({
         throw new Error(result.error || 'Erreur lors de la simulation')
       }
 
-      router.push(`/dashboard/simulation/${result.simulationId}`)
+      // Forcer un rechargement complet pour afficher les données mises à jour
+      window.location.href = `/dashboard/simulation/${result.simulationId}`
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Une erreur est survenue')
     } finally {
@@ -167,21 +199,57 @@ export function SimulationForm({
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="consoAnnuelle">
-                  Consommation annuelle (kWh/an)
-                </Label>
+              <div className="space-y-3">
+                <Label>Consommation annuelle</Label>
+                
+                {/* Sélecteur de mode */}
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={consoInputMode === 'kwh' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => handleConsoModeChange('kwh')}
+                    className="flex-1"
+                  >
+                    kWh/an
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={consoInputMode === 'shekels' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => handleConsoModeChange('shekels')}
+                    className="flex-1"
+                  >
+                    ₪/an
+                  </Button>
+                </div>
+                
                 <Input
                   id="consoAnnuelle"
                   type="number"
-                  {...register('consoAnnuelle', { valueAsNumber: true })}
+                  placeholder={consoInputMode === 'kwh' ? "15000" : "9600"}
+                  {...register('consoAnnuelle', { 
+                    valueAsNumber: true,
+                    onChange: (e) => {
+                      const value = parseFloat(e.target.value) || 0
+                      setValue('consoAnnuelle', value)
+                    }
+                  })}
                 />
+                
+                {/* Affichage de la conversion */}
+                {consoAnnuelle && consoAnnuelle > 0 && (
+                  <p className="text-sm text-muted-foreground">
+                    {consoInputMode === 'kwh' 
+                      ? `${consoAnnuelle.toLocaleString('fr-FR')} kWh/an soit environ ${Math.round(consoShekels).toLocaleString('fr-FR')} ₪/an`
+                      : `${Math.round(consoAnnuelle).toLocaleString('fr-FR')} ₪/an soit environ ${Math.round(consoKwh).toLocaleString('fr-FR')} kWh/an`
+                    }
+                  </p>
+                )}
+                
                 {errors.consoAnnuelle && (
                   <p className="text-sm text-destructive">{errors.consoAnnuelle.message}</p>
                 )}
-                <p className="text-sm text-muted-foreground">
-                  Visible sur la facture IEC ou les relevés mensuels
-                </p>
               </div>
 
               <div className="space-y-4">
@@ -227,38 +295,28 @@ export function SimulationForm({
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <div className="flex justify-between">
-                  <Label>Surface de toiture disponible</Label>
-                  <span className="text-sm font-medium">{surfaceToit} m²</span>
-                </div>
-                <Slider
-                  value={[surfaceToit]}
-                  onValueChange={(v) => setValue('surfaceToit', v[0])}
+              <div className="space-y-2">
+                <Label htmlFor="surfaceToit">Surface de toiture disponible (m²)</Label>
+                <Input
+                  id="surfaceToit"
+                  type="number"
                   min={10}
-                  max={500}
-                  step={5}
-                  className="py-4"
+                  max={10000}
+                  placeholder="50"
+                  {...register('surfaceToit', { 
+                    valueAsNumber: true,
+                    onChange: (e) => {
+                      const value = parseFloat(e.target.value) || 0
+                      setValue('surfaceToit', value)
+                    }
+                  })}
                 />
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>10 m²</span>
-                  <span>500 m²</span>
-                </div>
-              </div>
-
-              {/* Quick select */}
-              <div className="grid grid-cols-4 gap-2">
-                {[30, 50, 80, 120].map((size) => (
-                  <Button
-                    key={size}
-                    type="button"
-                    variant={surfaceToit === size ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setValue('surfaceToit', size)}
-                  >
-                    {size} m²
-                  </Button>
-                ))}
+                {errors.surfaceToit && (
+                  <p className="text-sm text-destructive">{errors.surfaceToit.message}</p>
+                )}
+                <p className="text-sm text-muted-foreground">
+                  Surface exploitable pour l&apos;installation des panneaux (minimum 10 m²)
+                </p>
               </div>
 
               <div className="flex gap-4">
