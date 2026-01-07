@@ -11,7 +11,8 @@ import {
   UserPlus,
   Loader2,
   Check,
-  Trash2
+  Trash2,
+  Pencil
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -31,6 +32,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 
 interface Lead {
   id: string
@@ -39,6 +43,7 @@ interface Lead {
   email: string
   telephone: string | null
   ville: string | null
+  notes?: string | null
   created_at: string
   simulationId: string | null
   commercialAssigne?: { id: string; prenom: string; nom: string } | null
@@ -53,15 +58,22 @@ interface Commercial {
 interface LeadsTableProps {
   leads: Lead[]
   commercials: Commercial[]
+  onLoadLeads?: () => void
 }
 
-export function LeadsTable({ leads: initialLeads, commercials }: LeadsTableProps) {
+export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads }: LeadsTableProps) {
   const [leads, setLeads] = useState<Lead[]>(initialLeads)
   const [transferDialogOpen, setTransferDialogOpen] = useState<string | null>(null)
+  const [editDialogOpen, setEditDialogOpen] = useState<string | null>(null)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<string | null>(null)
   const [selectedCommercial, setSelectedCommercial] = useState<string>('')
   const [transferring, setTransferring] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  
+  // État pour l'édition
+  const [editingLead, setEditingLead] = useState<Partial<Lead> | null>(null)
 
   // Recharger les leads quand ils changent
   useEffect(() => {
@@ -160,6 +172,100 @@ export function LeadsTable({ leads: initialLeads, commercials }: LeadsTableProps
     setError(null)
   }
 
+  const openEditDialog = (leadId: string) => {
+    const lead = leads.find(l => l.id === leadId)
+    if (lead) {
+      setEditingLead({
+        id: lead.id,
+        prenom: lead.prenom,
+        nom: lead.nom,
+        email: lead.email,
+        telephone: lead.telephone || '',
+        ville: lead.ville || '',
+        notes: lead.notes || '',
+      })
+      setEditDialogOpen(leadId)
+      setError(null)
+    }
+  }
+
+  const handleSaveEdit = async () => {
+    if (!editingLead || !editingLead.id) return
+    
+    if (!editingLead.prenom || !editingLead.nom || !editingLead.email) {
+      setError('Prénom, nom et email sont requis')
+      return
+    }
+
+    setSaving(true)
+    setError(null)
+
+    try {
+      const response = await fetch(`/api/admin/leads/${editingLead.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prenom: editingLead.prenom,
+          nom: editingLead.nom,
+          email: editingLead.email,
+          telephone: editingLead.telephone || null,
+          ville: editingLead.ville || null,
+          notes: editingLead.notes || null,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Erreur lors de la modification')
+      }
+
+      setEditDialogOpen(null)
+      setEditingLead(null)
+      
+      // Recharger les leads
+      if (onLoadLeads) {
+        onLoadLeads()
+      } else {
+        window.location.reload()
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de la modification')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleDeleteLead = async (leadId: string) => {
+    setDeleting(leadId)
+    setError(null)
+
+    try {
+      const response = await fetch(`/api/admin/leads/${leadId}`, {
+        method: 'DELETE',
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Erreur lors de la suppression')
+      }
+
+      setDeleteDialogOpen(null)
+      
+      // Recharger les leads
+      if (onLoadLeads) {
+        onLoadLeads()
+      } else {
+        window.location.reload()
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de la suppression')
+    } finally {
+      setDeleting(null)
+    }
+  }
+
   return (
     <>
       <div className="overflow-x-auto">
@@ -248,93 +354,276 @@ export function LeadsTable({ leads: initialLeads, commercials }: LeadsTableProps
                   )}
                 </td>
                 <td className="p-4">
-                  <Dialog open={transferDialogOpen === lead.id} onOpenChange={(open) => {
-                    if (!open) {
-                      setTransferDialogOpen(null)
-                      setError(null)
-                    }
-                  }}>
-                    <DialogTrigger asChild>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => openTransferDialog(lead.id)}
-                        className="gap-2"
-                      >
-                        <UserPlus className="w-4 h-4" />
-                        Assigner
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Assigner le lead à un commercial</DialogTitle>
-                        <DialogDescription>
-                          Sélectionnez le commercial qui sera responsable de ce lead
-                        </DialogDescription>
-                      </DialogHeader>
-                      
-                      <div className="space-y-4 py-4">
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">
-                            Lead: {lead.prenom} {lead.nom}
-                          </label>
-                          <p className="text-sm text-muted-foreground">{lead.email}</p>
+                  <div className="flex items-center gap-2">
+                    <Dialog open={transferDialogOpen === lead.id} onOpenChange={(open) => {
+                      if (!open) {
+                        setTransferDialogOpen(null)
+                        setError(null)
+                      }
+                    }}>
+                      <DialogTrigger asChild>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => openTransferDialog(lead.id)}
+                          className="gap-2"
+                        >
+                          <UserPlus className="w-4 h-4" />
+                          Assigner
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Assigner le lead à un commercial</DialogTitle>
+                          <DialogDescription>
+                            Sélectionnez le commercial qui sera responsable de ce lead
+                          </DialogDescription>
+                        </DialogHeader>
+                        
+                        <div className="space-y-4 py-4">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">
+                              Lead: {lead.prenom} {lead.nom}
+                            </label>
+                            <p className="text-sm text-muted-foreground">{lead.email}</p>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Commercial</label>
+                            <Select
+                              value={selectedCommercial}
+                              onValueChange={setSelectedCommercial}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Sélectionner un commercial" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {commercials.map((commercial) => (
+                                  <SelectItem key={commercial.id} value={commercial.id}>
+                                    {commercial.prenom} {commercial.nom}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {error && (
+                            <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
+                              {error}
+                            </div>
+                          )}
                         </div>
                         
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">Commercial</label>
-                          <Select
-                            value={selectedCommercial}
-                            onValueChange={setSelectedCommercial}
+                        <DialogFooter>
+                          <Button 
+                            variant="outline" 
+                            onClick={() => {
+                              setTransferDialogOpen(null)
+                              setError(null)
+                            }}
+                            disabled={transferring}
                           >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Sélectionner un commercial" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {commercials.map((commercial) => (
-                                <SelectItem key={commercial.id} value={commercial.id}>
-                                  {commercial.prenom} {commercial.nom}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
+                            Annuler
+                          </Button>
+                          <Button
+                            onClick={() => handleTransfer(lead.id)}
+                            disabled={transferring || !selectedCommercial}
+                            className="bg-solar-gradient hover:opacity-90 text-white"
+                          >
+                            {transferring ? (
+                              <>
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                Attribution...
+                              </>
+                            ) : (
+                              'Assigner'
+                            )}
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
 
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openEditDialog(lead.id)}
+                      className="gap-2"
+                    >
+                      <Pencil className="w-4 h-4" />
+                      Modifier
+                    </Button>
+
+                    <Dialog open={editDialogOpen === lead.id} onOpenChange={(open) => {
+                      if (!open) {
+                        setEditDialogOpen(null)
+                        setEditingLead(null)
+                        setError(null)
+                      }
+                    }}>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Modifier le lead</DialogTitle>
+                          <DialogDescription>
+                            Modifiez les informations du lead
+                          </DialogDescription>
+                        </DialogHeader>
+                        
+                        <div className="space-y-4 py-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="edit-prenom">Prénom *</Label>
+                              <Input
+                                id="edit-prenom"
+                                value={editingLead?.prenom || ''}
+                                onChange={(e) => setEditingLead({ ...editingLead, prenom: e.target.value })}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="edit-nom">Nom *</Label>
+                              <Input
+                                id="edit-nom"
+                                value={editingLead?.nom || ''}
+                                onChange={(e) => setEditingLead({ ...editingLead, nom: e.target.value })}
+                              />
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="edit-email">Email *</Label>
+                            <Input
+                              id="edit-email"
+                              type="email"
+                              value={editingLead?.email || ''}
+                              onChange={(e) => setEditingLead({ ...editingLead, email: e.target.value })}
+                            />
+                          </div>
+                          
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="edit-telephone">Téléphone</Label>
+                              <Input
+                                id="edit-telephone"
+                                value={editingLead?.telephone || ''}
+                                onChange={(e) => setEditingLead({ ...editingLead, telephone: e.target.value })}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="edit-ville">Ville</Label>
+                              <Input
+                                id="edit-ville"
+                                value={editingLead?.ville || ''}
+                                onChange={(e) => setEditingLead({ ...editingLead, ville: e.target.value })}
+                              />
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="edit-notes">Notes</Label>
+                            <Textarea
+                              id="edit-notes"
+                              value={editingLead?.notes || ''}
+                              onChange={(e) => setEditingLead({ ...editingLead, notes: e.target.value })}
+                              rows={3}
+                            />
+                          </div>
+
+                          {error && (
+                            <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
+                              {error}
+                            </div>
+                          )}
+                        </div>
+                        
+                        <DialogFooter>
+                          <Button 
+                            variant="outline" 
+                            onClick={() => {
+                              setEditDialogOpen(null)
+                              setEditingLead(null)
+                              setError(null)
+                            }}
+                            disabled={saving}
+                          >
+                            Annuler
+                          </Button>
+                          <Button
+                            onClick={handleSaveEdit}
+                            disabled={saving || !editingLead?.prenom || !editingLead?.nom || !editingLead?.email}
+                            className="bg-solar-gradient hover:opacity-90 text-white"
+                          >
+                            {saving ? (
+                              <>
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                Enregistrement...
+                              </>
+                            ) : (
+                              'Enregistrer'
+                            )}
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+
+                    <Dialog open={deleteDialogOpen === lead.id} onOpenChange={(open) => {
+                      if (!open) {
+                        setDeleteDialogOpen(null)
+                        setError(null)
+                      }
+                    }}>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Supprimer le lead</DialogTitle>
+                          <DialogDescription>
+                            Êtes-vous sûr de vouloir supprimer ce lead ? Cette action est irréversible.
+                            {lead.simulationId && ' La simulation associée sera également supprimée.'}
+                          </DialogDescription>
+                        </DialogHeader>
+                        
                         {error && (
                           <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
                             {error}
                           </div>
                         )}
-                      </div>
-                      
-                      <DialogFooter>
-                        <Button 
-                          variant="outline" 
-                          onClick={() => {
-                            setTransferDialogOpen(null)
-                            setError(null)
-                          }}
-                          disabled={transferring}
-                        >
-                          Annuler
-                        </Button>
-                        <Button
-                          onClick={() => handleTransfer(lead.id)}
-                          disabled={transferring || !selectedCommercial}
-                          className="bg-solar-gradient hover:opacity-90 text-white"
-                        >
-                          {transferring ? (
-                            <>
-                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                              Attribution...
-                            </>
-                          ) : (
-                            'Assigner'
-                          )}
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                        
+                        <DialogFooter>
+                          <Button 
+                            variant="outline" 
+                            onClick={() => {
+                              setDeleteDialogOpen(null)
+                              setError(null)
+                            }}
+                            disabled={deleting === lead.id}
+                          >
+                            Annuler
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            onClick={() => handleDeleteLead(lead.id)}
+                            disabled={deleting === lead.id}
+                          >
+                            {deleting === lead.id ? (
+                              <>
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                Suppression...
+                              </>
+                            ) : (
+                              'Supprimer'
+                            )}
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => setDeleteDialogOpen(lead.id)}
+                      className="gap-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Supprimer
+                    </Button>
+                  </div>
                 </td>
               </tr>
             ))}

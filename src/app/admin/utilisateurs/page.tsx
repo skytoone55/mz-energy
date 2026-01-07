@@ -420,11 +420,6 @@ export default function AdminUsersPage() {
                         </Badge>
                       </td>
                       <td className="p-4">
-                        <Badge variant={user.actif ? 'default' : 'destructive'}>
-                          {user.actif ? 'Actif' : 'Inactif'}
-                        </Badge>
-                      </td>
-                      <td className="p-4">
                         <div className="flex items-center gap-2">
                           <Button
                             variant="ghost"
