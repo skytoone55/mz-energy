@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { MobileStickyCTA } from "@/components/layout/MobileStickyCTA";
 
 const outfit = Outfit({
   variable: "--font-geist-sans",
@@ -14,8 +17,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MZ Energy - Simulateur Photovoltaïque Israël",
-  description: "Calculez vos économies d'énergie avec une installation solaire. Simulation gratuite et personnalisée pour le marché israélien.",
+  title: "MZ Energy - Solutions Solaires en Israël",
+  description: "Solutions photovoltaïques clé en main en Israël. Produisez, stockez et revendez votre énergie solaire. Simulation gratuite.",
   keywords: ["photovoltaïque", "solaire", "Israël", "économies", "énergie", "panneaux solaires"],
 };
 
@@ -27,7 +30,12 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={`${outfit.variable} ${jetbrainsMono.variable} font-sans`}>
-        {children}
+        <Header />
+        <main className="pt-16">
+          {children}
+        </main>
+        <Footer />
+        <MobileStickyCTA />
       </body>
     </html>
   );

@@ -1,201 +1,93 @@
-'use client'
-
-/**
- * MZ Energy - Page d'accueil officielle
- * Gère la présentation du service et l'accès à la simulation pour les particuliers.
- */
-
+import { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
-import { Sun, Zap, TrendingUp, Shield, ArrowRight, ChevronDown } from 'lucide-react'
+import { 
+  Sun, Battery, BarChart3, Coins, 
+  Home, Building2, Globe, Ship, Handshake, 
+  ShieldCheck, Wrench, Smartphone, TrendingUp, Zap, FileCheck,
+  Calculator, ClipboardCheck, ArrowRight
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { HeroSection } from '@/components/sections/HeroSection'
+import { CTASection } from '@/components/sections/CTASection'
+import { PartnersSection } from '@/components/sections/PartnersSection'
+
+export const metadata: Metadata = {
+  title: 'MZ Energy | Solutions Solaires en Israël',
+  description: 'Solutions photovoltaïques clé en main en Israël. Produisez, stockez et revendez votre énergie solaire. Simulation gratuite.',
+}
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-hero-gradient">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 glass">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-solar-gradient flex items-center justify-center">
-                <Sun className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-xl font-bold tracking-tight">MZ Energy</span>
-            </div>
-            <nav className="hidden md:flex items-center gap-8">
-              <a href="#avantages" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Avantages
-              </a>
-              <a href="#comment-ca-marche" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Comment ça marche
-              </a>
-              <Link href="/login">
-                <Button variant="ghost" size="sm">
-                  Espace Pro
-                </Button>
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen">
+      {/* Section 1 - Hero */}
+      <HeroSection
+        title="L'énergie solaire, simplement."
+        subtitle="Produisez votre électricité. Stockez-la. Revendez le surplus. Solutions photovoltaïques clé en main en Israël."
+        primaryCTA={{
+          text: '🧮 Simuler mes économies',
+          href: '/simulation',
+        }}
+        secondaryCTA={{
+          text: '📞 Être rappelé',
+          action: 'callback',
+        }}
+        backgroundImage="/images/home/home_01_hero.jpg"
+        showScrollIndicator={true}
+      />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 text-accent-foreground text-sm font-medium">
-                <Zap className="w-4 h-4" />
-                Simulation gratuite en 2 minutes
-              </div>
-              
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-                Passez au solaire
-                <span className="block text-amber-500">
-                  et économisez gros
-                </span>
-          </h1>
-              
-              <p className="text-lg text-muted-foreground max-w-xl">
-                Découvrez combien vous pouvez économiser chaque année avec une installation 
-                photovoltaïque adaptée à votre consommation en Israël.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/simulation">
-                  <Button size="lg" className="bg-solar-gradient hover:opacity-90 transition-opacity text-white w-full sm:w-auto group">
-                    Simuler mes économies
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                <a href="#comment-ca-marche">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                    En savoir plus
-                  </Button>
-                </a>
-              </div>
-              
-              <div className="flex items-center gap-8 pt-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-foreground">1 800h</div>
-                  <div className="text-sm text-muted-foreground">d&apos;ensoleillement/an</div>
-                </div>
-                <div className="w-px h-12 bg-border" />
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-foreground">20 ans</div>
-                  <div className="text-sm text-muted-foreground">de garantie</div>
-                </div>
-                <div className="w-px h-12 bg-border" />
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-foreground">14 000</div>
-                  <div className="text-sm text-muted-foreground">kWh revendables/an</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="relative">
-              <div className="absolute inset-0 bg-solar-gradient opacity-20 blur-3xl rounded-full" />
-              <div className="relative bg-card rounded-3xl p-8 shadow-2xl border">
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-muted-foreground">Économies potentielles</span>
-                    <span className="px-3 py-1 rounded-full bg-energy/10 text-energy text-xs font-semibold">
-                      Exemple
-                    </span>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="text-5xl font-bold tracking-tight">
-                      84 414 <span className="text-2xl">₪/an</span>
-                    </div>
-                    <div className="text-muted-foreground">
-                      Pour 120 000 kWh/an de consommation
-                    </div>
-                  </div>
-                  
-                  <div className="h-px bg-border" />
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 rounded-xl bg-secondary/50">
-                      <div className="text-sm text-muted-foreground mb-1">Sur 20 ans</div>
-                      <div className="text-xl font-bold">1.9M ₪</div>
-                    </div>
-                    <div className="p-4 rounded-xl bg-secondary/50">
-                      <div className="text-sm text-muted-foreground mb-1">Production</div>
-                      <div className="text-xl font-bold">137 808 kWh</div>
-                    </div>
-                  </div>
-                  
-                  <Link href="/simulation" className="block">
-                    <Button className="w-full bg-primary hover:bg-primary/90">
-                      Calculer pour ma situation
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Scroll indicator */}
-      <div className="flex justify-center pb-8">
-        <a href="#avantages" className="animate-bounce">
-          <ChevronDown className="w-6 h-6 text-muted-foreground" />
-        </a>
-      </div>
-
-      {/* Avantages Section */}
-      <section id="avantages" className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+      {/* Section 2 - Les 4 Piliers */}
+      <section id="content" className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Pourquoi passer au solaire ?
+              Un écosystème solaire complet
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              L&apos;énergie solaire en Israël offre des avantages considérables grâce 
-              à l&apos;ensoleillement exceptionnel du pays.
+              Tout ce qu&apos;il faut pour maîtriser votre énergie
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                icon: TrendingUp,
-                title: 'Économies durables',
-                description: 'Réduisez votre facture d\'électricité jusqu\'à 100% et revendez votre surplus.',
-                color: 'bg-solar-gradient',
-              },
-              {
                 icon: Sun,
-                title: '1 800h de soleil',
-                description: 'Israël bénéficie d\'un des meilleurs ensoleillements au monde.',
-                color: 'bg-energy-gradient',
+                title: 'Produire',
+                description: 'Vos panneaux captent l\'énergie du soleil et alimentent directement votre logement. Vous réduisez immédiatement votre facture d\'électricité.',
               },
               {
-                icon: Shield,
-                title: 'Garantie 20 ans',
-                description: 'Des équipements de qualité avec une garantie de performance sur 20 ans.',
-                color: 'bg-solar-gradient',
+                icon: Battery,
+                title: 'Stocker',
+                description: 'Les batteries conservent le surplus produit en journée. Vous consommez votre propre énergie même après le coucher du soleil.',
               },
               {
-                icon: Zap,
-                title: 'Revente au réseau',
-                description: 'Jusqu\'à 14 000 kWh/an revendables au réseau électrique.',
-                color: 'bg-energy-gradient',
+                icon: BarChart3,
+                title: 'Piloter',
+                description: 'Suivez en temps réel votre production, consommation et économies depuis votre smartphone. Gardez le contrôle total sur votre installation.',
+              },
+              {
+                icon: Coins,
+                title: 'Revendre',
+                description: 'Injectez votre surplus dans le réseau et générez des revenus passifs. Votre toit devient un investissement rentable.',
+                badge: 'Option',
               },
             ].map((item, index) => (
-              <Card 
-                key={index} 
-                className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-              >
+              <Card key={index} className="group hover:shadow-lg transition-all">
                 <CardContent className="p-6 space-y-4">
-                  <div className={`w-12 h-12 rounded-xl ${item.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                    <item.icon className="w-6 h-6 text-white" />
+                  <div className="flex items-start justify-between">
+                    <div className="w-12 h-12 rounded-xl bg-solar-gradient flex items-center justify-center">
+                      <item.icon className="w-6 h-6 text-white" />
+                    </div>
+                    {item.badge && (
+                      <Badge variant="secondary" className="text-xs">
+                        {item.badge}
+                      </Badge>
+                    )}
                   </div>
                   <h3 className="text-lg font-semibold">{item.title}</h3>
-                  <p className="text-muted-foreground text-sm">{item.description}</p>
+                  <p className="text-sm text-muted-foreground">{item.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -203,82 +95,268 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Comment ça marche Section */}
-      <section id="comment-ca-marche" className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* Section 3 - Monitoring */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Comment ça marche ?
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              En quelques étapes simples, découvrez votre potentiel d&apos;économies.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                step: '01',
-                title: 'Renseignez vos infos',
-                description: 'Indiquez votre consommation annuelle et la surface de votre toit disponible.',
-              },
-              {
-                step: '02',
-                title: 'Simulation instantanée',
-                description: 'Notre algorithme calcule 4 scénarios adaptés à votre situation.',
-              },
-              {
-                step: '03',
-                title: 'Un expert vous rappelle',
-                description: 'Un conseiller vous contacte sous 24h pour affiner votre projet.',
-              },
-            ].map((item, index) => (
-              <div key={index} className="relative">
-                <div className="text-7xl font-bold text-muted/30 absolute -top-4 -left-2">
-                  {item.step}
-                </div>
-                <div className="relative pt-8 pl-4">
-                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="relative flex justify-center">
+              <div className="relative rounded-xl overflow-hidden border shadow-lg max-w-xs w-full">
+                <div className="aspect-[2/3] relative">
+                  <Image
+                    src="/images/home/home_02_monitoring_app.jpg"
+                    alt="Application de monitoring MZ Energy"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
                 </div>
               </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-16">
-            <Link href="/simulation">
-              <Button size="lg" className="bg-solar-gradient hover:opacity-90 transition-opacity text-white group">
-                Commencer ma simulation
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
+            </div>
+            <div className="space-y-6">
+              <h2 className="text-3xl sm:text-4xl font-bold">
+                Votre installation dans votre poche
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                L&apos;application MZ Energy vous offre une visibilité complète sur votre système solaire
+              </p>
+              <ul className="space-y-3">
+                {[
+                  'Production solaire en temps réel',
+                  'Consommation instantanée',
+                  'État de charge des batteries',
+                  'Historique et statistiques',
+                  'Alertes et notifications',
+                  'Support technique à distance',
+                ].map((item, index) => (
+                  <li key={index} className="flex items-center gap-3">
+                    <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                      <span className="text-green-600 text-sm">✓</span>
+                    </div>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <blockquote className="pl-4 border-l-4 border-solar text-lg italic text-muted-foreground">
+                &quot;Vous savez exactement ce que vous produisez, ce que vous consommez, et ce que vous économisez.&quot;
+              </blockquote>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-primary text-primary-foreground">
+      {/* Section 4 - Pourquoi le solaire en Israël */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                <Sun className="w-6 h-6" />
-              </div>
-              <span className="text-xl font-bold">MZ Energy</span>
-            </div>
-            
-            <div className="text-sm text-primary-foreground/70">
-              © 2026 MZ Energy. Tous droits réservés. | mz-energy.co.il
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <Link href="/login" className="text-sm hover:underline">
-                Espace Pro
-              </Link>
-            </div>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Pourquoi passer au solaire en Israël ?
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Des conditions idéales pour un investissement énergétique intelligent
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
+            {[
+              {
+                icon: Sun,
+                chiffre: '1 800+',
+                texte: 'Heures d\'ensoleillement par an',
+              },
+              {
+                icon: TrendingUp,
+                chiffre: '↗️',
+                texte: 'Coût de l\'électricité en hausse constante',
+              },
+              {
+                icon: Zap,
+                chiffre: '⚠️',
+                texte: 'Réseau électrique sous tension',
+              },
+              {
+                icon: Home,
+                chiffre: '🔒',
+                texte: 'Demande croissante d\'autonomie énergétique',
+              },
+              {
+                icon: FileCheck,
+                chiffre: '✓',
+                texte: 'Réglementation favorable à la revente',
+              },
+            ].map((item, index) => (
+              <Card key={index} className="text-center">
+                <CardContent className="p-6 space-y-4">
+                  <div className="w-12 h-12 rounded-xl bg-solar-gradient flex items-center justify-center mx-auto">
+                    <item.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-2xl font-bold">{item.chiffre}</div>
+                  <p className="text-sm text-muted-foreground">{item.texte}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <p className="text-xl font-semibold text-foreground">
+              Le solaire n&apos;est plus une option, c&apos;est un investissement stratégique.
+            </p>
           </div>
         </div>
-      </footer>
+      </section>
+
+      {/* Section 5 - Nos Solutions */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Des solutions adaptées à vos besoins
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Card Particuliers */}
+            <Card className="group hover:shadow-xl transition-all overflow-hidden">
+              <div className="relative h-48">
+                <Image
+                  src="/images/home/home_03_particuliers.jpg"
+                  alt="Particuliers"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform"
+                />
+              </div>
+              <CardContent className="p-6 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-solar-gradient flex items-center justify-center">
+                    <Home className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold">Particuliers</h3>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>• Réduisez votre facture d&apos;électricité</li>
+                  <li>• Gagnez en indépendance énergétique</li>
+                  <li>• Protégez-vous des coupures de courant</li>
+                  <li>• Générez des revenus passifs</li>
+                </ul>
+                <Link href="/particuliers">
+                  <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    Découvrir nos solutions
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* Card Professionnels */}
+            <Card className="group hover:shadow-xl transition-all overflow-hidden">
+              <div className="relative h-48">
+                <Image
+                  src="/images/home/home_04_professionnels.jpg"
+                  alt="Professionnels"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform"
+                />
+              </div>
+              <CardContent className="p-6 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-energy-gradient flex items-center justify-center">
+                    <Building2 className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold">Professionnels</h3>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>• Réduisez vos charges d&apos;exploitation</li>
+                  <li>• Sécurisez vos coûts énergétiques</li>
+                  <li>• Valorisez vos surfaces de toiture</li>
+                  <li>• Bénéficiez d&apos;avantages fiscaux</li>
+                </ul>
+                <Link href="/professionnels">
+                  <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    Découvrir nos solutions
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 6 - Pourquoi MZ Energy */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Pourquoi choisir MZ Energy ?
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Expérience, qualité et accompagnement local
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: Globe,
+                title: 'Expertise européenne',
+                texte: 'Expérience éprouvée dans l\'industrie photovoltaïque',
+              },
+              {
+                icon: Ship,
+                title: 'Importateur direct',
+                texte: 'Réseau établi en Asie pour des équipements de qualité',
+              },
+              {
+                icon: Handshake,
+                title: 'Partenariats exclusifs',
+                texte: 'Distributeur officiel MAZDA et DEYE en Israël',
+              },
+              {
+                icon: ShieldCheck,
+                title: 'Garanties solides',
+                texte: 'Couverture long terme sur tous les équipements',
+              },
+              {
+                icon: Wrench,
+                title: 'Installation et SAV local',
+                texte: 'Service et maintenance sur place en Israël',
+              },
+              {
+                icon: Smartphone,
+                title: 'Monitoring inclus',
+                texte: 'Suivi en temps réel de chaque installation',
+              },
+            ].map((item, index) => (
+              <Card key={index}>
+                <CardContent className="p-6 space-y-3">
+                  <div className="w-12 h-12 rounded-xl bg-solar-gradient flex items-center justify-center">
+                    <item.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground">{item.texte}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 7 - Nos Partenaires */}
+      <PartnersSection backgroundImage="/images/home/home_05_background_partenaires.jpg" />
+
+      {/* Section 8 - CTA Final */}
+      <CTASection
+        title="Prêt à passer au solaire ?"
+        text="Simulez vos économies en 2 minutes ou demandez à être rappelé par notre équipe."
+        primaryCTA={{
+          text: '🧮 Lancer ma simulation',
+          href: '/simulation',
+        }}
+        secondaryCTA={{
+          text: '📞 Être rappelé',
+          action: 'callback',
+        }}
+        backgroundImage="/images/home/home_06_cta_sunset.jpg"
+      />
     </div>
   )
 }

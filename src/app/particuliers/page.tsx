@@ -1,0 +1,344 @@
+import { Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
+import { 
+  PiggyBank, ShieldCheck, Zap, Coins, Leaf, TrendingUp,
+  Calculator, ClipboardCheck, Wrench, Smartphone, ArrowRight, Check
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { HeroSection } from '@/components/sections/HeroSection'
+import { CTASection } from '@/components/sections/CTASection'
+import { TestimonialCard } from '@/components/sections/TestimonialCard'
+import { FAQ } from '@/components/ui/faq'
+
+export const metadata: Metadata = {
+  title: 'Panneaux Solaires Maison | MZ Energy Israël',
+  description: 'Installez des panneaux solaires chez vous. Économies jusqu\'à 70%, autonomie énergétique, revenus passifs. Simulation gratuite.',
+}
+
+export default function ParticuliersPage() {
+  return (
+    <div className="min-h-screen">
+      {/* Section 1 - Hero */}
+      <HeroSection
+        title="Produisez votre propre électricité"
+        subtitle="Réduisez votre facture, gagnez en autonomie et protégez-vous des hausses de prix. Une solution solaire sur mesure pour votre maison."
+        primaryCTA={{
+          text: '🧮 Simuler mes économies',
+          href: '/simulation',
+        }}
+        secondaryCTA={{
+          text: '📞 Être rappelé',
+          action: 'callback',
+        }}
+        backgroundImage="/images/particuliers/particuliers_01_hero.jpg"
+      />
+
+      {/* Section 2 - Les bénéfices */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Pourquoi installer des panneaux solaires chez vous ?
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: PiggyBank,
+                title: 'Économies immédiates',
+                texte: 'Réduisez votre facture d\'électricité dès le premier jour. Jusqu\'à 70% d\'économies sur votre consommation.',
+              },
+              {
+                icon: ShieldCheck,
+                title: 'Protection contre les hausses',
+                texte: 'Le prix de l\'électricité augmente chaque année. Produisez la vôtre et protégez votre budget familial.',
+              },
+              {
+                icon: Zap,
+                title: 'Autonomie énergétique',
+                texte: 'Ne dépendez plus uniquement du réseau. Avec une batterie, vous avez de l\'électricité même en cas de coupure.',
+              },
+              {
+                icon: Coins,
+                title: 'Revenus complémentaires',
+                texte: 'Revendez votre surplus au réseau et générez des revenus passifs. Votre toit travaille pour vous.',
+              },
+              {
+                icon: Leaf,
+                title: 'Geste écologique',
+                texte: 'Participez à la transition énergétique. L\'énergie solaire est propre, renouvelable et disponible en abondance en Israël.',
+              },
+              {
+                icon: TrendingUp,
+                title: 'Valorisation immobilière',
+                texte: 'Une maison équipée de panneaux solaires gagne en valeur sur le marché immobilier.',
+              },
+            ].map((item, index) => (
+              <Card key={index}>
+                <CardContent className="p-6 space-y-3">
+                  <div className="w-12 h-12 rounded-xl bg-solar-gradient flex items-center justify-center">
+                    <item.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground">{item.texte}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 3 - Nos solutions */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Deux solutions adaptées à vos besoins
+            </h2>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Solution On-Grid */}
+            <Card className="overflow-hidden">
+              <div className="relative h-64">
+                <Image
+                  src="/images/particuliers/particuliers_02_on_grid.jpg"
+                  alt="Solution On-Grid"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Solution On-Grid</CardTitle>
+                  <Badge variant="secondary">Économique</Badge>
+                </div>
+                <CardDescription>L&apos;essentiel pour commencer à économiser</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Vos panneaux produisent de l&apos;électricité en journée. Vous consommez directement ce que vous produisez et réduisez votre facture. Le soir, le réseau prend le relais.
+                </p>
+                <div className="space-y-2">
+                  <h4 className="font-semibold">Inclus :</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-green-600" />
+                      Panneaux solaires premium MAZDA
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-green-600" />
+                      Onduleur DEYE haute performance
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-green-600" />
+                      Installation complète
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-green-600" />
+                      Monitoring en temps réel
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-green-600" />
+                      Garantie 25 ans sur les panneaux
+                    </li>
+                  </ul>
+                </div>
+                <div className="pt-4 border-t">
+                  <h4 className="font-semibold mb-2">Idéal pour :</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Maisons avec consommation principalement en journée</li>
+                    <li>• Budget maîtrisé</li>
+                    <li>• Première installation solaire</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Solution Hybride */}
+            <Card className="overflow-hidden">
+              <div className="relative h-64">
+                <Image
+                  src="/images/particuliers/particuliers_03_hybride_batterie.jpg"
+                  alt="Solution Hybride"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Solution Hybride</CardTitle>
+                  <Badge className="bg-energy text-white">Autonomie maximale</Badge>
+                </div>
+                <CardDescription>L&apos;indépendance énergétique complète</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Vos panneaux alimentent votre maison en journée. Le surplus est stocké dans votre batterie pour le soir et la nuit. Vous êtes autonome 24h/24, même en cas de coupure réseau.
+                </p>
+                <div className="space-y-2">
+                  <h4 className="font-semibold">Inclus :</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-green-600" />
+                      Panneaux solaires premium MAZDA
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-green-600" />
+                      Onduleur hybride DEYE
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-green-600" />
+                      Batterie de stockage MAZDA
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-green-600" />
+                      Installation complète
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-green-600" />
+                      Monitoring avancé
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-green-600" />
+                      Garantie 25 ans panneaux + 10 ans batterie
+                    </li>
+                  </ul>
+                </div>
+                <div className="pt-4 border-t">
+                  <h4 className="font-semibold mb-2">Idéal pour :</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Maisons avec consommation jour et soir</li>
+                    <li>• Recherche d&apos;autonomie maximale</li>
+                    <li>• Protection contre les coupures de courant</li>
+                    <li>• Objectif d&apos;autoconsommation totale</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 4 - Comment ça marche */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Un projet clé en main en 4 étapes
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                icon: Calculator,
+                step: '1',
+                title: 'Simulation',
+                description: 'Simulez vos économies en ligne en 2 minutes. Recevez une estimation personnalisée.',
+              },
+              {
+                icon: ClipboardCheck,
+                step: '2',
+                title: 'Étude technique',
+                description: 'Notre expert se déplace chez vous pour une étude complète de votre toiture et de vos besoins.',
+              },
+              {
+                icon: Wrench,
+                step: '3',
+                title: 'Installation',
+                description: 'Notre équipe installe votre système en 1 à 2 jours. Propre, rapide, professionnel.',
+              },
+              {
+                icon: Smartphone,
+                step: '4',
+                title: 'Suivi',
+                description: 'Suivez votre production et vos économies en temps réel depuis l&apos;application.',
+              },
+            ].map((item, index) => (
+              <div key={index} className="relative">
+                <div className="text-7xl font-bold text-muted/30 absolute -top-4 -left-2">
+                  {item.step}
+                </div>
+                <div className="relative pt-8 pl-4">
+                  <div className="w-12 h-12 rounded-xl bg-solar-gradient flex items-center justify-center mb-4">
+                    <item.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                  <p className="text-muted-foreground">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 5 - Témoignage */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+        <div className="max-w-4xl mx-auto">
+          <TestimonialCard
+            quote="Notre facture d'électricité a été divisée par 3. L'installation s'est faite en une journée et l'équipe était très professionnelle. Je recommande MZ Energy à tous mes voisins."
+            author="David R., Netanya"
+            details="Installation : 12 panneaux (7.2 kWc) | Économies : 65% sur la facture | Depuis : Janvier 2024"
+            image="/images/particuliers/particuliers_04_temoignage.jpg"
+          />
+        </div>
+      </section>
+
+      {/* Section 6 - FAQ */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Questions fréquentes
+            </h2>
+          </div>
+
+          <FAQ
+            items={[
+              {
+                question: 'Combien coûte une installation solaire ?',
+                answer: 'Le coût dépend de la taille de votre installation et de vos besoins. Utilisez notre simulateur pour obtenir une estimation personnalisée. En moyenne, l\'investissement est amorti en 5 à 7 ans.',
+              },
+              {
+                question: 'Quelle est la durée de vie des panneaux ?',
+                answer: 'Nos panneaux MAZDA sont garantis 25 ans. Leur durée de vie réelle dépasse souvent 30 ans avec une perte de rendement minime (moins de 0.5% par an).',
+              },
+              {
+                question: 'Mon toit est-il adapté ?',
+                answer: 'La plupart des toits en Israël sont adaptés au solaire. Lors de l\'étude technique gratuite, notre expert évalue l\'orientation, l\'inclinaison et l\'ombrage de votre toiture.',
+              },
+              {
+                question: 'Que se passe-t-il en cas de coupure de courant ?',
+                answer: 'Avec une solution On-Grid, l\'installation s\'arrête par sécurité. Avec une solution Hybride (batterie), vous continuez à être alimenté par votre batterie.',
+              },
+              {
+                question: 'Puis-je revendre mon surplus d\'électricité ?',
+                answer: 'Oui ! En Israël, vous pouvez revendre jusqu\'à 14 000 kWh par an au réseau. Notre simulateur calcule automatiquement vos revenus potentiels.',
+              },
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* Section 7 - CTA Final */}
+      <CTASection
+        title="Passez au solaire dès maintenant"
+        text="Simulez vos économies gratuitement et découvrez combien vous pouvez économiser."
+        primaryCTA={{
+          text: '🧮 Lancer ma simulation',
+          href: '/simulation',
+        }}
+        secondaryCTA={{
+          text: '📞 Être rappelé',
+          action: 'callback',
+        }}
+      />
+    </div>
+  )
+}
+
