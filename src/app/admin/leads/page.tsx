@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Users, Loader2 } from 'lucide-react'
+import { Users, Loader2, Trash2 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { LeadsTable } from '@/components/leads-table'
+import { Button } from '@/components/ui/button'
 
 interface Lead {
   id: string
@@ -28,6 +29,8 @@ export default function AdminLeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([])
   const [commercials, setCommercials] = useState<Commercial[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [deleting, setDeleting] = useState(false)
   
   const loadData = async () => {
     setLoading(true)
@@ -61,6 +64,37 @@ export default function AdminLeadsPage() {
     loadData()
   }, [])
 
+  const handleDeleteSelected = async () => {
+    if (selectedIds.size === 0) return
+    
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer ${selectedIds.size} lead(s) ? Cette action est irréversible.`)) {
+      return
+    }
+
+    setDeleting(true)
+    try {
+      const response = await fetch('/api/admin/leads', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: Array.from(selectedIds) }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Erreur lors de la suppression')
+      }
+
+      setSelectedIds(new Set())
+      loadData()
+    } catch (err) {
+      console.error('Erreur suppression leads:', err)
+      alert(err instanceof Error ? err.message : 'Erreur lors de la suppression')
+    } finally {
+      setDeleting(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -80,8 +114,29 @@ export default function AdminLeadsPage() {
           </h1>
           <p className="text-muted-foreground mt-1">
             {leads.length} lead{(leads.length > 1 ? 's' : '')} au total
+            {selectedIds.size > 0 && ` • ${selectedIds.size} sélectionné(s)`}
           </p>
         </div>
+        {selectedIds.size > 0 && (
+          <Button 
+            variant="destructive" 
+            onClick={handleDeleteSelected}
+            disabled={deleting}
+            className="gap-2"
+          >
+            {deleting ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Suppression...
+              </>
+            ) : (
+              <>
+                <Trash2 className="w-4 h-4" />
+                Supprimer ({selectedIds.size})
+              </>
+            )}
+          </Button>
+        )}
       </div>
 
       {/* Stats */}
@@ -155,7 +210,13 @@ export default function AdminLeadsPage() {
         </CardHeader>
         <CardContent>
           {leads && leads.length > 0 ? (
-            <LeadsTable leads={leads} commercials={commercials} onLoadLeads={loadData} />
+            <LeadsTable 
+              leads={leads} 
+              commercials={commercials} 
+              onLoadLeads={loadData}
+              selectedIds={selectedIds}
+              onSelectedIdsChange={setSelectedIds}
+            />
           ) : (
             <div className="text-center py-12">
               <Users className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />

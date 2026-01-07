@@ -12,7 +12,9 @@ import {
   Loader2,
   Check,
   Trash2,
-  Pencil
+  Pencil,
+  CheckSquare,
+  Square
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -59,10 +61,13 @@ interface LeadsTableProps {
   leads: Lead[]
   commercials: Commercial[]
   onLoadLeads?: () => void
+  selectedIds?: Set<string>
+  onSelectedIdsChange?: (ids: Set<string>) => void
 }
 
-export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads }: LeadsTableProps) {
+export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, selectedIds: externalSelectedIds, onSelectedIdsChange }: LeadsTableProps) {
   const [leads, setLeads] = useState<Lead[]>(initialLeads)
+  const [internalSelectedIds, setInternalSelectedIds] = useState<Set<string>>(new Set())
   const [transferDialogOpen, setTransferDialogOpen] = useState<string | null>(null)
   const [editDialogOpen, setEditDialogOpen] = useState<string | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<string | null>(null)
@@ -71,6 +76,29 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads }: Le
   const [deleting, setDeleting] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  
+  // Utiliser l'état externe si fourni, sinon utiliser l'état interne
+  const selectedIds = externalSelectedIds ?? internalSelectedIds
+  
+  // Wrapper pour setSelectedIds qui gère les deux cas
+  const updateSelectedIds = (updater: Set<string> | ((prev: Set<string>) => Set<string>)) => {
+    if (onSelectedIdsChange) {
+      // Si onSelectedIdsChange est fourni, c'est une fonction qui prend directement un Set
+      if (updater instanceof Set) {
+        onSelectedIdsChange(updater)
+      } else {
+        // Si c'est une fonction updater, on l'applique d'abord
+        onSelectedIdsChange(updater(selectedIds))
+      }
+    } else {
+      // Sinon, on utilise setInternalSelectedIds qui accepte les deux formes
+      if (updater instanceof Set) {
+        setInternalSelectedIds(updater)
+      } else {
+        setInternalSelectedIds(updater)
+      }
+    }
+  }
   
   // État pour l'édition
   const [editingLead, setEditingLead] = useState<Partial<Lead> | null>(null)
@@ -266,12 +294,43 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads }: Le
     }
   }
 
+  const toggleSelection = (leadId: string) => {
+    updateSelectedIds((prev: Set<string>) => {
+      const next = new Set(prev)
+      if (next.has(leadId)) {
+        next.delete(leadId)
+      } else {
+        next.add(leadId)
+      }
+      return next
+    })
+  }
+
   return (
     <>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b">
+              <th className="text-left p-4 font-medium text-muted-foreground w-12">
+                <button
+                  onClick={() => {
+                    if (selectedIds.size === leads.length) {
+                      updateSelectedIds(new Set<string>())
+                    } else {
+                      updateSelectedIds(new Set<string>(leads.map(l => l.id)))
+                    }
+                  }}
+                  className="p-1 hover:bg-secondary rounded"
+                  type="button"
+                >
+                  {selectedIds.size === leads.length && leads.length > 0 ? (
+                    <CheckSquare className="w-5 h-5 text-primary" />
+                  ) : (
+                    <Square className="w-5 h-5 text-muted-foreground" />
+                  )}
+                </button>
+              </th>
               <th className="text-left p-4 font-medium text-muted-foreground">Contact</th>
               <th className="text-left p-4 font-medium text-muted-foreground">Téléphone</th>
               <th className="text-left p-4 font-medium text-muted-foreground">Ville</th>
@@ -282,8 +341,23 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads }: Le
             </tr>
           </thead>
           <tbody>
-            {leads.map((lead) => (
-              <tr key={lead.id} className="border-b hover:bg-secondary/50">
+            {leads.map((lead) => {
+              const isSelected = selectedIds.has(lead.id)
+              return (
+              <tr key={lead.id} className={`border-b hover:bg-secondary/50 ${isSelected ? 'bg-secondary/30' : ''}`}>
+                <td className="p-4">
+                  <button
+                    onClick={() => toggleSelection(lead.id)}
+                    className="p-1 hover:bg-secondary rounded"
+                    type="button"
+                  >
+                    {isSelected ? (
+                      <CheckSquare className="w-5 h-5 text-primary" />
+                    ) : (
+                      <Square className="w-5 h-5 text-muted-foreground" />
+                    )}
+                  </button>
+                </td>
                 <td className="p-4">
                   <div>
                     <p className="font-medium">{lead.prenom} {lead.nom}</p>
@@ -626,7 +700,8 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads }: Le
                   </div>
                 </td>
               </tr>
-            ))}
+              )
+            })}
           </tbody>
         </table>
       </div>

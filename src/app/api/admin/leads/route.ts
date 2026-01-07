@@ -91,3 +91,74 @@ export async function GET() {
   }
 }
 
+/**
+ * API Route pour supprimer des leads en masse (admin only)
+ * DELETE /api/admin/leads
+ * Body: { ids: string[] }
+ */
+export async function DELETE(request: NextRequest) {
+  try {
+    const { authorized, error, statusCode } = await checkAdminAccess()
+    
+    if (!authorized) {
+      return NextResponse.json({ error }, { status: statusCode || 401 })
+    }
+    
+    const body = await request.json()
+    const { ids } = body
+    
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return NextResponse.json({ error: 'IDs manquants ou invalides' }, { status: 400 })
+    }
+    
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!serviceRoleKey) {
+      return NextResponse.json({ error: 'Configuration serveur manquante' }, { status: 500 })
+    }
+    
+    const adminSupabase = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      serviceRoleKey
+    )
+    
+    // Pour chaque lead, supprimer aussi la simulation associée si elle existe
+    for (const leadId of ids) {
+      // Trouver la simulation associée
+      const { data: simulation } = await adminSupabase
+        .from('simulations')
+        .select('id')
+        .eq('lead_id', leadId)
+        .maybeSingle()
+      
+      // Supprimer la simulation si elle existe
+      if (simulation) {
+        const { error: simDeleteError } = await adminSupabase
+          .from('simulations')
+          .delete()
+          .eq('id', simulation.id)
+        
+        if (simDeleteError) {
+          console.error(`Erreur suppression simulation pour lead ${leadId}:`, simDeleteError)
+        }
+      }
+    }
+    
+    // Supprimer les leads
+    const { error: deleteError } = await adminSupabase
+      .from('leads')
+      .delete()
+      .in('id', ids)
+    
+    if (deleteError) {
+      console.error('Erreur suppression leads:', deleteError)
+      return NextResponse.json({ error: 'Erreur lors de la suppression' }, { status: 500 })
+    }
+    
+    return NextResponse.json({ success: true, deletedCount: ids.length })
+    
+  } catch (error) {
+    console.error('Erreur API admin leads DELETE:', error)
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+  }
+}
+
