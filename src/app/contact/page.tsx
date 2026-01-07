@@ -34,6 +34,13 @@ export default function ContactPage() {
     e.preventDefault()
     setSubmitting(true)
 
+    // Validation manuelle des champs requis
+    if (!formData.type || !formData.sujet) {
+      alert('Veuillez remplir tous les champs obligatoires.')
+      setSubmitting(false)
+      return
+    }
+
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -148,7 +155,6 @@ export default function ContactPage() {
                     <Select
                       value={formData.type}
                       onValueChange={(value) => setFormData({ ...formData, type: value })}
-                      required
                     >
                       <SelectTrigger id="type">
                         <SelectValue placeholder="Sélectionner" />
@@ -165,7 +171,6 @@ export default function ContactPage() {
                     <Select
                       value={formData.sujet}
                       onValueChange={(value) => setFormData({ ...formData, sujet: value })}
-                      required
                     >
                       <SelectTrigger id="sujet">
                         <SelectValue placeholder="Sélectionner" />

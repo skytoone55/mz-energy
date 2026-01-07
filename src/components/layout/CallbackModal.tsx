@@ -39,6 +39,13 @@ export function CallbackModal({ open, onOpenChange }: CallbackModalProps) {
     e.preventDefault()
     setSubmitting(true)
 
+    // Validation manuelle des champs requis
+    if (!formData.type) {
+      alert('Veuillez sélectionner votre profil.')
+      setSubmitting(false)
+      return
+    }
+
     // TODO: Intégrer avec l'API pour créer un lead
     // Pour l'instant, simulation d'un envoi
     await new Promise(resolve => setTimeout(resolve, 1000))
@@ -103,7 +110,6 @@ export function CallbackModal({ open, onOpenChange }: CallbackModalProps) {
               <Select
                 value={formData.type}
                 onValueChange={(value) => setFormData({ ...formData, type: value })}
-                required
               >
                 <SelectTrigger id="type">
                   <SelectValue placeholder="Sélectionner" />
