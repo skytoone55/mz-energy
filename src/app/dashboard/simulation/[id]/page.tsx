@@ -107,7 +107,7 @@ export default async function SimulationDetailPage({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard/simulations">
+          <Link href="/dashboard/simulations" className="pdf-hide">
             <Button variant="ghost" size="icon">
               <ArrowLeft className="w-5 h-5" />
             </Button>
@@ -127,7 +127,7 @@ export default async function SimulationDetailPage({
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pdf-hide">
           <Link href={`/dashboard/simulation/${simulation.id}/modifier`}>
             <Button variant="outline">
               Modifier
@@ -137,6 +137,8 @@ export default async function SimulationDetailPage({
         </div>
       </div>
 
+      {/* Contenu à exporter en PDF */}
+      <div id="simulation-pdf-content">
       {/* Paramètres */}
       <Card>
         <CardHeader>
@@ -299,6 +301,7 @@ export default async function SimulationDetailPage({
           )
         })}
         </div>
+      </div>
     </div>
   )
 }

@@ -218,3 +218,8 @@
     radial-gradient(ellipse at 70% 80%, oklch(0.55 0.15 145 / 0.1) 0%, transparent 50%),
     linear-gradient(180deg, oklch(0.12 0.02 260) 0%, oklch(0.1 0.02 260) 100%);
 }
+
+/* Classe pour masquer les éléments lors de l'export PDF */
+.pdf-exporting .pdf-hide {
+  display: none !important;
+}
