@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
       .insert({
         user_id: user.id,
         nom_projet: body.nomProjet || null,
+        contact_id: body.contactId || null,
         conso_annuelle: data.consoAnnuelle,
         part_jour: data.partJour,
         surface_toit: data.surfaceToit,
@@ -87,6 +88,7 @@ export async function POST(request: NextRequest) {
         prix_revente_kwh: data.prixReventeKwh,
         resultats: resultatsComplets,
         type: 'commercial',
+        statut: 'en_cours',
       })
       .select()
       .single()

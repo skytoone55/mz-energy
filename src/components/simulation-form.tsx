@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -12,16 +12,18 @@ import {
   ArrowRight,
   ArrowLeft,
   Calculator,
-  Loader2
+  Loader2,
+  User
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { ContactSelector } from '@/components/contact-selector'
 
 const simulationSchema = z.object({
-  nomProjet: z.string().optional(),
+  nomProjet: z.string().min(1, 'Le nom du projet est obligatoire'),
   consoAnnuelle: z.number().min(1000).max(1000000),
   partJour: z.number().min(0).max(100),
   surfaceToit: z.number().min(10).max(10000),
@@ -54,11 +56,22 @@ export function SimulationForm({
   mode = 'create'
 }: SimulationFormProps) {
   const router = useRouter()
-  const [step, setStep] = useState(1)
+  const searchParams = useSearchParams()
+  const [step, setStep] = useState(mode === 'create' ? 0 : 1) // Étape 0 = Contact (uniquement en mode create)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [consoInputMode, setConsoInputMode] = useState<'kwh' | 'shekels'>('kwh')
+  const [selectedContactId, setSelectedContactId] = useState<string | null>(
+    mode === 'create' ? (searchParams?.get('contactId') || null) : null
+  )
   const TARIF_FIXE = 0.64 // ₪/kWh
+
+  // Si contactId est fourni dans l'URL, passer directement à l'étape 1
+  useEffect(() => {
+    if (mode === 'create' && selectedContactId && step === 0) {
+      setStep(1)
+    }
+  }, [selectedContactId, mode, step])
 
   const form = useForm<FormData>({
     resolver: zodResolver(simulationSchema),
@@ -72,7 +85,21 @@ export function SimulationForm({
     },
   })
 
-  const { register, setValue, watch, handleSubmit, formState: { errors } } = form
+  const { register, setValue, watch, handleSubmit, reset, formState: { errors } } = form
+  
+  // Réinitialiser le formulaire quand initialValues change (mode edit)
+  useEffect(() => {
+    if (initialValues && mode === 'edit') {
+      reset({
+        nomProjet: initialValues.nomProjet || '',
+        consoAnnuelle: initialValues.consoAnnuelle,
+        partJour: initialValues.partJour,
+        surfaceToit: initialValues.surfaceToit,
+        prixAchatKwh: initialValues.prixAchatKwh,
+        prixReventeKwh: initialValues.prixReventeKwh,
+      })
+    }
+  }, [initialValues, mode, reset])
 
   const partJour = watch('partJour')
   const consoAnnuelle = watch('consoAnnuelle')
@@ -109,6 +136,11 @@ export function SimulationForm({
       : data.consoAnnuelle / TARIF_FIXE
 
     try {
+      const dataToSend = {
+        ...data,
+        consoAnnuelle: Math.round(consoKwh),
+        contactId: mode === 'create' ? selectedContactId : undefined,
+      }
       const url = mode === 'edit' && simulationId
         ? `/api/simulation/commercial/${simulationId}`
         : '/api/simulation/commercial'
@@ -118,10 +150,7 @@ export function SimulationForm({
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...data,
-          consoAnnuelle: Math.round(consoKwh) // Toujours envoyer en kWh
-        }),
+        body: JSON.stringify(dataToSend),
       })
 
       const result = await response.json()
@@ -130,7 +159,8 @@ export function SimulationForm({
         throw new Error(result.error || 'Erreur lors de la simulation')
       }
 
-      // Forcer un rechargement complet pour afficher les données mises à jour
+      // Forcer un rechargement complet avec window.location.href
+      // Cela garantit que les données sont rechargées depuis le serveur
       window.location.href = `/dashboard/simulation/${result.simulationId}`
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Une erreur est survenue')
@@ -156,27 +186,68 @@ export function SimulationForm({
 
       {/* Progress */}
       <div className="flex items-center gap-2 mb-8">
-        {[1, 2, 3].map((s) => (
-          <div key={s} className="flex items-center">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                s === step
-                  ? 'bg-primary text-primary-foreground'
-                  : s < step
-                    ? 'bg-energy text-white'
-                    : 'bg-muted text-muted-foreground'
-              }`}
-            >
-              {s}
+        {(() => {
+          const steps = mode === 'create' ? [0, 1, 2, 3] : [1, 2, 3]
+          return steps.map((s, idx) => (
+            <div key={s} className="flex items-center">
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+                  s === step
+                    ? 'bg-primary text-primary-foreground'
+                    : s < step
+                      ? 'bg-energy text-white'
+                      : 'bg-muted text-muted-foreground'
+                }`}
+              >
+                {s === 0 ? <User className="w-4 h-4" /> : s}
+              </div>
+              {idx < steps.length - 1 && (
+                <div className={`w-16 h-1 mx-2 rounded ${s < step ? 'bg-energy' : 'bg-muted'}`} />
+              )}
             </div>
-            {s < 3 && (
-              <div className={`w-16 h-1 mx-2 rounded ${s < step ? 'bg-energy' : 'bg-muted'}`} />
-            )}
-          </div>
-        ))}
+          ))
+        })()}
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Step 0: Contact (uniquement en mode create) */}
+        {step === 0 && mode === 'create' && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="w-5 h-5 text-solar" />
+                Contact client
+              </CardTitle>
+              <CardDescription>
+                Sélectionnez un contact existant ou créez-en un nouveau
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ContactSelector
+                selectedContactId={selectedContactId}
+                onContactSelect={(contactId) => {
+                  setSelectedContactId(contactId)
+                  if (contactId) {
+                    setStep(1)
+                  }
+                }}
+                onContactCreate={async (contact) => {
+                  const response = await fetch('/api/contacts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(contact),
+                  })
+                  const data = await response.json()
+                  if (!response.ok) {
+                    throw new Error(data.error || 'Erreur création contact')
+                  }
+                  return data.contact.id
+                }}
+              />
+            </CardContent>
+          </Card>
+        )}
+
         {/* Step 1: Infos projet */}
         {step === 1 && (
           <Card>
@@ -191,12 +262,15 @@ export function SimulationForm({
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="nomProjet">Nom du projet (optionnel)</Label>
+                <Label htmlFor="nomProjet">Nom du projet *</Label>
                 <Input
                   id="nomProjet"
                   placeholder="Ex: Villa Cohen - Herzliya"
                   {...register('nomProjet')}
                 />
+                {errors.nomProjet && (
+                  <p className="text-sm text-destructive">{errors.nomProjet.message}</p>
+                )}
               </div>
 
               <div className="space-y-3">
@@ -273,7 +347,16 @@ export function SimulationForm({
               <Button
                 type="button"
                 className="w-full bg-solar-gradient hover:opacity-90 text-white"
-                onClick={() => setStep(2)}
+                onClick={() => {
+                  if (mode === 'create' && step === 0) {
+                    // Si on est à l'étape 0, aller à l'étape 1
+                    if (selectedContactId) {
+                      setStep(1)
+                    }
+                  } else {
+                    setStep(2)
+                  }
+                }}
               >
                 Continuer
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -324,7 +407,7 @@ export function SimulationForm({
                   type="button"
                   variant="outline"
                   className="flex-1"
-                  onClick={() => setStep(1)}
+                  onClick={() => setStep(mode === 'create' ? 0 : 1)}
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Retour

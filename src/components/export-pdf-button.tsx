@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Download, Loader2 } from 'lucide-react'
+import { Download, Loader2, Printer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 
@@ -42,63 +42,32 @@ export function ExportPDFButton({ simulation, showPrices = false, onActiveScenar
     loadUser()
   }, [supabase])
 
-  const handleExport = async () => {
+  // Export via impression navigateur (rendu identique au site)
+  const handlePrintPDF = () => {
     setExporting(true)
-    try {
-      // Import dynamique pour réduire la taille du bundle
-      const { exportSimulationPDF } = await import('@/lib/pdf-export')
-      
-      // Vérifier s'il y a un élément avec les données filtrées (depuis SimulationDetailClient)
-      let simulationToExport = simulation
-      const pdfDataElement = document.getElementById('pdf-export-data')
-      if (pdfDataElement && pdfDataElement.textContent) {
-        try {
-          simulationToExport = JSON.parse(pdfDataElement.textContent)
-        } catch (e) {
-          console.warn('Impossible de parser les données PDF filtrées, utilisation des données par défaut')
-        }
-      }
-      
-      // Convertir les données de simulation au bon format
-      const simulationData = {
-        id: simulationToExport.id,
-        nomProjet: simulationToExport.nom_projet,
-        created_at: simulationToExport.created_at,
-        conso_annuelle: simulationToExport.conso_annuelle,
-        part_jour: simulationToExport.part_jour,
-        surface_toit: simulationToExport.surface_toit,
-        prix_achat_kwh: simulationToExport.prix_achat_kwh,
-        prix_revente_kwh: simulationToExport.prix_revente_kwh,
-        resultats: simulationToExport.resultats as {
-          scenarios: any[]
-          meilleurScenario: string
-        }
-      }
-      
-      exportSimulationPDF(simulationData, user, showPrices)
-    } catch (error) {
-      console.error('Erreur export PDF:', error)
-      alert('Erreur lors de la génération du PDF. Veuillez réessayer.')
-    } finally {
+    
+    // Petit délai pour afficher le loader
+    setTimeout(() => {
+      window.print()
       setExporting(false)
-    }
+    }, 100)
   }
 
   return (
     <Button 
-      onClick={handleExport}
+      onClick={handlePrintPDF}
       disabled={exporting}
       className="bg-solar-gradient hover:opacity-90 text-white gap-2"
     >
       {exporting ? (
         <>
           <Loader2 className="w-4 h-4 animate-spin" />
-          Export...
+          Préparation...
         </>
       ) : (
         <>
-          <Download className="w-4 h-4" />
-          Export PDF
+          <Printer className="w-4 h-4" />
+          Exporter PDF
         </>
       )}
     </Button>

@@ -472,11 +472,17 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                                 <SelectValue placeholder="Sélectionner un commercial" />
                               </SelectTrigger>
                               <SelectContent>
-                                {commercials.map((commercial) => (
-                                  <SelectItem key={commercial.id} value={commercial.id}>
-                                    {commercial.prenom} {commercial.nom}
+                                {commercials.length > 0 ? (
+                                  commercials.map((commercial) => (
+                                    <SelectItem key={commercial.id} value={commercial.id}>
+                                      {commercial.prenom} {commercial.nom}
+                                    </SelectItem>
+                                  ))
+                                ) : (
+                                  <SelectItem value="none" disabled>
+                                    Aucun utilisateur disponible
                                   </SelectItem>
-                                ))}
+                                )}
                               </SelectContent>
                             </Select>
                           </div>

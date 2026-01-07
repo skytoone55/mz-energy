@@ -42,6 +42,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const commercialId = searchParams.get('commercialId')
     const search = searchParams.get('search')?.trim()
+    const statut = searchParams.get('statut') // 'en_cours' ou 'validee'
     const isAdmin = profile.role === 'admin'
     
     let supabaseClient
@@ -62,7 +63,8 @@ export async function GET(request: NextRequest) {
       .select(`
         *,
         user_profiles(prenom, nom, email),
-        leads(prenom, nom, email, telephone)
+        leads(prenom, nom, email, telephone),
+        contacts(prenom, nom, email, telephone)
       `)
       .order('created_at', { ascending: false })
     
@@ -76,6 +78,14 @@ export async function GET(request: NextRequest) {
       } else {
         query = query.eq('user_id', commercialId)
       }
+    }
+    
+    // Filtrer par statut si fourni
+    if (statut) {
+      query = query.eq('statut', statut)
+    } else {
+      // Par défaut, "Mes simulations" affiche uniquement les "en_cours"
+      // Mais on laisse vide pour que l'appelant décide
     }
     
     const { data: simulations, error: fetchError } = await query

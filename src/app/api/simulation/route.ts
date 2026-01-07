@@ -56,11 +56,22 @@ export async function POST(request: NextRequest) {
       prixReventeKwh: data.prixReventeKwh,
     })
     
-    // 3. Sauvegarder la simulation
+    // 3. Générer le nom automatique : {nom} {prenom} - Simulation #{numero}
+    // Compter les simulations existantes pour ce lead
+    const { count } = await supabase
+      .from('simulations')
+      .select('*', { count: 'exact', head: true })
+      .eq('lead_id', lead.id)
+    
+    const numeroSimulation = (count || 0) + 1
+    const nomProjet = `${data.nom} ${data.prenom} - Simulation #${numeroSimulation}`
+    
+    // 4. Sauvegarder la simulation
     const { data: simulation, error: simError } = await supabase
       .from('simulations')
       .insert({
         lead_id: lead.id,
+        nom_projet: nomProjet,
         conso_annuelle: data.consoAnnuelle,
         part_jour: data.partJour,
         surface_toit: data.surfaceToit,
@@ -68,6 +79,7 @@ export async function POST(request: NextRequest) {
         prix_revente_kwh: data.prixReventeKwh,
         resultats: resultats,
         type: 'particulier',
+        statut: 'en_cours',
       })
       .select()
       .single()

@@ -45,10 +45,11 @@ export default function AdminLeadsPage() {
       const commercialsData = await commercialsRes.json()
       if (!commercialsRes.ok) throw new Error(commercialsData.error || 'Failed to fetch commercials')
 
-      const activeCommercials = commercialsData.users
-        .filter((u: any) => u.role === 'commercial' && u.actif)
+      // Inclure tous les utilisateurs actifs (commerciaux ET administrateurs)
+      const activeUsers = commercialsData.users
+        .filter((u: any) => (u.role === 'commercial' || u.role === 'admin') && u.actif)
         .map((u: any) => ({ id: u.id, prenom: u.prenom, nom: u.nom }))
-      setCommercials(activeCommercials)
+      setCommercials(activeUsers)
 
       // Les leads sont déjà formatés par l'API
       setLeads(leadsData.leads)

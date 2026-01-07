@@ -110,7 +110,7 @@ export default function ResultatPage() {
           {/* Back button */}
           <Link 
             href="/simulation"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8 no-print"
           >
             <ArrowLeft className="w-4 h-4" />
             Nouvelle simulation
@@ -181,7 +181,7 @@ export default function ResultatPage() {
           <h2 className="text-2xl font-bold mb-6">Comparaison des scénarios recommandés</h2>
           
           <Tabs defaultValue={scenariosAffiches.find(s => s.id === resultats.meilleurScenario)?.id || scenariosAffiches[0]?.id} className="mb-8">
-            <TabsList className={`grid ${scenariosAffiches.length === 2 ? 'grid-cols-2' : 'grid-cols-4'} mb-6`}>
+            <TabsList className={`grid ${scenariosAffiches.length === 2 ? 'grid-cols-2' : 'grid-cols-4'} mb-6 no-print`}>
               {scenariosAffiches.map((scenario) => (
                 <TabsTrigger 
                   key={scenario.id} 
@@ -362,7 +362,7 @@ export default function ResultatPage() {
           </div>
 
           {/* CTA Section */}
-          <Card className="bg-primary text-primary-foreground">
+          <Card className="bg-primary text-primary-foreground no-print">
             <CardContent className="p-8">
               <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div>

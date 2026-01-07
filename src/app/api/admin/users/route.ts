@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
     }
     
     const body = await request.json()
-    const { email, password, prenom, nom, role } = body
+    const { email, password, prenom, nom, role, societe } = body
     
     // Validation
     if (!email || !password || !prenom || !nom) {
@@ -128,6 +128,7 @@ export async function POST(request: NextRequest) {
         nom,
         role: role || 'commercial',
         actif: true,
+        societe: societe || null,
       })
     
     if (profileError) {
@@ -158,7 +159,7 @@ export async function PATCH(request: NextRequest) {
     }
     
     const body = await request.json()
-    const { userId, prenom, nom, role, actif } = body
+    const { userId, prenom, nom, role, actif, societe } = body
     
     // Validation
     if (!userId) {
@@ -184,6 +185,7 @@ export async function PATCH(request: NextRequest) {
     if (nom !== undefined) updateData.nom = nom
     if (role !== undefined) updateData.role = role
     if (actif !== undefined) updateData.actif = actif
+    if (societe !== undefined) updateData.societe = societe || null
     
     // Mettre à jour le profil
     const { error: updateError } = await adminSupabase

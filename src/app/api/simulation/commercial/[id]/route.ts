@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { calculerSimulation } from '@/lib/pv-engine'
 import { calculerPrixSimulation, DEFAULT_PRICE_CONFIG } from '@/lib/price-engine'
 import { simulationSchema } from '@/lib/validations'
@@ -96,18 +97,36 @@ export async function PUT(
       scenarios: scenariosAvecPrix,
     }
     
-    // Mettre à jour la simulation
-    const { error: updateError } = await supabase
+    // Données à mettre à jour
+    const updateData = {
+      nom_projet: body.nomProjet || null,
+      conso_annuelle: data.consoAnnuelle,
+      part_jour: data.partJour,
+      surface_toit: data.surfaceToit,
+      prix_achat_kwh: data.prixAchatKwh,
+      prix_revente_kwh: data.prixReventeKwh,
+      resultats: resultatsComplets,
+    }
+    
+    // Utiliser le client admin pour contourner les RLS lors de la mise à jour
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!serviceRoleKey) {
+      console.error('SUPABASE_SERVICE_ROLE_KEY manquante')
+      return NextResponse.json(
+        { error: 'Configuration serveur manquante' },
+        { status: 500 }
+      )
+    }
+    
+    const adminSupabase = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      serviceRoleKey
+    )
+    
+    // Mettre à jour la simulation avec le client admin
+    const { error: updateError } = await adminSupabase
       .from('simulations')
-      .update({
-        nom_projet: body.nomProjet || null,
-        conso_annuelle: data.consoAnnuelle,
-        part_jour: data.partJour,
-        surface_toit: data.surfaceToit,
-        prix_achat_kwh: data.prixAchatKwh,
-        prix_revente_kwh: data.prixReventeKwh,
-        resultats: resultatsComplets,
-      })
+      .update(updateData)
       .eq('id', id)
     
     if (updateError) {
@@ -118,9 +137,37 @@ export async function PUT(
       )
     }
     
+    // Récupérer la simulation mise à jour pour vérifier que tout est bien sauvegardé
+    const { data: updatedSimulation, error: fetchUpdatedError } = await adminSupabase
+      .from('simulations')
+      .select('*')
+      .eq('id', id)
+      .single()
+    
+    if (fetchUpdatedError) {
+      console.error('Erreur récupération simulation mise à jour:', fetchUpdatedError)
+      // Retourner quand même les données calculées même si la récupération échoue
+      return NextResponse.json({
+        success: true,
+        simulationId: id,
+        resultats: resultatsComplets,
+      })
+    }
+    
+    // Retourner toutes les données de la simulation mise à jour
     return NextResponse.json({
       success: true,
       simulationId: id,
+      simulation: {
+        id: updatedSimulation.id,
+        nom_projet: updatedSimulation.nom_projet,
+        conso_annuelle: updatedSimulation.conso_annuelle,
+        part_jour: updatedSimulation.part_jour,
+        surface_toit: updatedSimulation.surface_toit,
+        prix_achat_kwh: updatedSimulation.prix_achat_kwh,
+        prix_revente_kwh: updatedSimulation.prix_revente_kwh,
+        resultats: updatedSimulation.resultats,
+      },
       resultats: resultatsComplets,
     })
     

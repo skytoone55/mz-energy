@@ -81,6 +81,8 @@ export default function SimulationsListPage() {
       if (filters.search) {
         params.append('search', filters.search)
       }
+      // Filtrer uniquement les simulations "en_cours" pour "Mes simulations"
+      params.append('statut', 'en_cours')
 
       const simulationsRes = await fetch(`/api/dashboard/simulations?${params.toString()}`, {
         cache: 'no-store'

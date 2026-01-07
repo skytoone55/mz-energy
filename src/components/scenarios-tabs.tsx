@@ -25,6 +25,8 @@ interface ScenariosTabsProps {
 }
 
 export function ScenariosTabs({ scenarios, meilleurScenario, surfaceToit, onActiveTabChange }: ScenariosTabsProps) {
+  const [activeTab, setActiveTab] = useState<string>('recommandes')
+  
   const scenarioLabels: ScenarioLabels = {
     A: { 
       name: 'Autoconsommation Jour', 
@@ -87,6 +89,7 @@ export function ScenariosTabs({ scenarios, meilleurScenario, surfaceToit, onActi
 
   // Notifier le parent des scénarios affichés quand l'onglet change
   const handleTabChange = (value: string) => {
+    setActiveTab(value)
     const activeScenarios = value === 'recommandes' ? scenariosRecommandes : scenariosEconomiques
     if (onActiveTabChange) {
       onActiveTabChange(activeScenarios.map(s => s.id))
@@ -230,7 +233,7 @@ export function ScenariosTabs({ scenarios, meilleurScenario, surfaceToit, onActi
   if (showTabs) {
     return (
       <Tabs defaultValue="recommandes" onValueChange={handleTabChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6 h-12 gap-2">
+        <TabsList className="grid w-full grid-cols-2 mb-6 h-12 gap-2 no-print">
           <TabsTrigger 
             value="recommandes" 
             className="data-[state=active]:bg-[#F59E0B] data-[state=active]:text-white data-[state=active]:font-semibold data-[state=active]:shadow-lg data-[state=active]:ring-2 data-[state=active]:ring-[#F59E0B]/50 transition-all"
@@ -245,11 +248,19 @@ export function ScenariosTabs({ scenarios, meilleurScenario, surfaceToit, onActi
           </TabsTrigger>
         </TabsList>
         <TabsContent value="recommandes">
+          {/* Titre visible uniquement à l'impression */}
+          <h2 className="hidden print-show text-xl font-bold mb-4 text-gray-900">
+            Scénarios Recommandés
+          </h2>
           <div className="grid gap-6 md:grid-cols-2">
             {scenariosRecommandes.map(renderScenarioCard)}
           </div>
         </TabsContent>
         <TabsContent value="economique">
+          {/* Titre visible uniquement à l'impression */}
+          <h2 className="hidden print-show text-xl font-bold mb-4 text-gray-900">
+            Scénarios Économiques
+          </h2>
           <div className="grid gap-6 md:grid-cols-2">
             {scenariosEconomiques.map(renderScenarioCard)}
           </div>
@@ -260,8 +271,14 @@ export function ScenariosTabs({ scenarios, meilleurScenario, surfaceToit, onActi
 
   // Pas d'onglets, afficher directement les scénarios recommandés
   return (
-    <div className="grid gap-6 md:grid-cols-2 mt-6">
-      {scenariosRecommandes.map(renderScenarioCard)}
+    <div>
+      {/* Titre visible uniquement à l'impression */}
+      <h2 className="hidden print-show text-xl font-bold mb-4 text-gray-900">
+        Scénarios Recommandés
+      </h2>
+      <div className="grid gap-6 md:grid-cols-2 mt-6">
+        {scenariosRecommandes.map(renderScenarioCard)}
+      </div>
     </div>
   )
 }

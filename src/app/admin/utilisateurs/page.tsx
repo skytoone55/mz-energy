@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { 
   Shield, 
   UserPlus,
@@ -40,9 +40,11 @@ interface UserProfile {
   prenom: string
   nom: string
   email: string
+  telephone?: string | null
   role: 'commercial' | 'admin'
   actif: boolean
   created_at: string
+  societe?: string | null
 }
 
 export default function AdminUsersPage() {
@@ -52,6 +54,7 @@ export default function AdminUsersPage() {
   const [editingUser, setEditingUser] = useState<UserProfile | null>(null)
   const [creating, setCreating] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
   
   const [newUser, setNewUser] = useState({
     email: '',
@@ -59,6 +62,7 @@ export default function AdminUsersPage() {
     prenom: '',
     nom: '',
     role: 'commercial' as 'commercial' | 'admin',
+    societe: '',
   })
 
   const supabase = createClient()
@@ -95,6 +99,7 @@ export default function AdminUsersPage() {
       prenom: user.prenom,
       nom: user.nom,
       role: user.role,
+      societe: user.societe || '',
     })
     setDialogOpen(true)
   }
@@ -107,6 +112,7 @@ export default function AdminUsersPage() {
       prenom: '',
       nom: '',
       role: 'commercial',
+      societe: '',
     })
     setDialogOpen(true)
   }
@@ -127,6 +133,7 @@ export default function AdminUsersPage() {
             nom: newUser.nom,
             role: newUser.role,
             actif: editingUser.actif,
+            societe: newUser.societe || null,
           }),
         })
 
@@ -163,6 +170,7 @@ export default function AdminUsersPage() {
         prenom: '',
         nom: '',
         role: 'commercial',
+        societe: '',
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur inconnue')
@@ -216,6 +224,28 @@ export default function AdminUsersPage() {
     }
   }
 
+  const filteredUsers = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    if (!q) return users
+
+    return users.filter((u) => {
+      const haystack = [
+        u.prenom,
+        u.nom,
+        u.email,
+        u.telephone ?? '',
+        u.societe ?? '',
+        u.role,
+        u.actif ? 'actif' : 'inactif',
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+
+      return haystack.includes(q)
+    })
+  }, [users, search])
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -234,7 +264,7 @@ export default function AdminUsersPage() {
             Gestion des utilisateurs
           </h1>
           <p className="text-muted-foreground mt-1">
-            {users.length} utilisateur{users.length > 1 ? 's' : ''} au total
+            {filteredUsers.length} / {users.length} utilisateur{users.length > 1 ? 's' : ''} au total
           </p>
         </div>
         
@@ -306,21 +336,34 @@ export default function AdminUsersPage() {
                 </div>
               )}
               
-                <div className="space-y-2">
-                  <Label>Rôle</Label>
-                  <Select
-                    value={newUser.role}
-                    onValueChange={(v) => setNewUser({ ...newUser, role: v as 'commercial' | 'admin' })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="commercial">Commercial</SelectItem>
-                      <SelectItem value="admin">Administrateur</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="space-y-2">
+                <Label>Rôle</Label>
+                <Select
+                  value={newUser.role}
+                  onValueChange={(v) => setNewUser({ ...newUser, role: v as 'commercial' | 'admin' })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="commercial">Commercial</SelectItem>
+                    <SelectItem value="admin">Administrateur</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="societe">Société (Régie)</Label>
+                <Input
+                  id="societe"
+                  value={newUser.societe}
+                  onChange={(e) => setNewUser({ ...newUser, societe: e.target.value })}
+                  placeholder="Nom de la société (optionnel)"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Indiquez le nom de la société si le commercial travaille pour une régie
+                </p>
+              </div>
 
               {error && (
                 <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
@@ -359,19 +402,31 @@ export default function AdminUsersPage() {
           <CardDescription>Commerciaux et administrateurs du système</CardDescription>
         </CardHeader>
         <CardContent>
-          {users.length > 0 ? (
+          <div className="mb-4">
+            <Label htmlFor="users-search">Recherche</Label>
+            <Input
+              id="users-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Nom, prénom, email, téléphone, société..."
+              className="mt-2"
+            />
+          </div>
+
+          {filteredUsers.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
                     <th className="text-left p-4 font-medium text-muted-foreground">Utilisateur</th>
                     <th className="text-left p-4 font-medium text-muted-foreground">Rôle</th>
+                    <th className="text-left p-4 font-medium text-muted-foreground">Société</th>
                     <th className="text-left p-4 font-medium text-muted-foreground">Statut</th>
                     <th className="text-left p-4 font-medium text-muted-foreground">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user) => (
+                  {filteredUsers.map((user) => (
                     <tr key={user.id} className="border-b hover:bg-secondary/50">
                       <td className="p-4">
                         <div>
@@ -386,6 +441,13 @@ export default function AdminUsersPage() {
                         <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
                           {user.role === 'admin' ? 'Administrateur' : 'Commercial'}
                         </Badge>
+                      </td>
+                      <td className="p-4">
+                        {user.societe ? (
+                          <span className="text-sm font-medium">{user.societe}</span>
+                        ) : (
+                          <span className="text-sm text-muted-foreground italic">-</span>
+                        )}
                       </td>
                       <td className="p-4">
                         <Badge variant={user.actif ? 'default' : 'destructive'}>

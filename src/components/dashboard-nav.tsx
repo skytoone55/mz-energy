@@ -13,7 +13,9 @@ import {
   Menu,
   X,
   Shield,
-  Package
+  Package,
+  CheckCircle2,
+  Contact
 } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -26,6 +28,7 @@ interface UserProfile {
   nom: string
   email: string
   role: 'commercial' | 'admin'
+  societe?: string | null
 }
 
 interface DashboardNavProps {
@@ -44,11 +47,14 @@ export function DashboardNav({ user }: DashboardNavProps) {
     { name: 'Tableau de bord', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Nouvelle simulation', href: '/dashboard/simulation/nouvelle', icon: Calculator },
     { name: 'Mes simulations', href: '/dashboard/simulations', icon: FolderOpen },
+    { name: 'Simulations validées', href: '/dashboard/validees', icon: CheckCircle2 },
+    { name: 'Contacts', href: '/dashboard/contacts', icon: Contact },
   ]
 
   const adminNavigation = [
     { name: 'Tous les leads', href: '/admin/leads', icon: Users },
     { name: 'Toutes les simulations', href: '/admin/simulations', icon: FolderOpen },
+    { name: 'Contacts', href: '/admin/contacts', icon: Contact },
     { name: 'Utilisateurs', href: '/admin/utilisateurs', icon: Shield },
     { name: 'Catalogue', href: '/admin/catalogue', icon: Package },
     { name: 'Paramètres', href: '/admin/parametres', icon: Settings },
@@ -151,6 +157,9 @@ export function DashboardNav({ user }: DashboardNavProps) {
           <div className="p-4 rounded-xl bg-secondary/50">
             <p className="font-medium">{user.prenom} {user.nom}</p>
             <p className="text-sm text-muted-foreground">{user.email}</p>
+            {user.societe && (
+              <p className="text-sm font-medium text-primary mt-1">{user.societe}</p>
+            )}
             <span className={cn(
               'inline-block mt-2 px-2 py-1 rounded-full text-xs font-medium',
               isAdmin ? 'bg-energy/10 text-energy' : 'bg-solar/10 text-solar-foreground'
