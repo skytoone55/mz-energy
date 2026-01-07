@@ -11,8 +11,6 @@ import type { ScenarioResult } from './pv-engine'
 // ============================================
 
 export interface PriceConfig {
-  margeGlobale: number      // Ex: 0.25 (25%)
-  margeCommercial: number   // Ex: 0.05 (5%)
   tva: number               // Ex: 0.18 (18%)
   coutInstallation: number  // ₪/kWc
   fraisFixes: number        // ₪
@@ -164,8 +162,9 @@ export function calculerPrixScenario(
   // Prix de revient total
   const prixRevient = prixMateriel + prixInstallation
   
-  // Prix HT avec marges
-  const prixHT = prixRevient * (1 + config.margeGlobale) * (1 + config.margeCommercial)
+  // Prix HT avec marge MZ Energy fixe 28%
+  const MARGE_MZ_ENERGY = 0.28
+  const prixHT = prixRevient * (1 + MARGE_MZ_ENERGY)
   
   // Prix TTC
   const prixTTC = prixHT * (1 + config.tva)
@@ -197,13 +196,11 @@ export function calculerPrixSimulation(
 }
 
 /**
- * Configuration par défaut
+ * Configuration par défaut V4
  */
 export const DEFAULT_PRICE_CONFIG: PriceConfig = {
-  margeGlobale: 0.25,
-  margeCommercial: 0.05,
-  tva: 0.18,
-  coutInstallation: 980,
-  fraisFixes: 11850,
+  tva: 0.18,  // TVA 18%
+  coutInstallation: 980,  // ₪/kWc
+  fraisFixes: 15000,  // ₪ (frais fixes V4)
 }
 

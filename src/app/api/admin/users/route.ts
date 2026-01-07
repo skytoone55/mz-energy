@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
     }
     
     const body = await request.json()
-    const { email, password, prenom, nom, role, marge_commercial } = body
+    const { email, password, prenom, nom, role } = body
     
     // Validation
     if (!email || !password || !prenom || !nom) {
@@ -127,7 +127,6 @@ export async function POST(request: NextRequest) {
         prenom,
         nom,
         role: role || 'commercial',
-        marge_commercial: (marge_commercial || 5) / 100,
         actif: true,
       })
     
@@ -159,7 +158,7 @@ export async function PATCH(request: NextRequest) {
     }
     
     const body = await request.json()
-    const { userId, prenom, nom, role, marge_commercial, actif } = body
+    const { userId, prenom, nom, role, actif } = body
     
     // Validation
     if (!userId) {
@@ -184,7 +183,6 @@ export async function PATCH(request: NextRequest) {
     if (prenom !== undefined) updateData.prenom = prenom
     if (nom !== undefined) updateData.nom = nom
     if (role !== undefined) updateData.role = role
-    if (marge_commercial !== undefined) updateData.marge_commercial = marge_commercial / 100
     if (actif !== undefined) updateData.actif = actif
     
     // Mettre à jour le profil

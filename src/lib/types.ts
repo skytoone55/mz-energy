@@ -45,16 +45,17 @@ export interface SimulationResultats {
     prixReventeKwh: number
   }
   scenarios: ScenarioResultat[]
-  meilleurScenario: 'A' | 'B' | 'C' | 'D'
+  meilleurScenario: 'A' | 'B' | 'C' | 'D' | 'D-2'
   calculeLe: string
 }
 
 export interface ScenarioResultat {
-  id: 'A' | 'B' | 'C' | 'D'
+  id: 'A' | 'B' | 'C' | 'D' | 'D-2'
   nom: string
   description: string
   realisable: boolean
   statut: 'OK' | 'PARTIEL'
+  showInResults?: boolean
   surfaceNecessaire: number
   nombrePanneaux: number
   puissanceKwc: number
@@ -79,7 +80,6 @@ export interface UserProfile {
   email: string
   telephone?: string
   role: 'commercial' | 'admin'
-  marge_commercial: number
   actif: boolean
 }
 

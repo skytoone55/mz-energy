@@ -69,26 +69,36 @@ export default async function SimulationDetailPage({
   const resultats = simulation.resultats as SimulationResultats
   const scenarios = resultats.scenarios
 
-  const scenarioLabels: Record<string, { name: string; description: string; icon: React.ComponentType<{ className?: string }> }> = {
+  const scenarioLabels: Record<string, { name: string; description: string; icon: React.ComponentType<{ className?: string }>; color: string }> = {
     A: { 
-      name: 'Autoconsommation Pure', 
-      description: 'Production dimensionnée sur la consommation journalière',
-      icon: Sun
+      name: 'Autoconsommation Jour', 
+      description: 'Couvre uniquement la consommation de jour',
+      icon: Sun,
+      color: '#FEF3C7' // Jaune V4
     },
     B: { 
-      name: 'On-Grid avec Revente', 
-      description: 'Production maximale avec revente du surplus',
-      icon: Zap
+      name: 'Jour + Revente', 
+      description: 'Couvre le jour + vend le surplus au réseau',
+      icon: Zap,
+      color: '#FFEDD5' // Orange V4
     },
     C: { 
-      name: 'Hybride Autonomie', 
-      description: 'Batteries pour couvrir la nuit',
-      icon: Battery
+      name: 'Autonomie Totale', 
+      description: 'Couvre jour + nuit (autonomie maximale)',
+      icon: Battery,
+      color: '#DBEAFE' // Bleu V4
     },
     D: { 
-      name: 'Hybride Premium', 
-      description: 'Installation maximale avec stockage',
-      icon: Star
+      name: 'Autonomie + Revente', 
+      description: 'Couvre tout + vend le surplus restant',
+      icon: Star,
+      color: '#D1FAE5' // Vert clair V4
+    },
+    'D-2': {
+      name: 'Revente Prioritaire',
+      description: 'Revente prioritaire quand PARTIEL',
+      icon: TrendingUp,
+      color: '#A7F3D0' // Vert foncé V4
     },
   }
 
@@ -160,29 +170,33 @@ export default async function SimulationDetailPage({
 
       {/* Scénarios */}
       <div className="grid gap-6 md:grid-cols-2">
-        {scenarios.map((scenario) => {
+        {scenarios
+          .filter(scenario => scenario.showInResults !== false) // Masquer D-2 si identique à D
+          .map((scenario) => {
           const info = scenarioLabels[scenario.id]
+          if (!info) return null // Ignorer les scénarios non définis
+          
           const isMeilleur = scenario.id === resultats.meilleurScenario
           const Icon = info.icon
 
           return (
             <Card 
               key={scenario.id}
-              className={isMeilleur ? 'ring-2 ring-energy' : ''}
+              className={isMeilleur ? 'ring-2 ring-primary' : ''}
+              style={{
+                borderLeft: `4px solid ${info.color}`
+              }}
             >
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                      scenario.id === 'C' || scenario.id === 'D' 
-                        ? 'bg-energy/10' 
-                        : 'bg-solar/10'
-                    }`}>
-                      <Icon className={`w-6 h-6 ${
-                        scenario.id === 'C' || scenario.id === 'D' 
-                          ? 'text-energy' 
-                          : 'text-solar'
-                      }`} />
+                    <div 
+                      className="w-12 h-12 rounded-xl flex items-center justify-center"
+                      style={{ backgroundColor: `${info.color}80` }}
+                    >
+                      <div style={{ color: info.color }}>
+                        <Icon className="w-6 h-6" />
+                      </div>
                     </div>
                     <div>
                       <CardTitle className="text-lg">
@@ -192,7 +206,7 @@ export default async function SimulationDetailPage({
                     </div>
                   </div>
                   {isMeilleur && (
-                    <Badge className="bg-energy text-white">
+                    <Badge className="bg-primary text-white">
                       <Check className="w-3 h-3 mr-1" />
                       Recommandé
                     </Badge>
@@ -284,7 +298,7 @@ export default async function SimulationDetailPage({
             </Card>
           )
         })}
-      </div>
+        </div>
     </div>
   )
 }

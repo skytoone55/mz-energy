@@ -5,7 +5,6 @@ import {
   Shield, 
   UserPlus,
   Mail,
-  Percent,
   MoreVertical,
   Check,
   X,
@@ -42,7 +41,6 @@ interface UserProfile {
   nom: string
   email: string
   role: 'commercial' | 'admin'
-  marge_commercial: number
   actif: boolean
   created_at: string
 }
@@ -61,7 +59,6 @@ export default function AdminUsersPage() {
     prenom: '',
     nom: '',
     role: 'commercial' as 'commercial' | 'admin',
-    marge_commercial: 5,
   })
 
   const supabase = createClient()
@@ -98,7 +95,6 @@ export default function AdminUsersPage() {
       prenom: user.prenom,
       nom: user.nom,
       role: user.role,
-      marge_commercial: user.marge_commercial * 100,
     })
     setDialogOpen(true)
   }
@@ -111,7 +107,6 @@ export default function AdminUsersPage() {
       prenom: '',
       nom: '',
       role: 'commercial',
-      marge_commercial: 5,
     })
     setDialogOpen(true)
   }
@@ -131,7 +126,6 @@ export default function AdminUsersPage() {
             prenom: newUser.prenom,
             nom: newUser.nom,
             role: newUser.role,
-            marge_commercial: newUser.marge_commercial,
             actif: editingUser.actif,
           }),
         })
@@ -169,7 +163,6 @@ export default function AdminUsersPage() {
         prenom: '',
         nom: '',
         role: 'commercial',
-        marge_commercial: 5,
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur inconnue')
@@ -313,7 +306,6 @@ export default function AdminUsersPage() {
                 </div>
               )}
               
-              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Rôle</Label>
                   <Select
@@ -329,18 +321,6 @@ export default function AdminUsersPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="marge">Marge (%)</Label>
-                  <Input
-                    id="marge"
-                    type="number"
-                    min="0"
-                    max="50"
-                    value={newUser.marge_commercial}
-                    onChange={(e) => setNewUser({ ...newUser, marge_commercial: parseInt(e.target.value) || 0 })}
-                  />
-                </div>
-              </div>
 
               {error && (
                 <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
@@ -386,7 +366,6 @@ export default function AdminUsersPage() {
                   <tr className="border-b">
                     <th className="text-left p-4 font-medium text-muted-foreground">Utilisateur</th>
                     <th className="text-left p-4 font-medium text-muted-foreground">Rôle</th>
-                    <th className="text-left p-4 font-medium text-muted-foreground">Marge</th>
                     <th className="text-left p-4 font-medium text-muted-foreground">Statut</th>
                     <th className="text-left p-4 font-medium text-muted-foreground">Actions</th>
                   </tr>
@@ -407,12 +386,6 @@ export default function AdminUsersPage() {
                         <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
                           {user.role === 'admin' ? 'Administrateur' : 'Commercial'}
                         </Badge>
-                      </td>
-                      <td className="p-4">
-                        <span className="flex items-center gap-1">
-                          <Percent className="w-4 h-4 text-muted-foreground" />
-                          {(user.marge_commercial * 100).toFixed(0)}%
-                        </span>
                       </td>
                       <td className="p-4">
                         <Badge variant={user.actif ? 'default' : 'destructive'}>

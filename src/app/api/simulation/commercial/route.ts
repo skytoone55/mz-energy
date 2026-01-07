@@ -25,10 +25,10 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Récupérer le profil pour la marge commerciale
+    // Vérifier le profil
     const { data: profile } = await supabase
       .from('user_profiles')
-      .select('role, marge_commercial')
+      .select('role')
       .eq('id', user.id)
       .single()
     
@@ -61,10 +61,9 @@ export async function POST(request: NextRequest) {
       prixReventeKwh: data.prixReventeKwh,
     })
     
-    // Calculer les prix (avec la marge du commercial)
+    // Calculer les prix (marge fixe MZ Energy 28%)
     const priceConfig = {
       ...DEFAULT_PRICE_CONFIG,
-      margeCommercial: profile.marge_commercial || 0.05,
     }
     
     const scenariosAvecPrix = calculerPrixSimulation(resultats.scenarios, priceConfig)

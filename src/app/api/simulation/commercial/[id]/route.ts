@@ -43,7 +43,7 @@ export async function PUT(
     // Vérifier que l'utilisateur est le propriétaire ou admin
     const { data: profile } = await supabase
       .from('user_profiles')
-      .select('role, marge_commercial')
+      .select('role')
       .eq('id', user.id)
       .single()
     
@@ -83,10 +83,9 @@ export async function PUT(
       prixReventeKwh: data.prixReventeKwh,
     })
     
-    // Calculer les prix (avec la marge du commercial)
+    // Calculer les prix (marge fixe MZ Energy 28%)
     const priceConfig = {
       ...DEFAULT_PRICE_CONFIG,
-      margeCommercial: profile.marge_commercial || 0.05,
     }
     
     const scenariosAvecPrix = calculerPrixSimulation(resultats.scenarios, priceConfig)

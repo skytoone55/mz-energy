@@ -16,11 +16,12 @@ export interface SimulationInput {
 }
 
 export interface ScenarioResult {
-  id: 'A' | 'B' | 'C' | 'D'
+  id: 'A' | 'B' | 'C' | 'D' | 'D-2'
   nom: string
   description: string
   realisable: boolean
   statut: 'OK' | 'PARTIEL'
+  showInResults?: boolean  // Pour masquer D-2 si identique à D
   
   // Dimensionnement
   surfaceNecessaire: number  // m²
@@ -47,7 +48,7 @@ export interface ScenarioResult {
 export interface SimulationResult {
   input: SimulationInput
   scenarios: ScenarioResult[]
-  meilleurScenario: 'A' | 'B' | 'C' | 'D'
+  meilleurScenario: 'A' | 'B' | 'C' | 'D' | 'D-2'
   calculeLe: string
 }
 
@@ -56,11 +57,11 @@ export interface SimulationResult {
 // ============================================
 
 const CONFIG = {
-  ensoleillement: 1800,        // h/an (Israël)
-  performanceRatio: 0.88,      // Rendement global
+  ensoleillement: 1800,        // h/an (Israël) - V4
+  performanceRatio: 0.88,      // Rendement global - V4 (88%)
   dodBatterie: 0.95,           // Profondeur de décharge
   rendementBatterie: 0.95,     // Efficacité batterie
-  capRevente: 14000,           // kWh/an max revendable
+  capRevente: 14000,           // kWh/an max revendable - V4
   batterieMax: 1000,           // kWh max
   inflationElectricite: 0.015, // 1.5%/an
 }
@@ -452,6 +453,95 @@ function calculerScenarioD(input: SimulationInput): ScenarioResult {
   }
 }
 
+/**
+ * Scénario D-2 : Revente prioritaire (uniquement si D est PARTIEL)
+ * Si D est OK → D-2 = D (affichage conditionnel)
+ * Si D est PARTIEL → D-2 optimise en priorisant la revente (14,000 kWh max)
+ */
+function calculerScenarioD2(input: SimulationInput, scenarioD: ScenarioResult): ScenarioResult {
+  // Si D est OK, D-2 est identique à D
+  if (scenarioD.statut === 'OK') {
+    return {
+      ...scenarioD,
+      id: 'D-2',
+      nom: 'Revente Prioritaire',
+      description: 'Revente prioritaire quand PARTIEL',
+      showInResults: false,  // Ne pas afficher car identique à D
+    }
+  }
+  
+  // Sinon, optimiser avec priorité revente
+  const productible = getProductible()
+  const consoJour = input.consoAnnuelle * (input.partJour / 100)
+  const consoNuit = input.consoAnnuelle * ((100 - input.partJour) / 100)
+  
+  // PRIORITÉ 1: Réserver 14,000 kWh pour la revente
+  const reventeD2 = CONFIG.capRevente  // 14,000 kWh max
+  
+  // PRIORITÉ 2: Production nécessaire pour conso + revente
+  // Production cible = conso jour + conso nuit / rendement + revente prioritaire
+  const productionCible = consoJour + (consoNuit / CONFIG.rendementBatterie) + reventeD2
+  
+  // Puissance nécessaire
+  const puissanceKwc = productionCible / productible
+  const nombrePanneaux = Math.ceil((puissanceKwc * 1000) / PANNEAU.puissanceW)
+  const puissanceReelle = (nombrePanneaux * PANNEAU.puissanceW) / 1000
+  const surfaceNecessaire = nombrePanneaux * PANNEAU.surfaceM2
+  
+  // Production réelle
+  const productionAnnuelle = puissanceReelle * productible
+  
+  // Surplus disponible après autoconsommation
+  const productionApresAutoconsommation = productionAnnuelle - consoJour
+  const reventeEffective = Math.min(productionApresAutoconsommation, reventeD2)
+  
+  // Reste disponible pour batterie (après revente prioritaire)
+  const restePourBatterie = productionApresAutoconsommation - reventeEffective
+  
+  // Capacité batterie nécessaire sur le reste (pas tout le surplus)
+  const consoNuitJournaliere = consoNuit / 365
+  const capaciteBatterieNecessaire = Math.min(
+    consoNuitJournaliere / (CONFIG.dodBatterie * CONFIG.rendementBatterie),
+    restePourBatterie / 365 / (CONFIG.dodBatterie * CONFIG.rendementBatterie)
+  )
+  
+  // Sélection optimisée de la batterie
+  const batteryResult = selectBatterieOptimisee(capaciteBatterieNecessaire)
+  const capaciteBatterieReelle = batteryResult ? capaciteBatterieNecessaire : 0
+  
+  // Économies = toute la conso évitée + revente prioritaire
+  const economiesAnnuelles = input.consoAnnuelle * input.prixAchatKwh
+  const revenusRevente = reventeEffective * input.prixReventeKwh
+  
+  // Équipement
+  const onduleur = selectOnduleur(puissanceReelle, true)
+  
+  // Faisabilité
+  const realisable = surfaceNecessaire <= input.surfaceToit && batteryResult !== null
+  
+  return {
+    id: 'D-2',
+    nom: 'Revente Prioritaire',
+    description: 'Revente prioritaire quand PARTIEL',
+    realisable,
+    statut: realisable ? 'OK' : 'PARTIEL',
+    showInResults: true,  // Afficher car différent de D
+    surfaceNecessaire: Math.round(surfaceNecessaire),
+    nombrePanneaux,
+    puissanceKwc: Math.round(puissanceReelle * 10) / 10,
+    productionAnnuelle: Math.round(productionAnnuelle),
+    capaciteBatterie: Math.round(capaciteBatterieReelle * 10) / 10,
+    economiesAnnuelles: Math.round(economiesAnnuelles + revenusRevente),
+    economies20Ans: calculerEconomies20Ans(economiesAnnuelles + revenusRevente),
+    revenusReventeAnnuels: Math.round(revenusRevente),
+    equipement: {
+      panneau: PANNEAU.reference,
+      onduleur: onduleur.reference,
+      batterie: batteryResult?.reference || '',
+    }
+  }
+}
+
 // ============================================
 // FONCTION PRINCIPALE
 // ============================================
@@ -461,18 +551,28 @@ function calculerScenarioD(input: SimulationInput): ScenarioResult {
  * ATTENTION : Cette fonction ne retourne PAS les prix (réservés aux commerciaux)
  */
 export function calculerSimulation(input: SimulationInput): SimulationResult {
+  const scenarioA = calculerScenarioA(input)
+  const scenarioB = calculerScenarioB(input)
+  const scenarioC = calculerScenarioC(input)
+  const scenarioD = calculerScenarioD(input)
+  const scenarioD2 = calculerScenarioD2(input, scenarioD)
+  
   const scenarios: ScenarioResult[] = [
-    calculerScenarioA(input),
-    calculerScenarioB(input),
-    calculerScenarioC(input),
-    calculerScenarioD(input),
+    scenarioA,
+    scenarioB,
+    scenarioC,
+    scenarioD,
+    scenarioD2,
   ]
   
-  // Trouver le meilleur scénario (max économies réalisable)
-  const scenariosRealisables = scenarios.filter(s => s.realisable)
+  // Filtrer les scénarios à afficher (masquer D-2 si identique à D)
+  const scenariosToCompare = scenarios.filter(s => s.showInResults !== false)
+  
+  // Trouver le meilleur scénario (max économies réalisable parmi ceux affichés)
+  const scenariosRealisables = scenariosToCompare.filter(s => s.realisable)
   const meilleur = scenariosRealisables.length > 0
     ? scenariosRealisables.reduce((a, b) => a.economiesAnnuelles > b.economiesAnnuelles ? a : b)
-    : scenarios[0]
+    : scenariosToCompare[0]
   
   return {
     input,
