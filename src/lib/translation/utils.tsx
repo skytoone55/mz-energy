@@ -53,24 +53,26 @@ function translateRecursive(node: React.ReactNode, depth: number): React.ReactNo
   // Si c'est un élément React, traduire ses enfants récursivement
   if (React.isValidElement(node)) {
     // Ignorer les composants qui sont déjà traduits
-    const componentName = (node.type as any)?.displayName || (node.type as any)?.name
+    const componentName = (node.type as { displayName?: string; name?: string })?.displayName || (node.type as { name?: string })?.name
     if (componentName === 'T' || componentName === 'TranslatedText') {
       return node // Déjà traduit, ne pas retraduire
     }
+
+    const nodeProps = node.props as Record<string, unknown>
 
     // Si c'est un fragment React, traduire ses children
     if (node.type === React.Fragment) {
       return React.cloneElement(
         node,
         {},
-        translateRecursive(node.props.children, depth + 1)
+        translateRecursive(nodeProps.children as React.ReactNode, depth + 1)
       )
     }
 
     // Traduire récursivement les children
-    const props = { ...node.props }
+    const props: Record<string, unknown> = { ...nodeProps }
     if (props.children !== undefined) {
-      props.children = translateRecursive(props.children, depth + 1)
+      props.children = translateRecursive(props.children as React.ReactNode, depth + 1)
     }
 
     return React.cloneElement(node, props)

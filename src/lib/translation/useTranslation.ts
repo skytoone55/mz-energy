@@ -63,17 +63,17 @@ export function useTranslation() {
 }
 
 // Hook pour traduction synchrone avec état
-export function useTranslatedText(text: string): string {
+export function useTranslatedText(text: string | number | boolean | null | undefined): string {
   const { locale } = useLocale();
   
   // S'assurer que text est bien une string, convertir si nécessaire
-  const textStr = typeof text === 'string' ? text : (text?.toString() || '');
+  const textStr = String(text ?? '');
   const [translated, setTranslated] = useState(textStr);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // S'assurer que text est bien une string
-    const safeText = typeof text === 'string' ? text : (text?.toString() || '');
+    const safeText = String(text ?? '');
     
     // #region agent log
     fetch('http://127.0.0.1:7242/ingest/737c270c-19c0-4819-bbc2-3ceb8f9a5656',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'useTranslation.ts:useEffect',message:'useEffect triggered',data:{text:safeText.substring(0,30),locale},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A,D'})}).catch(()=>{});

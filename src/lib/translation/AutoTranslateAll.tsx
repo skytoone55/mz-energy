@@ -60,16 +60,17 @@ function translateRecursive(node: React.ReactNode): React.ReactNode {
     }
 
     // Traduire récursivement les children
-    const props = { ...node.props }
+    const originalProps = node.props as Record<string, unknown>
+    const props: Record<string, unknown> = { ...originalProps }
     if (props.children !== undefined) {
-      props.children = translateRecursive(props.children)
+      props.children = translateRecursive(props.children as React.ReactNode)
     }
 
     // Traduire aussi les attributs texte (placeholder, title, alt, etc.)
-    const textAttributes: (keyof React.HTMLAttributes<any>)[] = ['placeholder', 'title', 'alt', 'aria-label']
+    const textAttributes = ['placeholder', 'title', 'alt', 'aria-label'] as const
     for (const attr of textAttributes) {
-      if (props[attr] && typeof props[attr] === 'string' && !isLikelyData(props[attr])) {
-        props[attr] = translateTextSync(props[attr]) // On traduira de manière synchrone si possible, sinon on laisse
+      if (props[attr] && typeof props[attr] === 'string' && !isLikelyData(props[attr] as string)) {
+        props[attr] = translateTextSync(props[attr] as string)
       }
     }
 
