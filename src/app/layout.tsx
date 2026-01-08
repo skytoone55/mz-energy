@@ -21,6 +21,18 @@ export const metadata: Metadata = {
   title: "MZ Energy - Solutions Solaires en Israël",
   description: "Solutions photovoltaïques clé en main en Israël. Produisez, stockez et revendez votre énergie solaire. Simulation gratuite.",
   keywords: ["photovoltaïque", "solaire", "Israël", "économies", "énergie", "panneaux solaires"],
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'MZ Energy',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
 };
 
 export default function RootLayout({
