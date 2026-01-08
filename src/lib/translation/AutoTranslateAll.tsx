@@ -48,13 +48,14 @@ function translateRecursive(node: React.ReactNode): React.ReactNode {
 
   // Si c'est un élément React, traduire ses enfants
   if (React.isValidElement(node)) {
-    // Ignorer certains composants qui ne doivent pas être traduits
-    if (node.type === TranslatedText || (typeof node.type === 'object' && node.type && 'displayName' in node.type && node.type.displayName === 'TranslatedText')) {
+    // Ignorer TranslatedText pour éviter la traduction double
+    if (node.type === TranslatedText) {
       return node // Déjà traduit
     }
     
-    // Ignorer les composants T (déjà traduits)
-    if (typeof node.type === 'object' && node.type && 'displayName' in node.type && node.type.displayName === 'T') {
+    // Ignorer les composants avec displayName TranslatedText ou T
+    const nodeType = node.type as { displayName?: string }
+    if (typeof node.type === 'function' && nodeType.displayName && (nodeType.displayName === 'TranslatedText' || nodeType.displayName === 'T')) {
       return node
     }
 
