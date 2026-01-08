@@ -14,7 +14,7 @@ export default function AProposPage() {
   return (
     <div className="min-h-screen">
       {/* Section 1 - Hero */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6">
             <T>À propos de MZ Energy</T>
@@ -26,7 +26,7 @@ export default function AProposPage() {
       </section>
 
       {/* Section 2 - Notre histoire */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl sm:text-4xl font-bold mb-8">
             <T>Notre histoire</T>
@@ -46,7 +46,7 @@ export default function AProposPage() {
       </section>
 
       {/* Section 3 - Notre équipe */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative h-96 rounded-xl overflow-hidden">
@@ -85,7 +85,7 @@ export default function AProposPage() {
       </section>
 
       {/* Section 4 - Nos valeurs */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -145,7 +145,7 @@ export default function AProposPage() {
       <PartnersSection />
 
       {/* Section 6 - Rejoignez-nous */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold mb-6">
             <T>Rejoignez l&apos;aventure MZ Energy</T>

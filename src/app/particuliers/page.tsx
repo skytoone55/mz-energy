@@ -34,7 +34,7 @@ export default function ParticuliersPage() {
       />
 
       {/* Section 2 - Les bénéfices */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
@@ -90,7 +90,7 @@ export default function ParticuliersPage() {
       </section>
 
       {/* Section 3 - Nos solutions */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
@@ -222,7 +222,7 @@ export default function ParticuliersPage() {
       </section>
 
       {/* Section 4 - Comment ça marche */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
@@ -275,7 +275,7 @@ export default function ParticuliersPage() {
       </section>
 
       {/* Section 5 - Témoignage */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-4xl mx-auto">
           <TestimonialCard
             quote="Notre facture d'électricité a été divisée par 3. L'installation s'est faite en une journée et l'équipe était très professionnelle. Je recommande MZ Energy à tous mes voisins."
@@ -287,7 +287,7 @@ export default function ParticuliersPage() {
       </section>
 
       {/* Section 6 - FAQ */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">

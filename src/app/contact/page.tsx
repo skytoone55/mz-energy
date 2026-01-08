@@ -80,7 +80,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen">
       {/* Section 1 - Hero */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6">
             <T>Contactez-nous</T>
@@ -92,7 +92,7 @@ export default function ContactPage() {
       </section>
 
       {/* Section 2 - Formulaire de contact */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Formulaire */}
@@ -268,7 +268,7 @@ export default function ContactPage() {
       </section>
 
       {/* Section 3 - Nos bureaux */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative h-96 rounded-xl overflow-hidden">
@@ -295,7 +295,7 @@ export default function ContactPage() {
       </section>
 
       {/* Section 4 - FAQ rapide */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">

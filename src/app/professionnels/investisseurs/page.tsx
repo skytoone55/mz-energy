@@ -23,7 +23,7 @@ export default function InvestisseursPage() {
       />
 
       {/* Section 2 - Opportunités d'investissement */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
@@ -114,7 +114,7 @@ export default function InvestisseursPage() {
       </section>
 
       {/* Section 3 - Chiffres clés */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative h-96 rounded-xl overflow-hidden">
@@ -151,7 +151,7 @@ export default function InvestisseursPage() {
       </section>
 
       {/* Section 4 - Processus investisseur */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
@@ -197,7 +197,7 @@ export default function InvestisseursPage() {
       </section>
 
       {/* Section 5 - FAQ Investisseurs */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
