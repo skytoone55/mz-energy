@@ -65,7 +65,7 @@ export function HeroSection({
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {primaryCTA && (
               <Link href={primaryCTA.href}>
-                <Button size="lg" className="bg-solar-gradient hover:opacity-90 text-white text-lg px-8 py-7">
+                <Button size="lg" className="bg-solar-gradient hover:brightness-110 hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] hover:scale-105 transition-all duration-300 text-white text-lg px-8 py-7">
                   <Calculator className="w-5 h-5 mr-2" />
                   <T>{primaryCTA.text}</T>
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -80,10 +80,10 @@ export function HeroSection({
                     variant="outline"
                     className={
                       secondaryVariant === 'green'
-                        ? 'bg-green-600 hover:bg-green-700 text-white border-0 text-lg px-8 py-7 cursor-pointer'
+                        ? 'bg-green-600 hover:bg-green-500 hover:shadow-[0_0_25px_rgba(34,197,94,0.5)] hover:scale-105 transition-all duration-300 text-white border-0 text-lg px-8 py-7 cursor-pointer'
                         : secondaryVariant === 'orange'
-                        ? 'bg-solar-gradient text-white border-0 text-lg px-8 py-7 cursor-pointer'
-                        : 'bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 text-lg px-8 py-7 cursor-pointer'
+                        ? 'bg-solar-gradient hover:brightness-110 hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] hover:scale-105 transition-all duration-300 text-white border-0 text-lg px-8 py-7 cursor-pointer'
+                        : 'bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/30 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:scale-105 transition-all duration-300 text-lg px-8 py-7 cursor-pointer'
                     }
                     onClick={() => setCallbackOpen(true)}
                   >
@@ -97,10 +97,10 @@ export function HeroSection({
                       variant="outline"
                       className={
                         secondaryVariant === 'green'
-                          ? 'bg-green-600 hover:bg-green-700 text-white border-0 text-lg px-8 py-7 cursor-pointer'
+                          ? 'bg-green-600 hover:bg-green-500 hover:shadow-[0_0_25px_rgba(34,197,94,0.5)] hover:scale-105 transition-all duration-300 text-white border-0 text-lg px-8 py-7 cursor-pointer'
                           : secondaryVariant === 'orange'
-                          ? 'bg-solar-gradient text-white border-0 text-lg px-8 py-7 cursor-pointer'
-                          : 'bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 text-lg px-8 py-7 cursor-pointer'
+                          ? 'bg-solar-gradient hover:brightness-110 hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] hover:scale-105 transition-all duration-300 text-white border-0 text-lg px-8 py-7 cursor-pointer'
+                          : 'bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/30 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:scale-105 transition-all duration-300 text-lg px-8 py-7 cursor-pointer'
                       }
                     >
                       <T>{secondaryCTA.text}</T>
