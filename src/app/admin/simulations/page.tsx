@@ -214,7 +214,7 @@ export default function AdminSimulationsPage() {
             <T>Toutes les simulations</T>
           </h1>
           <p className="text-muted-foreground mt-1">
-            {simulations.length} <T>simulation{(simulations.length > 1 ? 's' : '')} au total</T>
+            {simulations.length} <T>{`simulation${simulations.length > 1 ? 's' : ''} au total`}</T>
             {selectedIds.size > 0 && ` • ${selectedIds.size} `}{selectedIds.size > 0 && <T>sélectionnée(s)</T>}
           </p>
         </div>

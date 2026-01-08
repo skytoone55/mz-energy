@@ -158,7 +158,7 @@ export default function ContactsPage() {
                     )}
                     <div className="flex items-center gap-2 text-sm font-medium text-solar">
                       <FileText className="w-4 h-4" />
-                      {contact.nb_simulations || 0} <T>simulation{(contact.nb_simulations || 0) > 1 ? 's' : ''}</T>
+                      {contact.nb_simulations || 0} <T>{`simulation${(contact.nb_simulations || 0) > 1 ? 's' : ''}`}</T>
                     </div>
                   </div>
                 </CardContent>

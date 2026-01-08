@@ -203,7 +203,7 @@ export default function SimulationsListPage() {
             {loading ? <T>Chargement...</T> : (isAdmin ? <T>Toutes les simulations</T> : <T>Mes simulations</T>)}
           </h1>
           <p className="text-muted-foreground mt-1">
-            {simulations.length} <T>simulation{(simulations.length > 1 ? 's' : '')} au total</T>
+            {simulations.length} <T>{`simulation${simulations.length > 1 ? 's' : ''} au total`}</T>
             {selectedIds.size > 0 && ` • ${selectedIds.size} `}<T>sélectionnée(s)</T>
           </p>
         </div>

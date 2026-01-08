@@ -265,7 +265,7 @@ export default function AdminUsersPage() {
             <T>Gestion des utilisateurs</T>
           </h1>
           <p className="text-muted-foreground mt-1">
-            {filteredUsers.length} / {users.length} <T>utilisateur{users.length > 1 ? 's' : ''} au total</T>
+            {filteredUsers.length} / {users.length} <T>{`utilisateur${users.length > 1 ? 's' : ''} au total`}</T>
           </p>
         </div>
         
