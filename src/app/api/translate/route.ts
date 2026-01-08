@@ -1,15 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { translate, translateBatch, isValidLocale, SupportedLocale } from '@/lib/translation';
-import * as fs from 'fs';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { text, texts, targetLang } = body;
-
-    // #region agent log
-    fs.appendFileSync('/Users/john/JARVIS/.cursor/debug.log', JSON.stringify({location:'api/translate/route.ts:entry',message:'API route called',data:{text:text?.substring(0,30),targetLang},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'G'})+'\n');
-    // #endregion
 
     // Valider la langue cible
     if (!targetLang || !isValidLocale(targetLang)) {
@@ -22,9 +17,6 @@ export async function POST(request: NextRequest) {
     // Traduction unique
     if (text && typeof text === 'string') {
       const translated = await translate(text, targetLang as SupportedLocale);
-      // #region agent log
-      fs.appendFileSync('/Users/john/JARVIS/.cursor/debug.log', JSON.stringify({location:'api/translate/route.ts:result',message:'translate() returned',data:{original:text.substring(0,30),translated:translated.substring(0,30),same:text===translated},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'G'})+'\n');
-      // #endregion
       return NextResponse.json({ translated });
     }
 
@@ -47,4 +39,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

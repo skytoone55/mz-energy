@@ -1,128 +1,65 @@
 'use client'
 
-import React from 'react'
-import { useTranslatedText } from './useTranslation'
+import React, { useState, useEffect } from 'react'
+import { useLocale } from './TranslationContext'
+
+// Cache côté client
+const clientCache = new Map<string, string>()
 
 /**
  * Helper pour traduire automatiquement les children d'un composant
- * Version améliorée : traduit récursivement TOUS les textes, même dans les éléments React imbriqués
- * Évite de traduire deux fois les éléments déjà traduits (T, TranslatedText)
+ * SIMPLIFIÉ : Ne traduit que les strings directes, ne modifie pas les éléments React
  */
 export function AutoTranslate({ children }: { children: React.ReactNode }): React.ReactNode {
-  return translateRecursive(children, 0)
-}
-
-/**
- * Fonction récursive pour traduire tous les textes
- */
-function translateRecursive(node: React.ReactNode, depth: number): React.ReactNode {
-  // Limite de profondeur pour éviter les boucles infinies
-  if (depth > 10) return node
-
-  // Si c'est une string (non vide), la traduire si ce n'est pas une donnée
-  if (typeof node === 'string') {
-    const trimmed = node.trim()
-    if (trimmed && !isLikelyData(trimmed)) {
-      return <TranslatedText text={node} />
-    }
-    return node
+  // Si children est une string simple, la traduire
+  if (typeof children === 'string' && children.trim()) {
+    return <TranslatedText text={children} />
   }
-
-  // Les nombres, booléens, null, undefined ne sont pas traduits
-  if (
-    typeof node === 'number' ||
-    typeof node === 'boolean' ||
-    node === null ||
-    node === undefined
-  ) {
-    return node
-  }
-
-  // Si c'est un tableau, traduire chaque élément récursivement
-  if (Array.isArray(node)) {
-    return node.map((child, index) => {
-      const translated = translateRecursive(child, depth + 1)
-      // Si c'est un élément React, lui donner une clé
-      if (React.isValidElement(translated)) {
-        return React.cloneElement(translated as React.ReactElement, { key: translated.key || `auto-${index}` })
-      }
-      return translated
-    })
-  }
-
-  // Si c'est un élément React, traduire ses enfants récursivement
-  if (React.isValidElement(node)) {
-    // Ignorer les composants qui sont déjà traduits
-    const componentName = (node.type as { displayName?: string; name?: string })?.displayName || (node.type as { name?: string })?.name
-    if (componentName === 'T' || componentName === 'TranslatedText') {
-      return node // Déjà traduit, ne pas retraduire
-    }
-
-    const nodeProps = node.props as Record<string, unknown>
-
-    // Si c'est un fragment React, traduire ses children
-    if (node.type === React.Fragment) {
-      return React.cloneElement(
-        node,
-        {},
-        translateRecursive(nodeProps.children as React.ReactNode, depth + 1)
-      )
-    }
-
-    // Traduire récursivement les children
-    const props: Record<string, unknown> = { ...nodeProps }
-    if (props.children !== undefined) {
-      props.children = translateRecursive(props.children as React.ReactNode, depth + 1)
-    }
-
-    return React.cloneElement(node, props)
-  }
-
-  return node
-}
-
-/**
- * Vérifie si un texte est probablement une donnée (email, téléphone, nombre, etc.)
- * et ne devrait pas être traduit
- */
-function isLikelyData(text: string): boolean {
-  // Emails
-  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) return true
   
-  // Numéros de téléphone (commencent par +, 0, ou contiennent des chiffres)
-  if (/^[\+\d\s\-\(\)]+$/.test(text) && /\d{6,}/.test(text)) return true
-  
-  // URLs
-  if (/^https?:\/\//.test(text)) return true
-  
-  // Nombres purs (avec ou sans séparateurs, mais pas de texte)
-  if (/^[\d\s,\.]+$/.test(text) && /\d/.test(text) && text.length > 3) return true
-  
-  // Dates au format numérique (01/01/2024, 2024-01-01)
-  if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}$/.test(text)) return true
-  
-  // Codes ou identifiants (UUID, hash, etc.)
-  if (/^[A-Z0-9\-_]{10,}$/.test(text)) return true
-
-  // Monnaie ou prix (€, ₪, $ suivis de chiffres)
-  if (/^[€₪$]\s?[\d,\.]+$/.test(text)) return true
-
-  // Unités avec nombres (m², kWh, etc.)
-  if (/^[\d,\.]+\s*(m²|kWh|kW|V|A|h|min|sec)$/i.test(text)) return true
-
-  return false
+  // Sinon, retourner tel quel (pas de modification des éléments React)
+  return children
 }
 
 /**
  * Composant simple pour traduire un texte
- * S'assure que text est bien une string avant de le passer à useTranslatedText
  */
-function TranslatedText({ text }: { text: string | number | boolean | null | undefined }) {
-  // Convertir en string si ce n'est pas déjà une string
-  const textStr = typeof text === 'string' ? text : (text?.toString() || '');
-  const translated = useTranslatedText(textStr)
+function TranslatedText({ text }: { text: string }) {
+  const { locale } = useLocale()
+  const [translated, setTranslated] = useState(text)
+
+  useEffect(() => {
+    // Français = pas de traduction
+    if (locale === 'fr') {
+      setTranslated(text)
+      return
+    }
+
+    // Vérifier le cache
+    const cacheKey = `${locale}:${text}`
+    if (clientCache.has(cacheKey)) {
+      setTranslated(clientCache.get(cacheKey)!)
+      return
+    }
+
+    // Appeler l'API de traduction
+    fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, targetLang: locale }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.translated) {
+          clientCache.set(cacheKey, data.translated)
+          setTranslated(data.translated)
+        }
+      })
+      .catch(err => {
+        console.error('Translation error:', err)
+      })
+  }, [text, locale])
+
   return <>{translated}</>
 }
 
-// Marquer TranslatedText avec displayName pour éviter la double traduction
 TranslatedText.displayName = 'TranslatedText'

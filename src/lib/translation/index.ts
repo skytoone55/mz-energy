@@ -31,22 +31,14 @@ export async function translate(
   text: string,
   targetLang: SupportedLocale
 ): Promise<string> {
-  const fs = require('fs');
-  
   // Pas de traduction nécessaire pour le français
   if (targetLang === 'fr') {
-    // #region agent log
-    fs.appendFileSync('/Users/john/JARVIS/.cursor/debug.log', JSON.stringify({location:'index.ts:translate',message:'targetLang is fr, returning original',data:{text:text.substring(0,30)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H'})+'\n');
-    // #endregion
     return text;
   }
 
   // Vérifier le cache d'abord
   const cached = await getFromCache(text, targetLang);
   if (cached) {
-    // #region agent log
-    fs.appendFileSync('/Users/john/JARVIS/.cursor/debug.log', JSON.stringify({location:'index.ts:translate',message:'cache HIT from Supabase',data:{text:text.substring(0,30),cached:cached.substring(0,30),same:text===cached},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H'})+'\n');
-    // #endregion
     // Appliquer le filtre hébreu même pour les traductions en cache
     if (targetLang === 'he') {
       return removeHebrewVowels(cached);
@@ -54,16 +46,8 @@ export async function translate(
     return cached;
   }
 
-  // #region agent log
-  fs.appendFileSync('/Users/john/JARVIS/.cursor/debug.log', JSON.stringify({location:'index.ts:translate',message:'cache MISS, calling Google',data:{text:text.substring(0,30),targetLang},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H'})+'\n');
-  // #endregion
-
   // Traduire via Google Cloud Translation
   const translated = await translateWithGoogle(text, targetLang);
-
-  // #region agent log
-  fs.appendFileSync('/Users/john/JARVIS/.cursor/debug.log', JSON.stringify({location:'index.ts:translate',message:'Google returned',data:{text:text.substring(0,30),translated:translated.substring(0,30),same:text===translated},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H'})+'\n');
-  // #endregion
 
   // Sauvegarder dans le cache (async, non bloquant)
   saveToCache(text, targetLang, translated).catch(console.error);
@@ -136,5 +120,3 @@ export async function translateBatch(
 
   return result;
 }
-
-

@@ -31,9 +31,6 @@ export function TranslationProvider({ children }: { children: React.ReactNode })
 
   // Mettre à jour la locale
   const setLocale = useCallback((newLocale: SupportedLocale) => {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/737c270c-19c0-4819-bbc2-3ceb8f9a5656',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TranslationContext.tsx:setLocale',message:'setLocale called',data:{newLocale,currentLocale:locale},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'E'})}).catch(()=>{});
-    // #endregion
     setLocaleState(newLocale);
     if (typeof window !== 'undefined') {
       localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
@@ -42,7 +39,7 @@ export function TranslationProvider({ children }: { children: React.ReactNode })
       document.documentElement.lang = newLocale;
       document.documentElement.dir = getDirection(newLocale);
     }
-  }, [locale]);
+  }, []);
 
   // Mettre à jour le HTML au changement de locale
   useEffect(() => {
@@ -73,4 +70,3 @@ export function useLocale() {
   }
   return context;
 }
-

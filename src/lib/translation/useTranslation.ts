@@ -63,72 +63,38 @@ export function useTranslation() {
 }
 
 // Hook pour traduction synchrone avec état
-export function useTranslatedText(text: string | number | boolean | null | undefined): string {
+export function useTranslatedText(text: string): string {
   const { locale } = useLocale();
-  
-  // S'assurer que text est bien une string, convertir si nécessaire
-  const textStr = String(text ?? '');
-  const [translated, setTranslated] = useState(textStr);
-  const [isLoading, setIsLoading] = useState(false);
+  const [translated, setTranslated] = useState(text);
 
   useEffect(() => {
-    // S'assurer que text est bien une string
-    const safeText = String(text ?? '');
-    
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/737c270c-19c0-4819-bbc2-3ceb8f9a5656',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'useTranslation.ts:useEffect',message:'useEffect triggered',data:{text:safeText.substring(0,30),locale},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A,D'})}).catch(()=>{});
-    // #endregion
-
+    // Français = pas de traduction
     if (locale === 'fr') {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/737c270c-19c0-4819-bbc2-3ceb8f9a5656',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'useTranslation.ts:fr-branch',message:'locale is fr, returning original',data:{text:safeText.substring(0,30)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A'})}).catch(()=>{});
-      // #endregion
-      setTranslated(safeText);
+      setTranslated(text);
       return;
     }
 
-    const cacheKey = getCacheKey(safeText, locale);
+    const cacheKey = getCacheKey(text, locale);
     if (clientCache.has(cacheKey)) {
-      // #region agent log
-      const cached = clientCache.get(cacheKey);
-      fetch('http://127.0.0.1:7242/ingest/737c270c-19c0-4819-bbc2-3ceb8f9a5656',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'useTranslation.ts:cache-hit',message:'cache hit',data:{text:safeText.substring(0,30),locale,cached:cached?.substring(0,30)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'C'})}).catch(()=>{});
-      // #endregion
-      setTranslated(cached!);
+      setTranslated(clientCache.get(cacheKey)!);
       return;
     }
-
-    setIsLoading(true);
 
     // Traduire via API
     fetch('/api/translate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: safeText, targetLang: locale }),
+      body: JSON.stringify({ text, targetLang: locale }),
     })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`Translation failed: ${res.statusText}`);
-        }
-        return res.json();
-      })
+      .then(res => res.json())
       .then(data => {
-        // #region agent log
-        const translatedResult = data.translated || safeText;
-        fetch('http://127.0.0.1:7242/ingest/737c270c-19c0-4819-bbc2-3ceb8f9a5656',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'useTranslation.ts:api-response',message:'API response received',data:{text:safeText.substring(0,30),locale,translated:typeof translatedResult === 'string' ? translatedResult.substring(0,30) : String(translatedResult).substring(0,30)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
-        // #endregion
-        const result = data.translated || safeText;
+        const result = data.translated || text;
         clientCache.set(cacheKey, result);
         setTranslated(result);
       })
       .catch(error => {
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/737c270c-19c0-4819-bbc2-3ceb8f9a5656',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'useTranslation.ts:api-error',message:'API error',data:{text:safeText.substring(0,30),locale,error:String(error)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B'})}).catch(()=>{});
-        // #endregion
         console.error('Translation error:', error);
-        setTranslated(safeText);
-      })
-      .finally(() => {
-        setIsLoading(false);
+        setTranslated(text);
       });
   }, [text, locale]);
 
@@ -139,4 +105,3 @@ export function useTranslatedText(text: string | number | boolean | null | undef
 export function useTranslatedAttr(text: string): string {
   return useTranslatedText(text);
 }
-
