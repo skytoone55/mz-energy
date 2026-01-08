@@ -17,11 +17,11 @@ export default function ProfessionnelsPage() {
         title="Solutions solaires pour professionnels"
         subtitle="Réduisez vos charges, valorisez vos actifs immobiliers et engagez votre entreprise dans la transition énergétique."
         primaryCTA={{
-          text: '📞 Demander un devis',
+          text: 'Demander un devis',
           href: '#',
         }}
         secondaryCTA={{
-          text: '🧮 Simuler mon projet',
+          text: 'Simuler mon projet',
           href: '/simulation',
           action: 'link',
         }}
@@ -162,7 +162,7 @@ export default function ProfessionnelsPage() {
         title="Discutons de votre projet"
         text="Chaque projet est unique. Contactez-nous pour une étude personnalisée gratuite."
         primaryCTA={{
-          text: '📞 Être rappelé',
+          text: 'Être rappelé',
           href: '#',
         }}
         secondaryCTA={{

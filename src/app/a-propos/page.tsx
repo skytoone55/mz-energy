@@ -167,11 +167,11 @@ export default function AProposPage() {
         title="Prêt à travailler ensemble ?"
         text="Contactez-nous pour discuter de votre projet solaire."
         primaryCTA={{
-          text: '📞 Nous contacter',
+          text: 'Nous contacter',
           href: '/contact',
         }}
         secondaryCTA={{
-          text: '🧮 Simuler mon projet',
+          text: 'Simuler mon projet',
           href: '/simulation',
           action: 'link',
         }}

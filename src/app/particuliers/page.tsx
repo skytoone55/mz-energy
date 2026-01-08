@@ -23,11 +23,11 @@ export default function ParticuliersPage() {
         title="Produisez votre propre électricité"
         subtitle="Réduisez votre facture, gagnez en autonomie et protégez-vous des hausses de prix. Une solution solaire sur mesure pour votre maison."
         primaryCTA={{
-          text: '🧮 Simuler mes économies',
+          text: 'Simuler mes économies',
           href: '/simulation',
         }}
         secondaryCTA={{
-          text: '📞 Être rappelé',
+          text: 'Être rappelé',
           action: 'callback',
         }}
         backgroundImage="/images/particuliers/particuliers_01_hero.jpg"
@@ -327,11 +327,11 @@ export default function ParticuliersPage() {
         title="Passez au solaire dès maintenant"
         text="Simulez vos économies gratuitement et découvrez combien vous pouvez économiser."
         primaryCTA={{
-          text: '🧮 Lancer ma simulation',
+          text: 'Lancer ma simulation',
           href: '/simulation',
         }}
         secondaryCTA={{
-          text: '📞 Être rappelé',
+          text: 'Être rappelé',
           action: 'callback',
         }}
       />

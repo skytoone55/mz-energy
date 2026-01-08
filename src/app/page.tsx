@@ -24,11 +24,11 @@ export default function HomePage() {
         title="L'énergie solaire, simplement."
         subtitle="Produisez votre électricité. Stockez-la. Revendez le surplus. Solutions photovoltaïques clé en main en Israël."
         primaryCTA={{
-          text: '🧮 Simuler mes économies',
+          text: 'Simuler mes économies',
           href: '/simulation',
         }}
         secondaryCTA={{
-          text: '📞 Être rappelé',
+          text: 'Être rappelé',
           action: 'callback',
         }}
         secondaryVariant="green"
@@ -346,11 +346,11 @@ export default function HomePage() {
         title="Prêt à passer au solaire ?"
         text="Simulez vos économies en 2 minutes ou demandez à être rappelé par notre équipe."
         primaryCTA={{
-          text: '🧮 Lancer ma simulation',
+          text: 'Lancer ma simulation',
           href: '/simulation',
         }}
         secondaryCTA={{
-          text: '📞 Être rappelé',
+          text: 'Être rappelé',
           action: 'callback',
         }}
         secondaryVariant="green"

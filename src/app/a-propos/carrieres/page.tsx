@@ -247,7 +247,7 @@ export default function CarrieresPage() {
           href: 'mailto:recrutement@mz-energy.co.il',
         }}
         secondaryCTA={{
-          text: '📞 Nous contacter',
+          text: 'Nous contacter',
           href: '/contact',
           action: 'link',
         }}

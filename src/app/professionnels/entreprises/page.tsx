@@ -19,7 +19,7 @@ export default function EntreprisesPage() {
         title="Équipez vos locaux en énergie solaire"
         subtitle="Bureaux, commerces, entrepôts, usines : réduisez vos charges et engagez votre entreprise dans la transition énergétique."
         primaryCTA={{
-          text: '📞 Demander une étude gratuite',
+          text: 'Demander une étude gratuite',
           href: '#',
         }}
         backgroundImage="/images/entreprises/entreprises_02_site_equipe.jpg"
@@ -200,7 +200,7 @@ export default function EntreprisesPage() {
         title="Demandez votre étude gratuite"
         text="Notre équipe analyse votre projet et vous propose une solution sur mesure sous 48h."
         primaryCTA={{
-          text: '📞 Être rappelé',
+          text: 'Être rappelé',
           href: '#',
         }}
       />

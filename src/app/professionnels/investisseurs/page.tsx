@@ -16,7 +16,7 @@ export default function InvestisseursPage() {
         title="Investissez dans l'énergie solaire"
         subtitle="Transformez vos toitures ou terrains en actifs rentables. Revenus stables, long terme, impact positif."
         primaryCTA={{
-          text: '📞 Discuter de mon projet',
+          text: 'Discuter de mon projet',
           href: '#',
         }}
         backgroundImage="/images/investisseurs/investisseurs_01_grande_echelle.jpg"
@@ -229,7 +229,7 @@ export default function InvestisseursPage() {
         title="Étudions votre projet d'investissement"
         text="Notre équipe vous accompagne dans l'analyse et la structuration de votre projet solaire."
         primaryCTA={{
-          text: '📞 Prendre rendez-vous',
+          text: 'Prendre rendez-vous',
           href: '#',
         }}
         secondaryCTA={{
