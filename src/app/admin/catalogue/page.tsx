@@ -172,7 +172,7 @@ export default function AdminCataloguePage() {
           <T>Catalogue produits</T>
         </h1>
         <p className="text-muted-foreground mt-1">
-          {products.length} <T>produit{products.length > 1 ? 's' : ''} au catalogue</T>
+          {products.length} <T>{`produit${products.length > 1 ? 's' : ''} au catalogue`}</T>
         </p>
       </div>
 
