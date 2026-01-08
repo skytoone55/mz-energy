@@ -252,8 +252,9 @@ export default function ContactPage() {
                         <div>
                           <div className="font-semibold mb-1"><T>Horaires</T></div>
                           <div className="text-sm text-muted-foreground">
-                            <T>Dimanche - Jeudi : 9h00 - 18h00<br />
-                            Vendredi - Samedi : Fermé</T>
+                            <T>Dimanche - Jeudi : 9h00 - 18h00</T>
+                            <br />
+                            <T>Vendredi - Samedi : Fermé</T>
                           </div>
                         </div>
                       </div>
