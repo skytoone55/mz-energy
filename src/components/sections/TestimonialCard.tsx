@@ -18,7 +18,7 @@ export function TestimonialCard({ quote, author, details, image }: TestimonialCa
           <div className="w-24 h-24 rounded-full mx-auto overflow-hidden bg-secondary">
             <Image
               src={image}
-              alt={author}
+              alt={typeof author === 'string' ? author : 'Témoignage'}
               width={96}
               height={96}
               className="w-full h-full object-cover"
