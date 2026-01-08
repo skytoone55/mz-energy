@@ -188,7 +188,7 @@ export default function AdminCataloguePage() {
                 <T>{label}</T>
               </CardTitle>
               <CardDescription>
-                {typeProducts.length} <T>produit{typeProducts.length > 1 ? 's' : ''}</T>
+                 {typeProducts.length} <T>{`produit${typeProducts.length > 1 ? 's' : ''}`}</T>
               </CardDescription>
             </CardHeader>
             <CardContent>
