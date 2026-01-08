@@ -4,9 +4,11 @@ import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
 
 import { cn } from "@/lib/utils"
+import { AutoTranslate } from "@/lib/translation/utils"
 
 function Label({
   className,
+  children,
   ...props
 }: React.ComponentProps<typeof LabelPrimitive.Root>) {
   return (
@@ -17,7 +19,9 @@ function Label({
         className
       )}
       {...props}
-    />
+    >
+      <AutoTranslate>{children}</AutoTranslate>
+    </LabelPrimitive.Root>
   )
 }
 

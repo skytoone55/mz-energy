@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/select'
 import { Card, CardContent } from '@/components/ui/card'
 import { FAQ } from '@/components/ui/faq'
+import { T } from '@/components/T'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -36,6 +37,7 @@ export default function ContactPage() {
 
     // Validation manuelle des champs requis
     if (!formData.type || !formData.sujet) {
+      // Note: alert will not be translated, but this is acceptable for validation messages
       alert('Veuillez remplir tous les champs obligatoires.')
       setSubmitting(false)
       return
@@ -81,10 +83,10 @@ export default function ContactPage() {
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-            Contactez-nous
+            <T>Contactez-nous</T>
           </h1>
           <p className="text-xl text-muted-foreground">
-            Une question ? Un projet ? Notre équipe est là pour vous accompagner.
+            <T>Une question ? Un projet ? Notre équipe est là pour vous accompagner.</T>
           </p>
         </div>
       </section>
@@ -95,21 +97,21 @@ export default function ContactPage() {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Formulaire */}
             <div>
-              <h2 className="text-2xl font-bold mb-6">Envoyez-nous un message</h2>
+              <h2 className="text-2xl font-bold mb-6"><T>Envoyez-nous un message</T></h2>
               {submitted ? (
                 <div className="p-8 text-center bg-green-500/10 rounded-lg border border-green-500/20">
                   <p className="text-lg font-medium text-green-600 mb-2">
-                    Merci pour votre message !
+                    <T>Merci pour votre message !</T>
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Nous vous répondons sous 24h.
+                    <T>Nous vous répondons sous 24h.</T>
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="prenom">Prénom *</Label>
+                      <Label htmlFor="prenom"><T>Prénom *</T></Label>
                       <Input
                         id="prenom"
                         value={formData.prenom}
@@ -118,7 +120,7 @@ export default function ContactPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="nom">Nom *</Label>
+                      <Label htmlFor="nom"><T>Nom *</T></Label>
                       <Input
                         id="nom"
                         value={formData.nom}
@@ -129,7 +131,7 @@ export default function ContactPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
+                    <Label htmlFor="email"><T>Email *</T></Label>
                     <Input
                       id="email"
                       type="email"
@@ -140,7 +142,7 @@ export default function ContactPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="telephone">Téléphone *</Label>
+                    <Label htmlFor="telephone"><T>Téléphone *</T></Label>
                     <Input
                       id="telephone"
                       type="tel"
@@ -151,7 +153,7 @@ export default function ContactPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="type">Je suis *</Label>
+                    <Label htmlFor="type"><T>Je suis *</T></Label>
                     <Select
                       value={formData.type}
                       onValueChange={(value) => setFormData({ ...formData, type: value })}
@@ -160,14 +162,14 @@ export default function ContactPage() {
                         <SelectValue placeholder="Sélectionner" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="particulier">Particulier</SelectItem>
-                        <SelectItem value="professionnel">Professionnel</SelectItem>
+                        <SelectItem value="particulier"><T>Particulier</T></SelectItem>
+                        <SelectItem value="professionnel"><T>Professionnel</T></SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="sujet">Sujet *</Label>
+                    <Label htmlFor="sujet"><T>Sujet *</T></Label>
                     <Select
                       value={formData.sujet}
                       onValueChange={(value) => setFormData({ ...formData, sujet: value })}
@@ -176,17 +178,17 @@ export default function ContactPage() {
                         <SelectValue placeholder="Sélectionner" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="question">Question générale</SelectItem>
-                        <SelectItem value="devis">Demande de devis</SelectItem>
-                        <SelectItem value="support">Support technique</SelectItem>
-                        <SelectItem value="partenariat">Partenariat</SelectItem>
-                        <SelectItem value="autre">Autre</SelectItem>
+                        <SelectItem value="question"><T>Question générale</T></SelectItem>
+                        <SelectItem value="devis"><T>Demande de devis</T></SelectItem>
+                        <SelectItem value="support"><T>Support technique</T></SelectItem>
+                        <SelectItem value="partenariat"><T>Partenariat</T></SelectItem>
+                        <SelectItem value="autre"><T>Autre</T></SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="message">Message *</Label>
+                    <Label htmlFor="message"><T>Message *</T></Label>
                     <Textarea
                       id="message"
                       rows={6}
@@ -201,7 +203,7 @@ export default function ContactPage() {
                     className="w-full bg-solar-gradient hover:opacity-90 text-white"
                     disabled={submitting}
                   >
-                    {submitting ? 'Envoi en cours...' : 'Envoyer le message'}
+                    {submitting ? <T>Envoi en cours...</T> : <T>Envoyer le message</T>}
                   </Button>
                 </form>
               )}
@@ -209,7 +211,7 @@ export default function ContactPage() {
 
             {/* Informations de contact */}
             <div>
-              <h2 className="text-2xl font-bold mb-6">Informations de contact</h2>
+              <h2 className="text-2xl font-bold mb-6"><T>Informations de contact</T></h2>
               <div className="space-y-6">
                 <Card>
                   <CardContent className="p-6">
@@ -225,21 +227,21 @@ export default function ContactPage() {
                       <div className="flex items-start gap-3">
                         <MapPin className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                         <div>
-                          <div className="font-semibold mb-1">Adresse</div>
-                          <div className="text-sm text-muted-foreground">[À définir]</div>
+                          <div className="font-semibold mb-1"><T>Adresse</T></div>
+                          <div className="text-sm text-muted-foreground"><T>[À définir]</T></div>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <Phone className="w-5 h-5 text-muted-foreground flex-shrink-0" />
                         <div>
-                          <div className="font-semibold mb-1">Téléphone</div>
+                          <div className="font-semibold mb-1"><T>Téléphone</T></div>
                           <div className="text-sm text-muted-foreground">+972 XX XXX XXXX</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <Mail className="w-5 h-5 text-muted-foreground flex-shrink-0" />
                         <div>
-                          <div className="font-semibold mb-1">Email</div>
+                          <div className="font-semibold mb-1"><T>Email</T></div>
                           <a href="mailto:contact@mz-energy.co.il" className="text-sm text-primary hover:underline">
                             contact@mz-energy.co.il
                           </a>
@@ -248,10 +250,10 @@ export default function ContactPage() {
                       <div className="flex items-start gap-3">
                         <Clock className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                         <div>
-                          <div className="font-semibold mb-1">Horaires</div>
+                          <div className="font-semibold mb-1"><T>Horaires</T></div>
                           <div className="text-sm text-muted-foreground">
-                            Dimanche - Jeudi : 9h00 - 18h00<br />
-                            Vendredi - Samedi : Fermé
+                            <T>Dimanche - Jeudi : 9h00 - 18h00<br />
+                            Vendredi - Samedi : Fermé</T>
                           </div>
                         </div>
                       </div>
@@ -278,13 +280,13 @@ export default function ContactPage() {
             </div>
             <div>
               <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-                Nos bureaux
+                <T>Nos bureaux</T>
               </h2>
               <p className="text-muted-foreground mb-6">
-                Vous souhaitez nous rencontrer ? Notre équipe vous accueille sur rendez-vous dans nos locaux.
+                <T>Vous souhaitez nous rencontrer ? Notre équipe vous accueille sur rendez-vous dans nos locaux.</T>
               </p>
               <Button variant="outline">
-                Prendre rendez-vous
+                <T>Prendre rendez-vous</T>
               </Button>
             </div>
           </div>
@@ -296,7 +298,7 @@ export default function ContactPage() {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Questions fréquentes
+              <T>Questions fréquentes</T>
             </h2>
           </div>
 

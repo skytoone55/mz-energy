@@ -6,6 +6,7 @@ import { ArrowRight, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CallbackModal } from '@/components/layout/CallbackModal'
 import { useState } from 'react'
+import { T } from '@/components/T'
 
 interface HeroSectionProps {
   title: string
@@ -54,18 +55,18 @@ export function HeroSection({
         )}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-            {title}
+            <T>{title}</T>
           </h1>
           {subtitle && (
             <p className="text-xl sm:text-2xl text-white/90 max-w-3xl mx-auto mb-8">
-              {subtitle}
+              <T>{subtitle}</T>
             </p>
           )}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {primaryCTA && (
               <Link href={primaryCTA.href}>
                 <Button size="lg" className="bg-solar-gradient hover:opacity-90 text-white text-lg px-8 py-7">
-                  {primaryCTA.text}
+                  <T>{primaryCTA.text}</T>
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
@@ -85,7 +86,7 @@ export function HeroSection({
                     }
                     onClick={() => setCallbackOpen(true)}
                   >
-                    {secondaryCTA.text}
+                    <T>{secondaryCTA.text}</T>
                   </Button>
                 ) : (
                   <Link href={secondaryCTA.href || '#'}>
@@ -100,7 +101,7 @@ export function HeroSection({
                           : 'bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 text-lg px-8 py-7 cursor-pointer'
                       }
                     >
-                      {secondaryCTA.text}
+                      <T>{secondaryCTA.text}</T>
                     </Button>
                   </Link>
                 )}

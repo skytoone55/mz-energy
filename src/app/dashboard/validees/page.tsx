@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/client'
+import { T } from '@/components/T'
 
 interface Lead {
   prenom: string
@@ -76,41 +77,41 @@ export default function ValideesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Simulations validées</h1>
+          <h1 className="text-3xl font-bold"><T>Simulations validées</T></h1>
           <p className="text-muted-foreground mt-1">
-            Simulations marquées comme "Client signé"
+            <T>Simulations marquées comme "Client signé"</T>
           </p>
         </div>
         <Link href="/dashboard/simulation/nouvelle">
           <Button className="bg-solar-gradient hover:opacity-90 text-white">
-            Nouvelle simulation
+            <T>Nouvelle simulation</T>
           </Button>
         </Link>
       </div>
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 rtl:left-auto rtl:right-3" />
         <Input
           placeholder="Rechercher une simulation..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="pl-10"
+          className="pl-10 rtl:pl-0 rtl:pr-10"
         />
       </div>
 
       {/* Simulations list */}
       {loading ? (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">Chargement...</p>
+          <p className="text-muted-foreground"><T>Chargement...</T></p>
         </div>
       ) : simulations.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
             <CheckCircle2 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground mb-2">Aucune simulation validée</p>
+            <p className="text-muted-foreground mb-2"><T>Aucune simulation validée</T></p>
             <p className="text-sm text-muted-foreground">
-              {search ? 'Essayez une autre recherche' : 'Les simulations validées apparaîtront ici'}
+              {search ? <T>Essayez une autre recherche</T> : <T>Les simulations validées apparaîtront ici</T>}
             </p>
           </CardContent>
         </Card>
@@ -126,7 +127,7 @@ export default function ValideesPage() {
                         <h3 className="font-semibold text-lg">{sim.nom_projet}</h3>
                         <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-700 flex items-center gap-1">
                           <CheckCircle2 className="w-3 h-3" />
-                          Validée
+                          <T>Validée</T>
                         </span>
                       </div>
                       
@@ -135,7 +136,7 @@ export default function ValideesPage() {
                         <div className="mb-4 p-3 bg-muted/50 rounded-lg">
                           <div className="flex items-center gap-2 mb-2">
                             <User className="w-4 h-4 text-muted-foreground" />
-                            <span className="text-sm font-medium text-muted-foreground">Contact</span>
+                            <span className="text-sm font-medium text-muted-foreground"><T>Contact</T></span>
                           </div>
                           <div className="flex items-center gap-4 text-sm">
                             <span className="font-medium">
@@ -159,21 +160,21 @@ export default function ValideesPage() {
                       
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
-                          <p className="text-sm text-muted-foreground">Consommation</p>
+                          <p className="text-sm text-muted-foreground"><T>Consommation</T></p>
                           <p className="font-medium">{sim.conso_annuelle.toLocaleString()} kWh/an</p>
                         </div>
                         <div>
-                          <p className="text-sm text-muted-foreground">Surface</p>
+                          <p className="text-sm text-muted-foreground"><T>Surface</T></p>
                           <p className="font-medium">{sim.surface_toit} m²</p>
                         </div>
                         <div>
-                          <p className="text-sm text-muted-foreground">Créée le</p>
+                          <p className="text-sm text-muted-foreground"><T>Créée le</T></p>
                           <p className="font-medium">
                             {new Date(sim.created_at).toLocaleDateString('fr-FR')}
                           </p>
                         </div>
                         <div>
-                          <p className="text-sm text-muted-foreground">Validée le</p>
+                          <p className="text-sm text-muted-foreground"><T>Validée le</T></p>
                           <p className="font-medium">
                             {new Date(sim.validated_at).toLocaleDateString('fr-FR')}
                           </p>

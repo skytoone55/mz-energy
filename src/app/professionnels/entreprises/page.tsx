@@ -1,4 +1,5 @@
-import { Metadata } from 'next'
+'use client'
+
 import Image from 'next/image'
 import { 
   PiggyBank, Lock, Leaf, Receipt, Zap, TrendingUp,
@@ -8,11 +9,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { CTASection } from '@/components/sections/CTASection'
 import { TestimonialCard } from '@/components/sections/TestimonialCard'
-
-export const metadata: Metadata = {
-  title: 'Solaire Entreprises | MZ Energy Israël',
-  description: 'Installation solaire pour bureaux, commerces, entrepôts. Réduisez vos charges d\'exploitation. Étude gratuite.',
-}
+import { T } from '@/components/T'
 
 export default function EntreprisesPage() {
   return (
@@ -33,7 +30,7 @@ export default function EntreprisesPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Les avantages du solaire pour votre entreprise
+              <T>Les avantages du solaire pour votre entreprise</T>
             </h2>
           </div>
 
@@ -75,8 +72,8 @@ export default function EntreprisesPage() {
                   <div className="w-12 h-12 rounded-xl bg-solar-gradient flex items-center justify-center">
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.texte}</p>
+                  <h3 className="text-lg font-semibold"><T>{item.title}</T></h3>
+                  <p className="text-sm text-muted-foreground"><T>{item.texte}</T></p>
                 </CardContent>
               </Card>
             ))}
@@ -89,7 +86,7 @@ export default function EntreprisesPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Nous équipons tous types de locaux professionnels
+              <T>Nous équipons tous types de locaux professionnels</T>
             </h2>
           </div>
 
@@ -116,8 +113,8 @@ export default function EntreprisesPage() {
                       <item.icon className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold">{item.type}</h3>
-                      <p className="text-sm text-muted-foreground">{item.description}</p>
+                      <h3 className="font-semibold"><T>{item.type}</T></h3>
+                      <p className="text-sm text-muted-foreground"><T>{item.description}</T></p>
                     </div>
                   </CardContent>
                 </Card>
@@ -132,7 +129,7 @@ export default function EntreprisesPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Un accompagnement de A à Z
+              <T>Un accompagnement de A à Z</T>
             </h2>
           </div>
 
@@ -164,8 +161,8 @@ export default function EntreprisesPage() {
                   {item.step}
                 </div>
                 <div className="relative pt-8 pl-4">
-                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
+                  <h3 className="text-xl font-semibold mb-2"><T>{item.title}</T></h3>
+                  <p className="text-muted-foreground"><T>{item.description}</T></p>
                 </div>
               </div>
             ))}
@@ -187,7 +184,7 @@ export default function EntreprisesPage() {
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-6">
-                Faites le bon choix pour votre entreprise
+                <T>Faites le bon choix pour votre entreprise</T>
               </h2>
               <TestimonialCard
                 quote="L'installation solaire sur notre entrepôt nous fait économiser 45 000 ₪ par an. L'investissement sera rentabilisé en moins de 5 ans."

@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation'
 import { Sun, Menu, X, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import LanguageSelector from '@/components/LanguageSelector'
+import { T } from '@/components/T'
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -36,7 +38,7 @@ export function Header() {
                 isActive('/') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
               )}
             >
-              Accueil
+              <T>Accueil</T>
             </Link>
             <Link
               href="/particuliers"
@@ -45,7 +47,7 @@ export function Header() {
                 isActive('/particuliers') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
               )}
             >
-              Particuliers
+              <T>Particuliers</T>
             </Link>
 
             {/* Professionnels Dropdown */}
@@ -60,7 +62,7 @@ export function Header() {
                   pathname.startsWith('/professionnels') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
                 )}
               >
-                Professionnels
+                <T>Professionnels</T>
                 <ChevronDown className="w-4 h-4" />
               </button>
               {professionnelsOpen && (
@@ -73,14 +75,14 @@ export function Header() {
                       className="block px-4 py-2 text-sm hover:bg-secondary transition-colors cursor-pointer"
                       onClick={() => setProfessionnelsOpen(false)}
                     >
-                      Entreprises
+                      <T>Entreprises</T>
                     </Link>
                     <Link
                       href="/professionnels/investisseurs"
                       className="block px-4 py-2 text-sm hover:bg-secondary transition-colors cursor-pointer"
                       onClick={() => setProfessionnelsOpen(false)}
                     >
-                      Investisseurs
+                      <T>Investisseurs</T>
                     </Link>
                   </div>
                 </>
@@ -99,7 +101,7 @@ export function Header() {
                   pathname.startsWith('/a-propos') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
                 )}
               >
-                À propos
+                <T>À propos</T>
                 <ChevronDown className="w-4 h-4" />
               </button>
               {aproposOpen && (
@@ -112,14 +114,14 @@ export function Header() {
                       className="block px-4 py-2 text-sm hover:bg-secondary transition-colors cursor-pointer"
                       onClick={() => setAproposOpen(false)}
                     >
-                      Notre histoire
+                      <T>Notre histoire</T>
                     </Link>
                     <Link
                       href="/a-propos/carrieres"
                       className="block px-4 py-2 text-sm hover:bg-secondary transition-colors cursor-pointer"
                       onClick={() => setAproposOpen(false)}
                     >
-                      Carrières
+                      <T>Carrières</T>
                     </Link>
                   </div>
                 </>
@@ -133,20 +135,22 @@ export function Header() {
                 isActive('/contact') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
               )}
             >
-              Contact
+              <T>Contact</T>
             </Link>
 
             <Link href="/login">
               <Button size="default" className="bg-green-600 hover:bg-green-700 text-white px-6">
-                Connexion
+                <T>Connexion</T>
               </Button>
             </Link>
 
             <Link href="/simulation">
               <Button size="default" className="bg-solar-gradient hover:opacity-90 text-white px-6">
-                Simuler
+                <T>Simuler</T>
               </Button>
             </Link>
+            
+            <LanguageSelector />
           </nav>
 
           {/* Mobile Menu Button */}
@@ -168,50 +172,50 @@ export function Header() {
               className="block px-3 py-2 rounded-lg hover:bg-secondary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Accueil
+              <T>Accueil</T>
             </Link>
             <Link
               href="/particuliers"
               className="block px-3 py-2 rounded-lg hover:bg-secondary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Particuliers
+              <T>Particuliers</T>
             </Link>
             <div className="px-3 py-2">
-              <div className="font-medium mb-2">Professionnels</div>
+              <div className="font-medium mb-2"><T>Professionnels</T></div>
               <div className="pl-4 space-y-1">
                 <Link
                   href="/professionnels/entreprises"
                   className="block px-3 py-2 rounded-lg hover:bg-secondary transition-colors text-sm"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Entreprises
+                  <T>Entreprises</T>
                 </Link>
                 <Link
                   href="/professionnels/investisseurs"
                   className="block px-3 py-2 rounded-lg hover:bg-secondary transition-colors text-sm"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Investisseurs
+                  <T>Investisseurs</T>
                 </Link>
               </div>
             </div>
             <div className="px-3 py-2">
-              <div className="font-medium mb-2">À propos</div>
+              <div className="font-medium mb-2"><T>À propos</T></div>
               <div className="pl-4 space-y-1">
                 <Link
                   href="/a-propos"
                   className="block px-3 py-2 rounded-lg hover:bg-secondary transition-colors text-sm"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Notre histoire
+                  <T>Notre histoire</T>
                 </Link>
                 <Link
                   href="/a-propos/carrieres"
                   className="block px-3 py-2 rounded-lg hover:bg-secondary transition-colors text-sm"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Carrières
+                  <T>Carrières</T>
                 </Link>
               </div>
             </div>
@@ -220,18 +224,22 @@ export function Header() {
               className="block px-3 py-2 rounded-lg hover:bg-secondary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Contact
+              <T>Contact</T>
             </Link>
             <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
               <Button className="w-full bg-green-600 hover:bg-green-700 text-white mt-2">
-                Connexion
+                <T>Connexion</T>
               </Button>
             </Link>
             <Link href="/simulation" onClick={() => setMobileMenuOpen(false)}>
               <Button className="w-full bg-solar-gradient hover:opacity-90 text-white mt-2">
-                Simuler
+                <T>Simuler</T>
               </Button>
             </Link>
+            
+            <div className="px-3 py-2 mt-2">
+              <LanguageSelector />
+            </div>
           </nav>
         </div>
       )}

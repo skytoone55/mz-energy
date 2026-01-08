@@ -1,4 +1,5 @@
-import { Metadata } from 'next'
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { 
@@ -13,11 +14,7 @@ import { Badge } from '@/components/ui/badge'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { CTASection } from '@/components/sections/CTASection'
 import { PartnersSection } from '@/components/sections/PartnersSection'
-
-export const metadata: Metadata = {
-  title: 'MZ Energy | Solutions Solaires en Israël',
-  description: 'Solutions photovoltaïques clé en main en Israël. Produisez, stockez et revendez votre énergie solaire. Simulation gratuite.',
-}
+import { T } from '@/components/T'
 
 export default function HomePage() {
   return (
@@ -44,10 +41,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Un écosystème solaire complet
+              <T>Un écosystème solaire complet</T>
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Tout ce qu&apos;il faut pour maîtriser votre énergie
+              <T>Tout ce qu&apos;il faut pour maîtriser votre énergie</T>
             </p>
           </div>
 
@@ -83,12 +80,12 @@ export default function HomePage() {
                     </div>
                     {item.badge && (
                       <Badge variant="secondary" className="text-xs">
-                        {item.badge}
+                        <T>{item.badge}</T>
                       </Badge>
                     )}
                   </div>
-                  <h3 className="text-lg font-semibold">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.description}</p>
+                  <h3 className="text-lg font-semibold"><T>{item.title}</T></h3>
+                  <p className="text-sm text-muted-foreground"><T>{item.description}</T></p>
                 </CardContent>
               </Card>
             ))}
@@ -115,10 +112,10 @@ export default function HomePage() {
             </div>
             <div className="space-y-6">
               <h2 className="text-3xl sm:text-4xl font-bold">
-                Votre installation dans votre poche
+                <T>Votre installation dans votre poche</T>
               </h2>
               <p className="text-lg text-muted-foreground">
-                L&apos;application MZ Energy vous offre une visibilité complète sur votre système solaire
+                <T>L&apos;application MZ Energy vous offre une visibilité complète sur votre système solaire</T>
               </p>
               <ul className="space-y-3">
                 {[
@@ -133,12 +130,12 @@ export default function HomePage() {
                     <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
                       <span className="text-green-600 text-sm">✓</span>
                     </div>
-                    <span>{item}</span>
+                    <span><T>{item}</T></span>
                   </li>
                 ))}
               </ul>
               <blockquote className="pl-4 border-l-4 border-solar text-lg italic text-muted-foreground">
-                &quot;Vous savez exactement ce que vous produisez, ce que vous consommez, et ce que vous économisez.&quot;
+                <T>&quot;Vous savez exactement ce que vous produisez, ce que vous consommez, et ce que vous économisez.&quot;</T>
               </blockquote>
             </div>
           </div>
@@ -150,10 +147,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Pourquoi passer au solaire en Israël ?
+              <T>Pourquoi passer au solaire en Israël ?</T>
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Des conditions idéales pour un investissement énergétique intelligent
+              <T>Des conditions idéales pour un investissement énergétique intelligent</T>
             </p>
           </div>
 
@@ -191,7 +188,7 @@ export default function HomePage() {
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
                   <div className="text-2xl font-bold">{item.chiffre}</div>
-                  <p className="text-sm text-muted-foreground">{item.texte}</p>
+                  <p className="text-sm text-muted-foreground"><T>{item.texte}</T></p>
                 </CardContent>
               </Card>
             ))}
@@ -199,7 +196,7 @@ export default function HomePage() {
 
           <div className="text-center">
             <p className="text-xl font-semibold text-foreground">
-              Le solaire n&apos;est plus une option, c&apos;est un investissement stratégique.
+              <T>Le solaire n&apos;est plus une option, c&apos;est un investissement stratégique.</T>
             </p>
           </div>
         </div>
@@ -210,7 +207,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Des solutions adaptées à vos besoins
+              <T>Des solutions adaptées à vos besoins</T>
             </h2>
           </div>
 
@@ -230,17 +227,17 @@ export default function HomePage() {
                   <div className="w-10 h-10 rounded-lg bg-solar-gradient flex items-center justify-center">
                     <Home className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold">Particuliers</h3>
+                  <h3 className="text-xl font-semibold"><T>Particuliers</T></h3>
                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>• Réduisez votre facture d&apos;électricité</li>
-                  <li>• Gagnez en indépendance énergétique</li>
-                  <li>• Protégez-vous des coupures de courant</li>
-                  <li>• Générez des revenus passifs</li>
+                  <li>• <T>Réduisez votre facture d&apos;électricité</T></li>
+                  <li>• <T>Gagnez en indépendance énergétique</T></li>
+                  <li>• <T>Protégez-vous des coupures de courant</T></li>
+                  <li>• <T>Générez des revenus passifs</T></li>
                 </ul>
                 <Link href="/particuliers">
                   <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    Découvrir nos solutions
+                    <T>Découvrir nos solutions</T>
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
@@ -262,17 +259,17 @@ export default function HomePage() {
                   <div className="w-10 h-10 rounded-lg bg-energy-gradient flex items-center justify-center">
                     <Building2 className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold">Professionnels</h3>
+                  <h3 className="text-xl font-semibold"><T>Professionnels</T></h3>
                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>• Réduisez vos charges d&apos;exploitation</li>
-                  <li>• Sécurisez vos coûts énergétiques</li>
-                  <li>• Valorisez vos surfaces de toiture</li>
-                  <li>• Bénéficiez d&apos;avantages fiscaux</li>
+                  <li>• <T>Réduisez vos charges d&apos;exploitation</T></li>
+                  <li>• <T>Sécurisez vos coûts énergétiques</T></li>
+                  <li>• <T>Valorisez vos surfaces de toiture</T></li>
+                  <li>• <T>Bénéficiez d&apos;avantages fiscaux</T></li>
                 </ul>
                 <Link href="/professionnels">
                   <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    Découvrir nos solutions
+                    <T>Découvrir nos solutions</T>
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
@@ -287,10 +284,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Pourquoi choisir MZ Energy ?
+              <T>Pourquoi choisir MZ Energy ?</T>
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Expérience, qualité et accompagnement local
+              <T>Expérience, qualité et accompagnement local</T>
             </p>
           </div>
 
@@ -332,8 +329,8 @@ export default function HomePage() {
                   <div className="w-12 h-12 rounded-xl bg-solar-gradient flex items-center justify-center">
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.texte}</p>
+                  <h3 className="text-lg font-semibold"><T>{item.title}</T></h3>
+                  <p className="text-sm text-muted-foreground"><T>{item.texte}</T></p>
                 </CardContent>
               </Card>
             ))}

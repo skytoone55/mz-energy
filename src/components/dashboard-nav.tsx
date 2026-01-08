@@ -21,6 +21,9 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
+import LanguageSelector from '@/components/LanguageSelector'
+import { T } from '@/components/T'
+import { useLocale } from '@/lib/translation/TranslationContext'
 
 interface UserProfile {
   id: string
@@ -40,6 +43,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
   const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const supabase = createClient()
+  const { direction } = useLocale()
 
   const isAdmin = user.role === 'admin'
 
@@ -77,13 +81,16 @@ export function DashboardNav({ user }: DashboardNavProps) {
             </div>
             <span className="font-bold">MZ Energy</span>
           </Link>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
+          <div className="flex items-center gap-2">
+            <LanguageSelector />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -91,7 +98,10 @@ export function DashboardNav({ user }: DashboardNavProps) {
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="fixed inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
-          <div className="fixed inset-y-0 left-0 w-72 bg-card p-6 pt-20">
+          <div className={cn(
+            "fixed inset-y-0 w-72 bg-card p-6 pt-20",
+            direction === 'rtl' ? 'right-0' : 'left-0'
+          )}>
             <nav className="space-y-2">
               {navigation.map((item) => (
                 <Link
@@ -106,7 +116,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                   )}
                 >
                   <item.icon className="w-5 h-5" />
-                  {item.name}
+                  <T>{item.name}</T>
                 </Link>
               ))}
               
@@ -114,7 +124,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                 <>
                   <div className="pt-4 pb-2">
                     <p className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                      Administration
+                      <T>Administration</T>
                     </p>
                   </div>
                   {adminNavigation.map((item) => (
@@ -130,7 +140,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                       )}
                     >
                       <item.icon className="w-5 h-5" />
-                      {item.name}
+                      <T>{item.name}</T>
                     </Link>
                   ))}
                 </>
@@ -149,7 +159,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                   onClick={handleLogout}
                 >
                   <LogOut className="w-4 h-4" />
-                  Se déconnecter
+                  <T>Se déconnecter</T>
                 </Button>
               </div>
             </nav>
@@ -158,16 +168,23 @@ export function DashboardNav({ user }: DashboardNavProps) {
       )}
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-card border-r px-6 pb-4">
-          {/* Logo */}
-          <div className="flex h-16 shrink-0 items-center">
+      <div className={cn(
+        "hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col",
+        direction === 'rtl' ? 'lg:right-0' : 'lg:left-0'
+      )}>
+        <div className={cn(
+          "flex grow flex-col gap-y-5 overflow-y-auto bg-card px-6 pb-4",
+          direction === 'rtl' ? 'border-l' : 'border-r'
+        )}>
+          {/* Logo and Language Selector */}
+          <div className="flex h-16 shrink-0 items-center justify-between">
             <Link href="/dashboard" className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-xl bg-solar-gradient flex items-center justify-center">
                 <Sun className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold">MZ Energy</span>
             </Link>
+            <LanguageSelector />
           </div>
 
           {/* User info */}
@@ -182,7 +199,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                 'inline-block mt-2 px-2 py-1 rounded-full text-xs font-medium',
                 isAdmin ? 'bg-energy/10 text-energy' : 'bg-solar/10 text-solar-foreground'
               )}>
-                {isAdmin ? 'Administrateur' : 'Commercial'}
+                {isAdmin ? <T>Administrateur</T> : <T>Commercial</T>}
               </span>
             </div>
             <Button
@@ -192,7 +209,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
               onClick={handleLogout}
             >
               <LogOut className="w-4 h-4" />
-              Se déconnecter
+              <T>Se déconnecter</T>
             </Button>
           </div>
 
@@ -213,7 +230,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                         )}
                       >
                         <item.icon className="w-5 h-5" />
-                        {item.name}
+                        <T>{item.name}</T>
                       </Link>
                     </li>
                   ))}
@@ -223,7 +240,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
               {isAdmin && (
                 <li>
                   <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                    Administration
+                    <T>Administration</T>
                   </div>
                   <ul role="list" className="-mx-2 space-y-1">
                     {adminNavigation.map((item) => (
@@ -238,7 +255,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                           )}
                         >
                           <item.icon className="w-5 h-5" />
-                          {item.name}
+                          <T>{item.name}</T>
                         </Link>
                       </li>
                     ))}

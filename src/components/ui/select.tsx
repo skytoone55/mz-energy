@@ -3,6 +3,8 @@
 import * as React from "react"
 import { ChevronDown, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { AutoTranslate } from "@/lib/translation/utils"
+import { useTranslatedText } from "@/lib/translation/useTranslation"
 
 interface SelectContextValue {
   value: string
@@ -75,7 +77,13 @@ SelectTrigger.displayName = "SelectTrigger"
 
 const SelectValue = ({ placeholder }: { placeholder?: string }) => {
   const { value } = useSelect()
-  return <span>{value || placeholder}</span>
+  const translatedPlaceholder = placeholder ? useTranslatedText(placeholder) : ''
+  // La valeur doit être traduite si c'est du texte, mais si c'est un ID, on ne traduit pas
+  // Pour l'instant, on traduit seulement le placeholder car la value est souvent un ID
+  if (value) {
+    return <span><AutoTranslate>{value}</AutoTranslate></span>
+  }
+  return <span>{translatedPlaceholder || ''}</span>
 }
 
 const SelectContent = React.forwardRef<
@@ -132,7 +140,7 @@ const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
         <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
           {isSelected && <Check className="h-4 w-4" />}
       </span>
-        {children}
+        <AutoTranslate>{children}</AutoTranslate>
       </div>
   )
 }

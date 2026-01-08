@@ -1,4 +1,5 @@
-import { Metadata } from 'next'
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { Building2, TrendingUp, Award, Clock, FileText, Headphones, ArrowRight } from 'lucide-react'
@@ -6,11 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { CTASection } from '@/components/sections/CTASection'
-
-export const metadata: Metadata = {
-  title: 'Solutions Solaires Professionnels | MZ Energy',
-  description: 'Équipez vos locaux professionnels en énergie solaire. Réduction des charges, avantages fiscaux. Devis gratuit.',
-}
+import { T } from '@/components/T'
 
 export default function ProfessionnelsPage() {
   return (
@@ -36,7 +33,7 @@ export default function ProfessionnelsPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Quel est votre projet ?
+              <T>Quel est votre projet ?</T>
             </h2>
           </div>
 
@@ -56,20 +53,20 @@ export default function ProfessionnelsPage() {
                   <div className="w-10 h-10 rounded-lg bg-solar-gradient flex items-center justify-center">
                     <Building2 className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold">Je veux équiper mes locaux</h3>
+                  <h3 className="text-xl font-semibold"><T>Je veux équiper mes locaux</T></h3>
                 </div>
                 <p className="text-muted-foreground">
-                  Vous êtes propriétaire ou locataire de locaux professionnels ? Installez des panneaux solaires pour réduire vos charges d&apos;exploitation et valoriser votre engagement environnemental.
+                  <T>Vous êtes propriétaire ou locataire de locaux professionnels ? Installez des panneaux solaires pour réduire vos charges d&apos;exploitation et valoriser votre engagement environnemental.</T>
                 </p>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>• Bureaux, commerces, entrepôts</li>
-                  <li>• Réduction des charges fixes</li>
-                  <li>• Image de marque responsable</li>
-                  <li>• Avantages fiscaux</li>
+                  <li><T>• Bureaux, commerces, entrepôts</T></li>
+                  <li><T>• Réduction des charges fixes</T></li>
+                  <li><T>• Image de marque responsable</T></li>
+                  <li><T>• Avantages fiscaux</T></li>
                 </ul>
                 <Link href="/professionnels/entreprises">
                   <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    Solutions Entreprises
+                    <T>Solutions Entreprises</T>
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
@@ -91,20 +88,20 @@ export default function ProfessionnelsPage() {
                   <div className="w-10 h-10 rounded-lg bg-energy-gradient flex items-center justify-center">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold">Je veux investir dans le solaire</h3>
+                  <h3 className="text-xl font-semibold"><T>Je veux investir dans le solaire</T></h3>
                 </div>
                 <p className="text-muted-foreground">
-                  Vous disposez de surfaces de toiture ou de terrain ? Transformez vos actifs en source de revenus récurrents grâce à l&apos;énergie solaire.
+                  <T>Vous disposez de surfaces de toiture ou de terrain ? Transformez vos actifs en source de revenus récurrents grâce à l&apos;énergie solaire.</T>
                 </p>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>• Location de toiture</li>
-                  <li>• Fermes solaires</li>
-                  <li>• Rendement stable 8-12%</li>
-                  <li>• Revenus sur 25 ans</li>
+                  <li><T>• Location de toiture</T></li>
+                  <li><T>• Fermes solaires</T></li>
+                  <li><T>• Rendement stable 8-12%</T></li>
+                  <li><T>• Revenus sur 25 ans</T></li>
                 </ul>
                 <Link href="/professionnels/investisseurs">
                   <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    Solutions Investisseurs
+                    <T>Solutions Investisseurs</T>
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
@@ -119,7 +116,7 @@ export default function ProfessionnelsPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Pourquoi choisir MZ Energy pour votre projet professionnel ?
+              <T>Pourquoi choisir MZ Energy pour votre projet professionnel ?</T>
             </h2>
           </div>
 
@@ -151,8 +148,8 @@ export default function ProfessionnelsPage() {
                   <div className="w-12 h-12 rounded-xl bg-solar-gradient flex items-center justify-center">
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.texte}</p>
+                  <h3 className="text-lg font-semibold"><T>{item.title}</T></h3>
+                  <p className="text-sm text-muted-foreground"><T>{item.texte}</T></p>
                 </CardContent>
               </Card>
             ))}
@@ -177,4 +174,3 @@ export default function ProfessionnelsPage() {
     </div>
   )
 }
-

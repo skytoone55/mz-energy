@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createClient } from '@/lib/supabase/client'
+import { T } from '@/components/T'
 
 interface SystemConfig {
   id: string
@@ -71,7 +72,7 @@ export default function AdminParametresPage() {
     }
   }
 
-  const configGroups = {
+  const configGroups: Record<string, string[]> = {
     'Tarifs électriques': ['prix_achat_kwh', 'prix_revente_kwh'],
     'Marges': ['marge_globale', 'tva'],
     'Installation': ['cout_installation_kwc', 'frais_fixes'],
@@ -104,10 +105,10 @@ export default function AdminParametresPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Settings className="w-8 h-8 text-primary" />
-            Paramètres système
+            <T>Paramètres système</T>
           </h1>
           <p className="text-muted-foreground mt-1">
-            Configuration globale des calculs et tarifs
+            <T>Configuration globale des calculs et tarifs</T>
           </p>
         </div>
         
@@ -119,12 +120,12 @@ export default function AdminParametresPage() {
           {saving ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Sauvegarde...
+              <T>Sauvegarde...</T>
             </>
           ) : (
             <>
               <Save className="w-4 h-4" />
-              Sauvegarder
+              <T>Sauvegarder</T>
             </>
           )}
         </Button>
@@ -145,7 +146,7 @@ export default function AdminParametresPage() {
         {Object.entries(configGroups).map(([groupName, keys]) => (
           <Card key={groupName}>
             <CardHeader>
-              <CardTitle>{groupName}</CardTitle>
+              <CardTitle><T>{groupName}</T></CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {keys.map(key => {

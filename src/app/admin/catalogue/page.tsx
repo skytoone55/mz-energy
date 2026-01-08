@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/dialog'
 import { createClient } from '@/lib/supabase/client'
 import { formatShekel } from '@/lib/pv-engine'
+import { T } from '@/components/T'
 
 interface Product {
   id: string
@@ -152,7 +153,7 @@ export default function AdminCataloguePage() {
     { key: 'onduleur_ongrid', label: 'Onduleurs On-Grid', icon: Zap },
     { key: 'onduleur_hybride', label: 'Onduleurs Hybrides', icon: Zap },
     { key: 'batterie', label: 'Batteries', icon: Battery },
-  ]
+  ] as const
 
   if (loading) {
     return (
@@ -168,10 +169,10 @@ export default function AdminCataloguePage() {
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-3">
           <Package className="w-8 h-8 text-primary" />
-          Catalogue produits
+          <T>Catalogue produits</T>
         </h1>
         <p className="text-muted-foreground mt-1">
-          {products.length} produit{products.length > 1 ? 's' : ''} au catalogue
+          {products.length} <T>produit{products.length > 1 ? 's' : ''} au catalogue</T>
         </p>
       </div>
 
@@ -184,10 +185,10 @@ export default function AdminCataloguePage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Icon className="w-5 h-5 text-solar" />
-                {label}
+                <T>{label}</T>
               </CardTitle>
               <CardDescription>
-                {typeProducts.length} produit{typeProducts.length > 1 ? 's' : ''}
+                {typeProducts.length} <T>produit{typeProducts.length > 1 ? 's' : ''}</T>
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -196,20 +197,20 @@ export default function AdminCataloguePage() {
                   <table className="w-full">
                     <thead>
                       <tr className="border-b">
-                        <th className="text-left p-3 font-medium text-muted-foreground">Référence</th>
+                        <th className="text-start p-3 font-medium text-muted-foreground"><T>Référence</T></th>
                         {key === 'panneau' && (
-                          <th className="text-left p-3 font-medium text-muted-foreground">Puissance</th>
+                          <th className="text-start p-3 font-medium text-muted-foreground"><T>Puissance</T></th>
                         )}
                         {(key === 'onduleur_ongrid' || key === 'onduleur_hybride') && (
-                          <th className="text-left p-3 font-medium text-muted-foreground">PV Max</th>
+                          <th className="text-start p-3 font-medium text-muted-foreground"><T>PV Max</T></th>
                         )}
                         {key === 'batterie' && (
-                          <th className="text-left p-3 font-medium text-muted-foreground">Capacité</th>
+                          <th className="text-start p-3 font-medium text-muted-foreground"><T>Capacité</T></th>
                         )}
-                        <th className="text-left p-3 font-medium text-muted-foreground">Prix revient</th>
-                        <th className="text-left p-3 font-medium text-muted-foreground">Statut</th>
-                        <th className="text-left p-3 font-medium text-muted-foreground">PDF</th>
-                        <th className="text-left p-3 font-medium text-muted-foreground">Actions</th>
+                        <th className="text-start p-3 font-medium text-muted-foreground"><T>Prix revient</T></th>
+                        <th className="text-start p-3 font-medium text-muted-foreground"><T>Statut</T></th>
+                        <th className="text-start p-3 font-medium text-muted-foreground">PDF</th>
+                        <th className="text-start p-3 font-medium text-muted-foreground"><T>Actions</T></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -230,17 +231,17 @@ export default function AdminCataloguePage() {
                           </td>
                           <td className="p-3">
                             <Badge variant={product.actif ? 'default' : 'secondary'}>
-                              {product.actif ? 'Actif' : 'Inactif'}
+                              {product.actif ? <T>Actif</T> : <T>Inactif</T>}
                             </Badge>
                           </td>
                           <td className="p-3">
                             {product.pdf_url ? (
                               <Badge variant="default" className="gap-1">
                                 <FileText className="w-3 h-3" />
-                                PDF disponible
+                                <T>PDF disponible</T>
                               </Badge>
                             ) : (
-                              <span className="text-sm text-muted-foreground">Aucun</span>
+                              <span className="text-sm text-muted-foreground"><T>Aucun</T></span>
                             )}
                           </td>
                           <td className="p-3">
@@ -254,7 +255,7 @@ export default function AdminCataloguePage() {
                                     className="gap-2"
                                   >
                                     <Download className="w-4 h-4" />
-                                    Télécharger
+                                    <T>Télécharger</T>
                                   </Button>
                                   <Button
                                     variant="ghost"
@@ -278,7 +279,7 @@ export default function AdminCataloguePage() {
                                 className="gap-2"
                               >
                                 <Upload className="w-4 h-4" />
-                                {product.pdf_url ? 'Modifier' : 'Ajouter'} PDF
+                                {product.pdf_url ? <T>Modifier PDF</T> : <T>Ajouter PDF</T>}
                               </Button>
                             </div>
                           </td>
@@ -289,7 +290,7 @@ export default function AdminCataloguePage() {
                 </div>
               ) : (
                 <p className="text-center py-8 text-muted-foreground">
-                  Aucun produit de ce type
+                  <T>Aucun produit de ce type</T>
                 </p>
               )}
             </CardContent>
@@ -308,16 +309,16 @@ export default function AdminCataloguePage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {products.find(p => p.id === pdfDialogOpen)?.pdf_url ? 'Modifier le PDF' : 'Ajouter un PDF'}
+              {products.find(p => p.id === pdfDialogOpen)?.pdf_url ? <T>Modifier le PDF</T> : <T>Ajouter un PDF</T>}
             </DialogTitle>
             <DialogDescription>
-              Pour le produit : {products.find(p => p.id === pdfDialogOpen)?.reference}
+              <T>Pour le produit</T> : {products.find(p => p.id === pdfDialogOpen)?.reference}
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Fichier PDF (max 10MB)</label>
+              <label className="text-sm font-medium"><T>Fichier PDF (max 10MB)</T></label>
               <input
                 type="file"
                 accept=".pdf,application/pdf"
@@ -331,7 +332,7 @@ export default function AdminCataloguePage() {
               />
               {selectedFile && (
                 <p className="text-sm text-muted-foreground">
-                  Fichier sélectionné : {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+                  <T>Fichier sélectionné</T> : {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
                 </p>
               )}
             </div>
@@ -353,7 +354,7 @@ export default function AdminCataloguePage() {
               }}
               disabled={uploading}
             >
-              Annuler
+              <T>Annuler</T>
             </Button>
             <Button
               onClick={() => pdfDialogOpen && handleUploadPdf(pdfDialogOpen)}
@@ -362,13 +363,13 @@ export default function AdminCataloguePage() {
             >
               {uploading ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Upload en cours...
+                  <Loader2 className="w-4 h-4 me-2 animate-spin" />
+                  <T>Upload en cours...</T>
                 </>
               ) : (
                 <>
-                  <Upload className="w-4 h-4 mr-2" />
-                  {products.find(p => p.id === pdfDialogOpen)?.pdf_url ? 'Remplacer' : 'Ajouter'}
+                  <Upload className="w-4 h-4 me-2" />
+                  {products.find(p => p.id === pdfDialogOpen)?.pdf_url ? <T>Remplacer</T> : <T>Ajouter</T>}
                 </>
               )}
             </Button>

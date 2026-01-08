@@ -1,9 +1,12 @@
+'use client'
+
 import Image from 'next/image'
+import { T } from '@/components/T'
 
 interface TestimonialCardProps {
-  quote: string
-  author: string
-  details?: string
+  quote: string | React.ReactNode
+  author: string | React.ReactNode
+  details?: string | React.ReactNode
   image?: string
 }
 
@@ -24,12 +27,12 @@ export function TestimonialCard({ quote, author, details, image }: TestimonialCa
         </div>
       )}
       <blockquote className="text-lg italic text-muted-foreground mb-6">
-        &quot;{quote}&quot;
+        &quot;{typeof quote === 'string' ? <T>{quote}</T> : quote}&quot;
       </blockquote>
       <div className="border-t pt-4">
-        <p className="font-semibold">{author}</p>
+        <p className="font-semibold">{typeof author === 'string' ? <T>{author}</T> : author}</p>
         {details && (
-          <p className="text-sm text-muted-foreground mt-1">{details}</p>
+          <p className="text-sm text-muted-foreground mt-1">{typeof details === 'string' ? <T>{details}</T> : details}</p>
         )}
       </div>
     </div>

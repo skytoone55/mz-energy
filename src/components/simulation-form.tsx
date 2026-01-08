@@ -21,6 +21,7 @@ import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ContactSelector } from '@/components/contact-selector'
+import { T } from '@/components/T'
 
 const simulationSchema = z.object({
   nomProjet: z.string().min(1, 'Le nom du projet est obligatoire'),
@@ -174,12 +175,12 @@ export function SimulationForm({
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold">
-          {mode === 'edit' ? 'Modifier la simulation' : 'Nouvelle simulation'}
+          {mode === 'edit' ? <T>Modifier la simulation</T> : <T>Nouvelle simulation</T>}
         </h1>
         <p className="text-muted-foreground mt-1">
           {mode === 'edit' 
-            ? 'Modifiez les paramètres de la simulation' 
-            : 'Créez une simulation photovoltaïque pour votre client'
+            ? <T>Modifiez les paramètres de la simulation</T>
+            : <T>Créez une simulation photovoltaïque pour votre client</T>
           }
         </p>
       </div>

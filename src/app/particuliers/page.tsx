@@ -1,4 +1,5 @@
-import { Metadata } from 'next'
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { 
@@ -12,11 +13,7 @@ import { HeroSection } from '@/components/sections/HeroSection'
 import { CTASection } from '@/components/sections/CTASection'
 import { TestimonialCard } from '@/components/sections/TestimonialCard'
 import { FAQ } from '@/components/ui/faq'
-
-export const metadata: Metadata = {
-  title: 'Panneaux Solaires Maison | MZ Energy Israël',
-  description: 'Installez des panneaux solaires chez vous. Économies jusqu\'à 70%, autonomie énergétique, revenus passifs. Simulation gratuite.',
-}
+import { T } from '@/components/T'
 
 export default function ParticuliersPage() {
   return (
@@ -41,7 +38,7 @@ export default function ParticuliersPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Pourquoi installer des panneaux solaires chez vous ?
+              <T>Pourquoi installer des panneaux solaires chez vous ?</T>
             </h2>
           </div>
 
@@ -83,8 +80,8 @@ export default function ParticuliersPage() {
                   <div className="w-12 h-12 rounded-xl bg-solar-gradient flex items-center justify-center">
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.texte}</p>
+                  <h3 className="text-lg font-semibold"><T>{item.title}</T></h3>
+                  <p className="text-sm text-muted-foreground"><T>{item.texte}</T></p>
                 </CardContent>
               </Card>
             ))}
@@ -97,7 +94,7 @@ export default function ParticuliersPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Deux solutions adaptées à vos besoins
+              <T>Deux solutions adaptées à vos besoins</T>
             </h2>
           </div>
 
@@ -117,43 +114,43 @@ export default function ParticuliersPage() {
                   <CardTitle>Solution On-Grid</CardTitle>
                   <Badge variant="secondary">Économique</Badge>
                 </div>
-                <CardDescription>L&apos;essentiel pour commencer à économiser</CardDescription>
+                <CardDescription><T>L&apos;essentiel pour commencer à économiser</T></CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Vos panneaux produisent de l&apos;électricité en journée. Vous consommez directement ce que vous produisez et réduisez votre facture. Le soir, le réseau prend le relais.
+                  <T>Vos panneaux produisent de l&apos;électricité en journée. Vous consommez directement ce que vous produisez et réduisez votre facture. Le soir, le réseau prend le relais.</T>
                 </p>
                 <div className="space-y-2">
-                  <h4 className="font-semibold">Inclus :</h4>
+                  <h4 className="font-semibold"><T>Inclus :</T></h4>
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Panneaux solaires premium MAZDA
+                      <T>Panneaux solaires premium MAZDA</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Onduleur DEYE haute performance
+                      <T>Onduleur DEYE haute performance</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Installation complète
+                      <T>Installation complète</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Monitoring en temps réel
+                      <T>Monitoring en temps réel</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Garantie 25 ans sur les panneaux
+                      <T>Garantie 25 ans sur les panneaux</T>
                     </li>
                   </ul>
                 </div>
                 <div className="pt-4 border-t">
-                  <h4 className="font-semibold mb-2">Idéal pour :</h4>
+                  <h4 className="font-semibold mb-2"><T>Idéal pour :</T></h4>
                   <ul className="space-y-1 text-sm text-muted-foreground">
-                    <li>• Maisons avec consommation principalement en journée</li>
-                    <li>• Budget maîtrisé</li>
-                    <li>• Première installation solaire</li>
+                    <li><T>• Maisons avec consommation principalement en journée</T></li>
+                    <li><T>• Budget maîtrisé</T></li>
+                    <li><T>• Première installation solaire</T></li>
                   </ul>
                 </div>
               </CardContent>
@@ -171,51 +168,51 @@ export default function ParticuliersPage() {
               </div>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>Solution Hybride</CardTitle>
-                  <Badge className="bg-energy text-white">Autonomie maximale</Badge>
+                  <CardTitle><T>Solution Hybride</T></CardTitle>
+                  <Badge className="bg-energy text-white"><T>Autonomie maximale</T></Badge>
                 </div>
-                <CardDescription>L&apos;indépendance énergétique complète</CardDescription>
+                <CardDescription><T>L&apos;indépendance énergétique complète</T></CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Vos panneaux alimentent votre maison en journée. Le surplus est stocké dans votre batterie pour le soir et la nuit. Vous êtes autonome 24h/24, même en cas de coupure réseau.
+                  <T>Vos panneaux alimentent votre maison en journée. Le surplus est stocké dans votre batterie pour le soir et la nuit. Vous êtes autonome 24h/24, même en cas de coupure réseau.</T>
                 </p>
                 <div className="space-y-2">
-                  <h4 className="font-semibold">Inclus :</h4>
+                  <h4 className="font-semibold"><T>Inclus :</T></h4>
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Panneaux solaires premium MAZDA
+                      <T>Panneaux solaires premium MAZDA</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Onduleur hybride DEYE
+                      <T>Onduleur hybride DEYE</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Batterie de stockage MAZDA
+                      <T>Batterie de stockage MAZDA</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Installation complète
+                      <T>Installation complète</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Monitoring avancé
+                      <T>Monitoring avancé</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Garantie 25 ans panneaux + 10 ans batterie
+                      <T>Garantie 25 ans panneaux + 10 ans batterie</T>
                     </li>
                   </ul>
                 </div>
                 <div className="pt-4 border-t">
-                  <h4 className="font-semibold mb-2">Idéal pour :</h4>
+                  <h4 className="font-semibold mb-2"><T>Idéal pour :</T></h4>
                   <ul className="space-y-1 text-sm text-muted-foreground">
-                    <li>• Maisons avec consommation jour et soir</li>
-                    <li>• Recherche d&apos;autonomie maximale</li>
-                    <li>• Protection contre les coupures de courant</li>
-                    <li>• Objectif d&apos;autoconsommation totale</li>
+                    <li><T>• Maisons avec consommation jour et soir</T></li>
+                    <li><T>• Recherche d&apos;autonomie maximale</T></li>
+                    <li><T>• Protection contre les coupures de courant</T></li>
+                    <li><T>• Objectif d&apos;autoconsommation totale</T></li>
                   </ul>
                 </div>
               </CardContent>
@@ -229,7 +226,7 @@ export default function ParticuliersPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Un projet clé en main en 4 étapes
+              <T>Un projet clé en main en 4 étapes</T>
             </h2>
           </div>
 
@@ -268,8 +265,8 @@ export default function ParticuliersPage() {
                   <div className="w-12 h-12 rounded-xl bg-solar-gradient flex items-center justify-center mb-4">
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
+                  <h3 className="text-xl font-semibold mb-2"><T>{item.title}</T></h3>
+                  <p className="text-muted-foreground"><T>{item.description}</T></p>
                 </div>
               </div>
             ))}
@@ -294,7 +291,7 @@ export default function ParticuliersPage() {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Questions fréquentes
+              <T>Questions fréquentes</T>
             </h2>
           </div>
 

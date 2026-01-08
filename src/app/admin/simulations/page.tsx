@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { formatShekel, formatNumber } from '@/lib/pv-engine'
 import { SimulationsFilters } from '@/components/simulations-filters'
+import { T } from '@/components/T'
 import {
   Dialog,
   DialogContent,
@@ -210,11 +211,11 @@ export default function AdminSimulationsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <FolderOpen className="w-8 h-8 text-primary" />
-            Toutes les simulations
+            <T>Toutes les simulations</T>
           </h1>
           <p className="text-muted-foreground mt-1">
-            {simulations.length} simulation{(simulations.length > 1 ? 's' : '')} au total
-            {selectedIds.size > 0 && ` • ${selectedIds.size} sélectionnée(s)`}
+            {simulations.length} <T>simulation{(simulations.length > 1 ? 's' : '')} au total</T>
+            {selectedIds.size > 0 && ` • ${selectedIds.size} `}{selectedIds.size > 0 && <T>sélectionnée(s)</T>}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -228,12 +229,12 @@ export default function AdminSimulationsPage() {
               {deleting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  Suppression...
+                  <T>Suppression...</T>
                 </>
               ) : (
                 <>
                   <Trash2 className="w-4 h-4" />
-                  Supprimer ({selectedIds.size})
+                  <T>Supprimer</T> ({selectedIds.size})
                 </>
               )}
             </Button>
@@ -261,7 +262,7 @@ export default function AdminSimulationsPage() {
             ) : (
               <Square className="w-4 h-4" />
             )}
-            {selectedIds.size === simulations.length ? 'Tout désélectionner' : 'Tout sélectionner'}
+            {selectedIds.size === simulations.length ? <T>Tout désélectionner</T> : <T>Tout sélectionner</T>}
           </Button>
         </div>
       )}
@@ -324,21 +325,21 @@ export default function AdminSimulationsPage() {
                     
                     <div className="flex items-center gap-4 flex-wrap sm:flex-nowrap">
                     <div className="text-right">
-                      <p className="text-sm text-muted-foreground">Économies</p>
+                      <p className="text-sm text-muted-foreground"><T>Économies</T></p>
                       <p className="text-lg font-bold text-energy">
                         {formatShekel(meilleur?.economiesAnnuelles || 0)}/an
                       </p>
                     </div>
                     {meilleur?.prixTTC && (
                       <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Prix TTC</p>
+                        <p className="text-sm text-muted-foreground"><T>Prix TTC</T></p>
                         <p className="text-lg font-bold text-solar">
                           {formatShekel(meilleur.prixTTC)}
                         </p>
                       </div>
                     )}
                     
-                    <div className="flex items-center gap-2 ml-4">
+                    <div className="flex items-center gap-2 ms-4">
                       {/* Bouton Assigner */}
                       <Button 
                         variant="outline" 
@@ -350,7 +351,7 @@ export default function AdminSimulationsPage() {
                         }}
                       >
                         <UserPlus className="w-4 h-4" />
-                        Assigner
+                        <T>Assigner</T>
                       </Button>
 
                       {/* Bouton Modifier */}
@@ -390,9 +391,9 @@ export default function AdminSimulationsPage() {
       <Dialog open={!!assignDialogOpen} onOpenChange={(open) => !open && setAssignDialogOpen(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Assigner la simulation</DialogTitle>
+            <DialogTitle><T>Assigner la simulation</T></DialogTitle>
             <DialogDescription>
-              Choisissez le commercial responsable de cette simulation.
+              <T>Choisissez le commercial responsable de cette simulation.</T>
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
@@ -408,13 +409,13 @@ export default function AdminSimulationsPage() {
             </Select>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setAssignDialogOpen(null)}>Annuler</Button>
+            <Button variant="outline" onClick={() => setAssignDialogOpen(null)}><T>Annuler</T></Button>
             <Button 
               onClick={() => assignDialogOpen && handleAssign(assignDialogOpen)}
               disabled={assigning || !selectedCommercial}
               className="bg-solar-gradient text-white"
             >
-              {assigning ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirmer'}
+              {assigning ? <Loader2 className="w-4 h-4 animate-spin" /> : <T>Confirmer</T>}
             </Button>
           </DialogFooter>
         </DialogContent>

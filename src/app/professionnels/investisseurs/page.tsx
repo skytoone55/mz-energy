@@ -1,15 +1,12 @@
-import { Metadata } from 'next'
+'use client'
+
 import Image from 'next/image'
 import { Building, Sun, Check, TrendingUp } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { CTASection } from '@/components/sections/CTASection'
 import { FAQ } from '@/components/ui/faq'
-
-export const metadata: Metadata = {
-  title: 'Investir dans le Solaire | MZ Energy',
-  description: 'Investissez dans l\'énergie solaire en Israël. Location de toiture, fermes solaires. Rendement 8-12%.',
-}
+import { T } from '@/components/T'
 
 export default function InvestisseursPage() {
   return (
@@ -30,7 +27,7 @@ export default function InvestisseursPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Deux modèles d'investissement
+              <T>Deux modèles d'investissement</T>
             </h2>
           </div>
 
@@ -41,34 +38,34 @@ export default function InvestisseursPage() {
                 <div className="w-16 h-16 rounded-xl bg-solar-gradient flex items-center justify-center">
                   <Building className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-semibold">Louez votre toiture</h3>
+                <h3 className="text-2xl font-semibold"><T>Louez votre toiture</T></h3>
                 <p className="text-muted-foreground">
-                  Vous possédez un bâtiment avec une grande toiture ? Louez-la à MZ Energy. Nous installons, exploitons et maintenons. Vous percevez un loyer garanti.
+                  <T>Vous possédez un bâtiment avec une grande toiture ? Louez-la à MZ Energy. Nous installons, exploitons et maintenons. Vous percevez un loyer garanti.</T>
                 </p>
                 <div className="space-y-2">
-                  <h4 className="font-semibold">Avantages :</h4>
+                  <h4 className="font-semibold"><T>Avantages :</T></h4>
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Aucun investissement de votre part
+                      <T>Aucun investissement de votre part</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Loyer garanti sur 20-25 ans
+                      <T>Loyer garanti sur 20-25 ans</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Toiture rénovée et entretenue
+                      <T>Toiture rénovée et entretenue</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Valorisation de votre patrimoine
+                      <T>Valorisation de votre patrimoine</T>
                     </li>
                   </ul>
                 </div>
                 <div className="pt-4 border-t">
                   <p className="text-sm text-muted-foreground">
-                    <strong>Rendement :</strong> Loyer fixe ou % de production
+                    <strong><T>Rendement :</T></strong> <T>Loyer fixe ou % de production</T>
                   </p>
                 </div>
               </CardContent>
@@ -80,34 +77,34 @@ export default function InvestisseursPage() {
                 <div className="w-16 h-16 rounded-xl bg-energy-gradient flex items-center justify-center">
                   <Sun className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-semibold">Développez une ferme solaire</h3>
+                <h3 className="text-2xl font-semibold"><T>Développez une ferme solaire</T></h3>
                 <p className="text-muted-foreground">
-                  Vous disposez de terrains ou souhaitez investir dans un projet solaire ? Nous développons des centrales photovoltaïques clé en main avec des rendements attractifs.
+                  <T>Vous disposez de terrains ou souhaitez investir dans un projet solaire ? Nous développons des centrales photovoltaïques clé en main avec des rendements attractifs.</T>
                 </p>
                 <div className="space-y-2">
-                  <h4 className="font-semibold">Avantages :</h4>
+                  <h4 className="font-semibold"><T>Avantages :</T></h4>
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Rendement 8-12% annuel
+                      <T>Rendement 8-12% annuel</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Revenus garantis sur 25 ans
+                      <T>Revenus garantis sur 25 ans</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Actif tangible et durable
+                      <T>Actif tangible et durable</T>
                     </li>
                     <li className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-green-600" />
-                      Impact environnemental positif
+                      <T>Impact environnemental positif</T>
                     </li>
                   </ul>
                 </div>
                 <div className="pt-4 border-t">
                   <p className="text-sm text-muted-foreground">
-                    <strong>Rendement :</strong> ROI 8-12% / an
+                    <strong><T>Rendement :</T></strong> <T>ROI 8-12% / an</T>
                   </p>
                 </div>
               </CardContent>
@@ -130,7 +127,7 @@ export default function InvestisseursPage() {
             </div>
             <div>
               <h2 className="text-3xl sm:text-4xl font-bold mb-8">
-                Pourquoi le solaire est un bon investissement
+                <T>Pourquoi le solaire est un bon investissement</T>
               </h2>
               <div className="grid grid-cols-2 gap-6">
                 {[
@@ -143,7 +140,7 @@ export default function InvestisseursPage() {
                   <Card key={index}>
                     <CardContent className="p-4 text-center">
                       <div className="text-2xl font-bold mb-1">{item.chiffre}</div>
-                      <div className="text-sm text-muted-foreground">{item.description}</div>
+                      <div className="text-sm text-muted-foreground"><T>{item.description}</T></div>
                     </CardContent>
                   </Card>
                 ))}
@@ -158,7 +155,7 @@ export default function InvestisseursPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Comment investir avec MZ Energy
+              <T>Comment investir avec MZ Energy</T>
             </h2>
           </div>
 
@@ -190,8 +187,8 @@ export default function InvestisseursPage() {
                   {item.step}
                 </div>
                 <div className="relative pt-8 pl-4">
-                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
+                  <h3 className="text-xl font-semibold mb-2"><T>{item.title}</T></h3>
+                  <p className="text-muted-foreground"><T>{item.description}</T></p>
                 </div>
               </div>
             ))}
@@ -204,7 +201,7 @@ export default function InvestisseursPage() {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Questions fréquentes
+              <T>Questions fréquentes</T>
             </h2>
           </div>
 

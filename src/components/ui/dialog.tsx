@@ -3,6 +3,7 @@
 import * as React from "react"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { AutoTranslate } from "@/lib/translation/utils"
 
 interface DialogContextValue {
   open: boolean
@@ -156,7 +157,7 @@ DialogFooter.displayName = "DialogFooter"
 const DialogTitle = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
+>(({ className, children, ...props }, ref) => (
   <h2
     ref={ref}
     className={cn(
@@ -164,19 +165,23 @@ const DialogTitle = React.forwardRef<
       className
     )}
     {...props}
-  />
+  >
+    <AutoTranslate>{children}</AutoTranslate>
+  </h2>
 ))
 DialogTitle.displayName = "DialogTitle"
 
 const DialogDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
+>(({ className, children, ...props }, ref) => (
   <p
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
     {...props}
-  />
+  >
+    <AutoTranslate>{children}</AutoTranslate>
+  </p>
 ))
 DialogDescription.displayName = "DialogDescription"
 

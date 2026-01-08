@@ -5,6 +5,7 @@ import { Users, Loader2, Trash2 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { LeadsTable } from '@/components/leads-table'
 import { Button } from '@/components/ui/button'
+import { T } from '@/components/T'
 
 interface Lead {
   id: string
@@ -111,11 +112,11 @@ export default function AdminLeadsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Users className="w-8 h-8 text-primary" />
-            Gestion des Leads
+            <T>Gestion des Leads</T>
           </h1>
           <p className="text-muted-foreground mt-1">
-            {leads.length} lead{(leads.length > 1 ? 's' : '')} au total
-            {selectedIds.size > 0 && ` • ${selectedIds.size} sélectionné(s)`}
+            {leads.length} lead{(leads.length > 1 ? 's' : '')} <T>au total</T>
+            {selectedIds.size > 0 && ` • ${selectedIds.size} `}{selectedIds.size > 0 && <T>sélectionné(s)</T>}
           </p>
         </div>
         {selectedIds.size > 0 && (
@@ -128,12 +129,12 @@ export default function AdminLeadsPage() {
             {deleting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Suppression...
+                <T>Suppression...</T>
               </>
             ) : (
               <>
                 <Trash2 className="w-4 h-4" />
-                Supprimer ({selectedIds.size})
+                <T>Supprimer</T> ({selectedIds.size})
               </>
             )}
           </Button>
@@ -145,7 +146,7 @@ export default function AdminLeadsPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total leads
+              <T>Total leads</T>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -155,7 +156,7 @@ export default function AdminLeadsPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Cette semaine
+              <T>Cette semaine</T>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -172,7 +173,7 @@ export default function AdminLeadsPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Ce mois
+              <T>Ce mois</T>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -188,7 +189,7 @@ export default function AdminLeadsPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Aujourd'hui
+              <T>Aujourd&apos;hui</T>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -206,8 +207,8 @@ export default function AdminLeadsPage() {
       {/* Leads Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Liste des leads</CardTitle>
-          <CardDescription>Tous les particuliers ayant effectué une simulation</CardDescription>
+          <CardTitle><T>Liste des leads</T></CardTitle>
+          <CardDescription><T>Tous les particuliers ayant effectué une simulation</T></CardDescription>
         </CardHeader>
         <CardContent>
           {leads && leads.length > 0 ? (
@@ -221,9 +222,9 @@ export default function AdminLeadsPage() {
           ) : (
             <div className="text-center py-12">
               <Users className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />
-              <h3 className="font-medium mb-2">Aucun lead</h3>
+              <h3 className="font-medium mb-2"><T>Aucun lead</T></h3>
               <p className="text-sm text-muted-foreground">
-                Les leads apparaîtront ici après les premières simulations
+                <T>Les leads apparaîtront ici après les premières simulations</T>
               </p>
             </div>
           )}

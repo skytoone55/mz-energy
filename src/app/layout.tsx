@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { PublicLayout } from "@/components/layout/PublicLayout";
+import { TranslationProvider } from "@/lib/translation/TranslationContext";
+import { HtmlLangInit } from "@/components/layout/HtmlLangInit";
+import { DEFAULT_LOCALE, getDirection } from "@/lib/translation/types";
 
 const outfit = Outfit({
   variable: "--font-geist-sans",
@@ -25,12 +28,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Utiliser DEFAULT_LOCALE pour le SSR initial
+  const defaultDirection = getDirection(DEFAULT_LOCALE);
+  
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang={DEFAULT_LOCALE} dir={defaultDirection} suppressHydrationWarning>
       <body className={`${outfit.variable} ${jetbrainsMono.variable} font-sans`}>
-        <PublicLayout>
-          {children}
-        </PublicLayout>
+        <HtmlLangInit />
+        <TranslationProvider>
+          <PublicLayout>
+            {children}
+          </PublicLayout>
+        </TranslationProvider>
       </body>
     </html>
   );

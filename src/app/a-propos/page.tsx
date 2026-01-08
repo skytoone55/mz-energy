@@ -1,4 +1,5 @@
-import { Metadata } from 'next'
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { Award, Users, Lightbulb, Heart, ArrowRight } from 'lucide-react'
@@ -7,11 +8,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { PartnersSection } from '@/components/sections/PartnersSection'
 import { CTASection } from '@/components/sections/CTASection'
-
-export const metadata: Metadata = {
-  title: 'À propos | MZ Energy',
-  description: 'Découvrez MZ Energy, votre partenaire solaire en Israël. Expertise, qualité, proximité.',
-}
+import { T } from '@/components/T'
 
 export default function AProposPage() {
   return (
@@ -20,10 +17,10 @@ export default function AProposPage() {
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-            À propos de MZ Energy
+            <T>À propos de MZ Energy</T>
           </h1>
           <p className="text-xl text-muted-foreground">
-            Votre partenaire pour la transition énergétique en Israël
+            <T>Votre partenaire pour la transition énergétique en Israël</T>
           </p>
         </div>
       </section>
@@ -32,17 +29,17 @@ export default function AProposPage() {
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl sm:text-4xl font-bold mb-8">
-            Notre histoire
+            <T>Notre histoire</T>
           </h2>
           <div className="space-y-4 text-muted-foreground">
             <p>
-              MZ Energy est née de la conviction que l&apos;énergie solaire doit être accessible à tous en Israël.
+              <T>MZ Energy est née de la conviction que l&apos;énergie solaire doit être accessible à tous en Israël.</T>
             </p>
             <p>
-              Forts d&apos;une expérience européenne dans l&apos;industrie photovoltaïque et d&apos;un réseau établi avec les meilleurs fabricants asiatiques, nous avons créé MZ Energy pour apporter des solutions solaires de qualité professionnelle sur le marché israélien.
+              <T>Forts d&apos;une expérience européenne dans l&apos;industrie photovoltaïque et d&apos;un réseau établi avec les meilleurs fabricants asiatiques, nous avons créé MZ Energy pour apporter des solutions solaires de qualité professionnelle sur le marché israélien.</T>
             </p>
             <p>
-              Aujourd&apos;hui, nous accompagnons particuliers et professionnels dans leur transition énergétique, avec une approche simple : des équipements premium, une installation soignée, et un suivi de qualité.
+              <T>Aujourd&apos;hui, nous accompagnons particuliers et professionnels dans leur transition énergétique, avec une approche simple : des équipements premium, une installation soignée, et un suivi de qualité.</T>
             </p>
           </div>
         </div>
@@ -62,10 +59,10 @@ export default function AProposPage() {
             </div>
             <div>
               <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-                Une équipe passionnée
+                <T>Une équipe passionnée</T>
               </h2>
               <p className="text-muted-foreground mb-8">
-                Notre équipe réunit des experts en énergie solaire, des techniciens certifiés et des conseillers dédiés. Unis par la même passion pour les énergies renouvelables, nous mettons notre expertise au service de vos projets.
+                <T>Notre équipe réunit des experts en énergie solaire, des techniciens certifiés et des conseillers dédiés. Unis par la même passion pour les énergies renouvelables, nous mettons notre expertise au service de vos projets.</T>
               </p>
               <div className="grid grid-cols-2 gap-6">
                 {[
@@ -77,7 +74,7 @@ export default function AProposPage() {
                   <Card key={index}>
                     <CardContent className="p-4 text-center">
                       <div className="text-2xl font-bold mb-1">{item.chiffre}</div>
-                      <div className="text-sm text-muted-foreground">{item.description}</div>
+                      <div className="text-sm text-muted-foreground"><T>{item.description}</T></div>
                     </CardContent>
                   </Card>
                 ))}
@@ -93,7 +90,7 @@ export default function AProposPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl sm:text-4xl font-bold mb-8">
-                Nos valeurs
+                <T>Nos valeurs</T>
               </h2>
               <div className="space-y-6">
                 {[
@@ -124,8 +121,8 @@ export default function AProposPage() {
                         <item.icon className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold mb-2">{item.valeur}</h3>
-                        <p className="text-sm text-muted-foreground">{item.description}</p>
+                        <h3 className="text-lg font-semibold mb-2"><T>{item.valeur}</T></h3>
+                        <p className="text-sm text-muted-foreground"><T>{item.description}</T></p>
                       </div>
                     </CardContent>
                   </Card>
@@ -151,14 +148,14 @@ export default function AProposPage() {
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-            Rejoignez l&apos;aventure MZ Energy
+            <T>Rejoignez l&apos;aventure MZ Energy</T>
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Nous recrutons des talents passionnés par les énergies renouvelables. Techniciens, commerciaux, ingénieurs : rejoignez une équipe dynamique et participez à la transition énergétique d&apos;Israël.
+            <T>Nous recrutons des talents passionnés par les énergies renouvelables. Techniciens, commerciaux, ingénieurs : rejoignez une équipe dynamique et participez à la transition énergétique d&apos;Israël.</T>
           </p>
           <Link href="/a-propos/carrieres">
             <Button size="lg" className="bg-solar-gradient hover:opacity-90 text-white">
-              Voir nos offres d&apos;emploi
+              <T>Voir nos offres d&apos;emploi</T>
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Link>
@@ -182,4 +179,3 @@ export default function AProposPage() {
     </div>
   )
 }
-

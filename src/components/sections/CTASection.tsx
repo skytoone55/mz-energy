@@ -6,6 +6,7 @@ import { Calculator, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CallbackModal } from '@/components/layout/CallbackModal'
 import { useState } from 'react'
+import { T } from '@/components/T'
 
 interface CTASectionProps {
   title: string
@@ -52,16 +53,16 @@ export function CTASection({
         )}
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            {title}
+            <T>{title}</T>
           </h2>
           <p className="text-lg text-gray-700 mb-8">
-            {text}
+            <T>{text}</T>
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href={primaryCTA.href}>
               <Button size="lg" className="bg-solar-gradient hover:opacity-90 text-white text-lg px-8 py-6">
                 <Calculator className="w-5 h-5 mr-2" />
-                {primaryCTA.text}
+                <T>{primaryCTA.text}</T>
               </Button>
             </Link>
             {secondaryCTA && (
@@ -80,7 +81,7 @@ export function CTASection({
                     onClick={() => setCallbackOpen(true)}
                   >
                     <Phone className="w-5 h-5 mr-2" />
-                    {secondaryCTA.text}
+                    <T>{secondaryCTA.text}</T>
                   </Button>
                 ) : (
                   <Link href={secondaryCTA.href || '#'}>
@@ -95,7 +96,7 @@ export function CTASection({
                           : 'bg-black/5 border-gray-900/20 text-gray-900 hover:bg-black/10 text-lg px-8 py-6 cursor-pointer'
                       }
                     >
-                      {secondaryCTA.text}
+                      <T>{secondaryCTA.text}</T>
                     </Button>
                   </Link>
                 )}

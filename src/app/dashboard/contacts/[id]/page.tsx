@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
+import { T } from '@/components/T'
 
 interface Contact {
   id: string
@@ -102,7 +103,7 @@ export default function ContactDetailPage() {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Chargement...</p>
+        <p className="text-muted-foreground"><T>Chargement...</T></p>
       </div>
     )
   }
@@ -110,10 +111,10 @@ export default function ContactDetailPage() {
   if (!contact) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Contact non trouvé</p>
+        <p className="text-muted-foreground"><T>Contact non trouvé</T></p>
         <Link href="/dashboard/contacts">
           <Button variant="outline" className="mt-4">
-            Retour aux contacts
+            <T>Retour aux contacts</T>
           </Button>
         </Link>
       </div>
@@ -127,7 +128,7 @@ export default function ContactDetailPage() {
         <Link href="/dashboard/contacts">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Retour
+            <T>Retour</T>
           </Button>
         </Link>
         <div className="flex gap-2">
@@ -137,22 +138,22 @@ export default function ContactDetailPage() {
                 setEditing(false)
                 setFormData(contact)
               }}>
-                Annuler
+                <T>Annuler</T>
               </Button>
               <Button onClick={handleSave} disabled={saving}>
                 <Save className="w-4 h-4 mr-2" />
-                {saving ? 'Enregistrement...' : 'Enregistrer'}
+                {saving ? <T>Enregistrement...</T> : <T>Enregistrer</T>}
               </Button>
             </>
           ) : (
             <>
               <Button variant="outline" onClick={() => setEditing(true)}>
                 <Edit2 className="w-4 h-4 mr-2" />
-                Modifier
+                <T>Modifier</T>
               </Button>
               <Button variant="destructive" onClick={handleDelete}>
                 <Trash2 className="w-4 h-4 mr-2" />
-                Supprimer
+                <T>Supprimer</T>
               </Button>
             </>
           )}
@@ -165,7 +166,7 @@ export default function ContactDetailPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Informations</CardTitle>
+                <CardTitle><T>Informations</T></CardTitle>
                 <div className="w-12 h-12 rounded-full bg-solar-gradient flex items-center justify-center text-white font-semibold text-lg">
                   {contact.prenom[0]}{contact.nom[0]}
                 </div>
@@ -218,7 +219,7 @@ export default function ContactDetailPage() {
                     <Input
                       value={formData?.ville || ''}
                       onChange={(e) => setFormData({ ...formData!, ville: e.target.value })}
-                      placeholder="Ville"
+                      placeholder="Ville" // Traduit automatiquement par Input
                     />
                   </div>
                   <div className="space-y-2">
@@ -227,7 +228,7 @@ export default function ContactDetailPage() {
                       value={formData?.notes || ''}
                       onChange={(e) => setFormData({ ...formData!, notes: e.target.value })}
                       rows={5}
-                      placeholder="Ajoutez des informations sur le client, ses préférences, remarques, etc..."
+                      placeholder="Ajoutez des informations sur le client, ses préférences, remarques, etc..." // Traduit automatiquement par Textarea
                       className="resize-y"
                     />
                   </div>
@@ -272,7 +273,7 @@ export default function ContactDetailPage() {
                     {contact.notes ? (
                       <p className="text-sm whitespace-pre-wrap bg-muted/50 p-3 rounded-md">{contact.notes}</p>
                     ) : (
-                      <p className="text-sm text-muted-foreground italic">Aucune note ajoutée</p>
+                      <p className="text-sm text-muted-foreground italic"><T>Aucune note ajoutée</T></p>
                     )}
                   </div>
                 </>
@@ -295,7 +296,7 @@ export default function ContactDetailPage() {
                 <Link href={`/dashboard/simulation/nouvelle?contactId=${contactId}`}>
                   <Button size="sm" className="bg-solar-gradient hover:opacity-90 text-white">
                     <Plus className="w-4 h-4 mr-2" />
-                    Nouvelle simulation
+                    <T>Nouvelle simulation</T>
                   </Button>
                 </Link>
               </div>
@@ -304,11 +305,11 @@ export default function ContactDetailPage() {
               {simulations.length === 0 ? (
                 <div className="text-center py-8">
                   <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground mb-4">Aucune simulation pour ce contact</p>
+                  <p className="text-muted-foreground mb-4"><T>Aucune simulation pour ce contact</T></p>
                   <Link href={`/dashboard/simulation/nouvelle?contactId=${contactId}`}>
                     <Button>
                       <Plus className="w-4 h-4 mr-2" />
-                      Créer une simulation
+                      <T>Créer une simulation</T>
                     </Button>
                   </Link>
                 </div>
@@ -323,26 +324,26 @@ export default function ContactDetailPage() {
                               <h4 className="font-medium">{sim.nom_projet}</h4>
                               {sim.statut === 'validee' && (
                                 <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-700">
-                                  Validée
+                                  <T>Validée</T>
                                 </span>
                               )}
                             </div>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                               <div>
-                                <p className="text-muted-foreground">Date de création</p>
+                                <p className="text-muted-foreground"><T>Date de création</T></p>
                                 <p className="font-medium">
                                   {new Date(sim.created_at).toLocaleDateString('fr-FR')}
                                 </p>
                               </div>
                               {sim.surface_toit && (
                                 <div>
-                                  <p className="text-muted-foreground">Surface toit</p>
+                                  <p className="text-muted-foreground"><T>Surface toit</T></p>
                                   <p className="font-medium">{sim.surface_toit} m²</p>
                                 </div>
                               )}
                               {sim.conso_annuelle && (
                                 <div>
-                                  <p className="text-muted-foreground">Consommation</p>
+                                  <p className="text-muted-foreground"><T>Consommation</T></p>
                                   <p className="font-medium">{sim.conso_annuelle.toLocaleString()} kWh/an</p>
                                 </div>
                               )}

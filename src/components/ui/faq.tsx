@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { T } from '@/components/T'
 
 interface FAQItem {
-  question: string
-  answer: string
+  question: string | React.ReactNode
+  answer: string | React.ReactNode
 }
 
 interface FAQProps {
@@ -24,7 +25,7 @@ export function FAQ({ items }: FAQProps) {
             className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-secondary/50 transition-colors"
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
           >
-            <span className="font-semibold">{item.question}</span>
+            <span className="font-semibold">{typeof item.question === 'string' ? <T>{item.question}</T> : item.question}</span>
             <ChevronDown
               className={cn(
                 'w-5 h-5 text-muted-foreground transition-transform',
@@ -34,7 +35,7 @@ export function FAQ({ items }: FAQProps) {
           </button>
           {openIndex === index && (
             <div className="px-6 py-4 bg-secondary/30 border-t">
-              <p className="text-muted-foreground">{item.answer}</p>
+              <p className="text-muted-foreground">{typeof item.answer === 'string' ? <T>{item.answer}</T> : item.answer}</p>
             </div>
           )}
         </div>

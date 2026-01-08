@@ -35,6 +35,7 @@ import {
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
+import { T } from '@/components/T'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -221,6 +222,8 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
     if (!editingLead || !editingLead.id) return
     
     if (!editingLead.prenom || !editingLead.nom || !editingLead.email) {
+      // Note: Error messages displayed to user should be translated, but setError expects string
+      // This will be handled when error is displayed, or we can use a translation hook here
       setError('Prénom, nom et email sont requis')
       return
     }
@@ -331,13 +334,13 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                   )}
                 </button>
               </th>
-              <th className="text-left p-4 font-medium text-muted-foreground">Contact</th>
-              <th className="text-left p-4 font-medium text-muted-foreground">Téléphone</th>
-              <th className="text-left p-4 font-medium text-muted-foreground">Ville</th>
-              <th className="text-left p-4 font-medium text-muted-foreground">Date</th>
-              <th className="text-left p-4 font-medium text-muted-foreground">Commercial</th>
-              <th className="text-left p-4 font-medium text-muted-foreground">Simulation</th>
-              <th className="text-left p-4 font-medium text-muted-foreground">Actions</th>
+              <th className="text-left p-4 font-medium text-muted-foreground"><T>Contact</T></th>
+              <th className="text-left p-4 font-medium text-muted-foreground"><T>Téléphone</T></th>
+              <th className="text-left p-4 font-medium text-muted-foreground"><T>Ville</T></th>
+              <th className="text-left p-4 font-medium text-muted-foreground"><T>Date</T></th>
+              <th className="text-left p-4 font-medium text-muted-foreground"><T>Commercial</T></th>
+              <th className="text-left p-4 font-medium text-muted-foreground"><T>Simulation</T></th>
+              <th className="text-left p-4 font-medium text-muted-foreground"><T>Actions</T></th>
             </tr>
           </thead>
           <tbody>
@@ -424,7 +427,7 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                       </Button>
                     </div>
                   ) : (
-                    <span className="text-sm text-muted-foreground">Aucune</span>
+                    <span className="text-sm text-muted-foreground"><T>Aucune</T></span>
                   )}
                 </td>
                 <td className="p-4">
@@ -443,14 +446,14 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                           className="gap-2"
                         >
                           <UserPlus className="w-4 h-4" />
-                          Assigner
+                          <T>Assigner</T>
                         </Button>
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
-                          <DialogTitle>Assigner le lead à un commercial</DialogTitle>
+                          <DialogTitle><T>Assigner le lead à un commercial</T></DialogTitle>
                           <DialogDescription>
-                            Sélectionnez le commercial qui sera responsable de ce lead
+                            <T>Sélectionnez le commercial qui sera responsable de ce lead</T>
                           </DialogDescription>
                         </DialogHeader>
                         
@@ -503,7 +506,7 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                             }}
                             disabled={transferring}
                           >
-                            Annuler
+                            <T>Annuler</T>
                           </Button>
                           <Button
                             onClick={() => handleTransfer(lead.id)}
@@ -513,10 +516,10 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                             {transferring ? (
                               <>
                                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                Attribution...
+                                <T>Attribution...</T>
                               </>
                             ) : (
-                              'Assigner'
+                              <T>Assigner</T>
                             )}
                           </Button>
                         </DialogFooter>
@@ -530,7 +533,7 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                       className="gap-2"
                     >
                       <Pencil className="w-4 h-4" />
-                      Modifier
+                      <T>Modifier</T>
                     </Button>
 
                     <Dialog open={editDialogOpen === lead.id} onOpenChange={(open) => {
@@ -542,9 +545,9 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                     }}>
                       <DialogContent>
                         <DialogHeader>
-                          <DialogTitle>Modifier le lead</DialogTitle>
+                          <DialogTitle><T>Modifier le lead</T></DialogTitle>
                           <DialogDescription>
-                            Modifiez les informations du lead
+                            <T>Modifiez les informations du lead</T>
                           </DialogDescription>
                         </DialogHeader>
                         
@@ -624,7 +627,7 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                             }}
                             disabled={saving}
                           >
-                            Annuler
+                            <T>Annuler</T>
                           </Button>
                           <Button
                             onClick={handleSaveEdit}
@@ -634,10 +637,10 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                             {saving ? (
                               <>
                                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                Enregistrement...
+                                <T>Enregistrement...</T>
                               </>
                             ) : (
-                              'Enregistrer'
+                              <T>Enregistrer</T>
                             )}
                           </Button>
                         </DialogFooter>
@@ -652,10 +655,10 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                     }}>
                       <DialogContent>
                         <DialogHeader>
-                          <DialogTitle>Supprimer le lead</DialogTitle>
+                          <DialogTitle><T>Supprimer le lead</T></DialogTitle>
                           <DialogDescription>
-                            Êtes-vous sûr de vouloir supprimer ce lead ? Cette action est irréversible.
-                            {lead.simulationId && ' La simulation associée sera également supprimée.'}
+                            <T>Êtes-vous sûr de vouloir supprimer ce lead ? Cette action est irréversible.</T>
+                            {lead.simulationId && <T> La simulation associée sera également supprimée.</T>}
                           </DialogDescription>
                         </DialogHeader>
                         
@@ -674,7 +677,7 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                             }}
                             disabled={deleting === lead.id}
                           >
-                            Annuler
+                            <T>Annuler</T>
                           </Button>
                           <Button
                             variant="destructive"
@@ -684,10 +687,10 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                             {deleting === lead.id ? (
                               <>
                                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                Suppression...
+                                <T>Suppression...</T>
                               </>
                             ) : (
-                              'Supprimer'
+                              <T>Supprimer</T>
                             )}
                           </Button>
                         </DialogFooter>
@@ -701,7 +704,7 @@ export function LeadsTable({ leads: initialLeads, commercials, onLoadLeads, sele
                       className="gap-2"
                     >
                       <Trash2 className="w-4 h-4" />
-                      Supprimer
+                      <T>Supprimer</T>
                     </Button>
                   </div>
                 </td>

@@ -1,6 +1,9 @@
+"use client"
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { AutoTranslate } from "@/lib/translation/utils"
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -28,23 +31,27 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+function CardTitle({ className, children, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-title"
       className={cn("leading-none font-semibold", className)}
       {...props}
-    />
+    >
+      <AutoTranslate>{children}</AutoTranslate>
+    </div>
   )
 }
 
-function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+function CardDescription({ className, children, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
       className={cn("text-muted-foreground text-sm", className)}
       {...props}
-    />
+    >
+      <AutoTranslate>{children}</AutoTranslate>
+    </div>
   )
 }
 

@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { createClient } from '@/lib/supabase/client'
+import { T } from '@/components/T'
 
 interface UserProfile {
   id: string
@@ -261,10 +262,10 @@ export default function AdminUsersPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Shield className="w-8 h-8 text-primary" />
-            Gestion des utilisateurs
+            <T>Gestion des utilisateurs</T>
           </h1>
           <p className="text-muted-foreground mt-1">
-            {filteredUsers.length} / {users.length} utilisateur{users.length > 1 ? 's' : ''} au total
+            {filteredUsers.length} / {users.length} <T>utilisateur{users.length > 1 ? 's' : ''} au total</T>
           </p>
         </div>
         
@@ -278,18 +279,18 @@ export default function AdminUsersPage() {
           <DialogTrigger asChild>
             <Button onClick={openCreateDialog} className="bg-solar-gradient hover:opacity-90 text-white gap-2">
               <UserPlus className="w-4 h-4" />
-              Nouvel utilisateur
+              <T>Nouvel utilisateur</T>
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {editingUser ? 'Modifier un utilisateur' : 'Créer un utilisateur'}
+                {editingUser ? <T>Modifier un utilisateur</T> : <T>Créer un utilisateur</T>}
               </DialogTitle>
               <DialogDescription>
                 {editingUser 
-                  ? 'Modifiez les informations de l\'utilisateur' 
-                  : 'Ajoutez un nouveau commercial ou administrateur'
+                  ? <T>Modifiez les informations de l&apos;utilisateur</T>
+                  : <T>Ajoutez un nouveau commercial ou administrateur</T>
                 }
               </DialogDescription>
             </DialogHeader>
@@ -297,7 +298,7 @@ export default function AdminUsersPage() {
             <div className="space-y-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="prenom">Prénom</Label>
+                  <Label htmlFor="prenom"><T>Prénom</T></Label>
                   <Input
                     id="prenom"
                     value={newUser.prenom}
@@ -305,7 +306,7 @@ export default function AdminUsersPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="nom">Nom</Label>
+                  <Label htmlFor="nom"><T>Nom</T></Label>
                   <Input
                     id="nom"
                     value={newUser.nom}
@@ -315,7 +316,7 @@ export default function AdminUsersPage() {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email"><T>Email</T></Label>
                 <Input
                   id="email"
                   type="email"
@@ -326,7 +327,7 @@ export default function AdminUsersPage() {
               
               {!editingUser && (
                 <div className="space-y-2">
-                  <Label htmlFor="password">Mot de passe</Label>
+                  <Label htmlFor="password"><T>Mot de passe</T></Label>
                   <Input
                     id="password"
                     type="password"
@@ -337,7 +338,7 @@ export default function AdminUsersPage() {
               )}
               
               <div className="space-y-2">
-                <Label>Rôle</Label>
+                <Label><T>Rôle</T></Label>
                 <Select
                   value={newUser.role}
                   onValueChange={(v) => setNewUser({ ...newUser, role: v as 'commercial' | 'admin' })}
@@ -346,14 +347,14 @@ export default function AdminUsersPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="commercial">Commercial</SelectItem>
-                    <SelectItem value="admin">Administrateur</SelectItem>
+                    <SelectItem value="commercial"><T>Commercial</T></SelectItem>
+                    <SelectItem value="admin"><T>Administrateur</T></SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="societe">Société (Régie)</Label>
+                <Label htmlFor="societe"><T>Société (Régie)</T></Label>
                 <Input
                   id="societe"
                   value={newUser.societe}
@@ -361,7 +362,7 @@ export default function AdminUsersPage() {
                   placeholder="Nom de la société (optionnel)"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Indiquez le nom de la société si le commercial travaille pour une régie
+                  <T>Indiquez le nom de la société si le commercial travaille pour une régie</T>
                 </p>
               </div>
 
@@ -374,7 +375,7 @@ export default function AdminUsersPage() {
             
             <DialogFooter>
               <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                Annuler
+                <T>Annuler</T>
               </Button>
               <Button 
                 onClick={saveUser} 
@@ -383,11 +384,11 @@ export default function AdminUsersPage() {
               >
                 {creating ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    {editingUser ? 'Enregistrement...' : 'Création...'}
+                    <Loader2 className="w-4 h-4 me-2 animate-spin" />
+                    {editingUser ? <T>Enregistrement...</T> : <T>Création...</T>}
                   </>
                 ) : (
-                  editingUser ? 'Enregistrer' : 'Créer'
+                  editingUser ? <T>Enregistrer</T> : <T>Créer</T>
                 )}
               </Button>
             </DialogFooter>
@@ -398,12 +399,12 @@ export default function AdminUsersPage() {
       {/* Users Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Liste des utilisateurs</CardTitle>
-          <CardDescription>Commerciaux et administrateurs du système</CardDescription>
+          <CardTitle><T>Liste des utilisateurs</T></CardTitle>
+          <CardDescription><T>Commerciaux et administrateurs du système</T></CardDescription>
         </CardHeader>
         <CardContent>
           <div className="mb-4">
-            <Label htmlFor="users-search">Recherche</Label>
+            <Label htmlFor="users-search"><T>Recherche</T></Label>
             <Input
               id="users-search"
               value={search}
@@ -418,11 +419,11 @@ export default function AdminUsersPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-4 font-medium text-muted-foreground">Utilisateur</th>
-                    <th className="text-left p-4 font-medium text-muted-foreground">Rôle</th>
-                    <th className="text-left p-4 font-medium text-muted-foreground">Société</th>
-                    <th className="text-left p-4 font-medium text-muted-foreground">Statut</th>
-                    <th className="text-left p-4 font-medium text-muted-foreground">Actions</th>
+                    <th className="text-start p-4 font-medium text-muted-foreground"><T>Utilisateur</T></th>
+                    <th className="text-start p-4 font-medium text-muted-foreground"><T>Rôle</T></th>
+                    <th className="text-start p-4 font-medium text-muted-foreground"><T>Société</T></th>
+                    <th className="text-start p-4 font-medium text-muted-foreground"><T>Statut</T></th>
+                    <th className="text-start p-4 font-medium text-muted-foreground"><T>Actions</T></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -439,7 +440,7 @@ export default function AdminUsersPage() {
                       </td>
                       <td className="p-4">
                         <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
-                          {user.role === 'admin' ? 'Administrateur' : 'Commercial'}
+                          {user.role === 'admin' ? <T>Administrateur</T> : <T>Commercial</T>}
                         </Badge>
                       </td>
                       <td className="p-4">
@@ -451,7 +452,7 @@ export default function AdminUsersPage() {
                       </td>
                       <td className="p-4">
                         <Badge variant={user.actif ? 'default' : 'destructive'}>
-                          {user.actif ? 'Actif' : 'Inactif'}
+                          {user.actif ? <T>Actif</T> : <T>Inactif</T>}
                         </Badge>
                       </td>
                       <td className="p-4">
@@ -495,9 +496,9 @@ export default function AdminUsersPage() {
           ) : (
             <div className="text-center py-12">
               <Shield className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />
-              <h3 className="font-medium mb-2">Aucun utilisateur</h3>
+              <h3 className="font-medium mb-2"><T>Aucun utilisateur</T></h3>
               <p className="text-sm text-muted-foreground">
-                Créez votre premier utilisateur
+                <T>Créez votre premier utilisateur</T>
               </p>
             </div>
           )}

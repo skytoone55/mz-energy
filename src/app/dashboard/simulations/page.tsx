@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { formatShekel, formatNumber } from '@/lib/pv-engine'
 import { SimulationsFilters } from '@/components/simulations-filters'
+import { T } from '@/components/T'
 
 interface SimulationResultats {
   scenarios: Array<{ economiesAnnuelles: number; id: string; prixTTC?: number }>
@@ -199,11 +200,11 @@ export default function SimulationsListPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">
-            {loading ? 'Chargement...' : (isAdmin ? 'Toutes les simulations' : 'Mes simulations')}
+            {loading ? <T>Chargement...</T> : (isAdmin ? <T>Toutes les simulations</T> : <T>Mes simulations</T>)}
           </h1>
           <p className="text-muted-foreground mt-1">
-            {simulations.length} simulation{(simulations.length > 1 ? 's' : '')} au total
-            {selectedIds.size > 0 && ` • ${selectedIds.size} sélectionnée(s)`}
+            {simulations.length} <T>simulation{(simulations.length > 1 ? 's' : '')} au total</T>
+            {selectedIds.size > 0 && ` • ${selectedIds.size} `}<T>sélectionnée(s)</T>
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -217,12 +218,12 @@ export default function SimulationsListPage() {
               {deleting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  Suppression...
+                  <T>Suppression...</T>
                 </>
               ) : (
                 <>
                   <Trash2 className="w-4 h-4" />
-                  Supprimer ({selectedIds.size})
+                  <T>Supprimer</T> ({selectedIds.size})
                 </>
               )}
             </Button>
@@ -230,7 +231,7 @@ export default function SimulationsListPage() {
           <Link href="/dashboard/simulation/nouvelle">
             <Button className="bg-solar-gradient hover:opacity-90 text-white gap-2">
               <Plus className="w-4 h-4" />
-              Nouvelle simulation
+              <T>Nouvelle simulation</T>
             </Button>
           </Link>
         </div>
@@ -263,7 +264,7 @@ export default function SimulationsListPage() {
             ) : (
               <Square className="w-4 h-4" />
             )}
-            {selectedIds.size === simulations.length ? 'Tout désélectionner' : 'Tout sélectionner'}
+            {selectedIds.size === simulations.length ? <T>Tout désélectionner</T> : <T>Tout sélectionner</T>}
           </Button>
         </div>
       )}
@@ -327,21 +328,21 @@ export default function SimulationsListPage() {
                     
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Économies</p>
+                        <p className="text-sm text-muted-foreground"><T>Économies</T></p>
                         <p className="text-lg font-bold text-energy">
                           {formatShekel(meilleur?.economiesAnnuelles || 0)}/an
                         </p>
                       </div>
                       {meilleur?.prixTTC && (
                         <div className="text-right">
-                          <p className="text-sm text-muted-foreground">Prix TTC</p>
+                          <p className="text-sm text-muted-foreground"><T>Prix TTC</T></p>
                           <p className="text-lg font-bold text-solar">
                             {formatShekel(meilleur.prixTTC)}
                           </p>
                         </div>
                       )}
                       <Badge variant="secondary" className="shrink-0">
-                        Scénario {resultats.meilleurScenario}
+                        <T>Scénario</T> {resultats.meilleurScenario}
                       </Badge>
                       <Link href={`/dashboard/simulation/${sim.id}/modifier`}>
                         <Button variant="ghost" size="icon" title="Modifier">
@@ -368,17 +369,17 @@ export default function SimulationsListPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-16">
             <FolderOpen className="w-16 h-16 text-muted-foreground/50 mb-4" />
-            <h3 className="text-xl font-medium mb-2">Aucune simulation</h3>
+            <h3 className="text-xl font-medium mb-2"><T>Aucune simulation</T></h3>
             <p className="text-muted-foreground text-center mb-6">
               {isAdmin && filters.commercialId || filters.search
-                ? 'Aucune simulation ne correspond aux filtres'
-                : 'Créez votre première simulation pour commencer'
+                ? <T>Aucune simulation ne correspond aux filtres</T>
+                : <T>Créez votre première simulation pour commencer</T>
               }
             </p>
             {(!isAdmin || (!filters.commercialId && !filters.search)) && (
               <Link href="/dashboard/simulation/nouvelle">
                 <Button className="bg-solar-gradient hover:opacity-90 text-white">
-                  Créer une simulation
+                  <T>Créer une simulation</T>
                 </Button>
               </Link>
             )}
