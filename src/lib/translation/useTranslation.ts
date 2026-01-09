@@ -64,10 +64,15 @@ export function useTranslation() {
 
 // Hook pour traduction synchrone avec état
 export function useTranslatedText(text: string): string {
-  const { locale } = useLocale();
+  const { locale, isLoading } = useLocale();
   const [translated, setTranslated] = useState(text);
 
   useEffect(() => {
+    // Attendre que la locale soit chargée depuis localStorage
+    if (isLoading) {
+      return;
+    }
+
     // Français = pas de traduction
     if (locale === 'fr') {
       setTranslated(text);
@@ -96,7 +101,7 @@ export function useTranslatedText(text: string): string {
         console.error('Translation error:', error);
         setTranslated(text);
       });
-  }, [text, locale]);
+  }, [text, locale, isLoading]);
 
   return translated;
 }
