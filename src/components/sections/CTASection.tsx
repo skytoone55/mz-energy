@@ -37,7 +37,7 @@ export function CTASection({
   return (
     <>
       <section
-        className="relative py-14 px-4 sm:px-6 lg:px-8"
+        className="relative py-10 px-4 sm:px-6 lg:px-8"
         style={
           backgroundImage
             ? {

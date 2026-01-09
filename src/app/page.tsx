@@ -37,9 +37,9 @@ export default function HomePage() {
       />
 
       {/* Section 2 - Les 4 Piliers */}
-      <section id="content" className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
+      <section id="content" className="py-10 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-11">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               <T>Un écosystème solaire complet</T>
             </h2>
@@ -94,7 +94,7 @@ export default function HomePage() {
       </section>
 
       {/* Section 3 - Monitoring */}
-      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-10 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative flex justify-center">
@@ -143,9 +143,9 @@ export default function HomePage() {
       </section>
 
       {/* Section 4 - Pourquoi le solaire en Israël */}
-      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-10 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-11">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               <T>Pourquoi passer au solaire en Israël ?</T>
             </h2>
@@ -203,9 +203,9 @@ export default function HomePage() {
       </section>
 
       {/* Section 5 - Nos Solutions */}
-      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-10 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-11">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               <T>Des solutions adaptées à vos besoins</T>
             </h2>
@@ -280,9 +280,9 @@ export default function HomePage() {
       </section>
 
       {/* Section 6 - Pourquoi MZ Energy */}
-      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-10 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-11">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               <T>Pourquoi choisir MZ Energy ?</T>
             </h2>

@@ -30,9 +30,9 @@ export default function CarrieresPage() {
       />
 
       {/* Section 2 - Pourquoi nous rejoindre */}
-      <section id="offres" className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
+      <section id="offres" className="py-10 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-11">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               Pourquoi rejoindre MZ Energy ?
             </h2>
@@ -86,7 +86,7 @@ export default function CarrieresPage() {
       </section>
 
       {/* Section 3 - Notre culture */}
-      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-10 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative h-96 rounded-xl overflow-hidden">
@@ -115,9 +115,9 @@ export default function CarrieresPage() {
       </section>
 
       {/* Section 4 - Nos métiers */}
-      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-card">
+      <section className="py-10 px-4 sm:px-6 lg:px-8 bg-card">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-11">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               Nos métiers
             </h2>
@@ -166,7 +166,7 @@ export default function CarrieresPage() {
       </section>
 
       {/* Section 5 - Offres d'emploi */}
-      <section className="py-14 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-10 px-4 sm:px-6 lg:px-8 bg-secondary/30">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">

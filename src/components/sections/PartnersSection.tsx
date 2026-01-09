@@ -7,7 +7,7 @@ interface PartnersSectionProps {
 export function PartnersSection({ backgroundImage }: PartnersSectionProps) {
   return (
     <section
-      className="py-14 px-4 sm:px-6 lg:px-8"
+      className="py-10 px-4 sm:px-6 lg:px-8"
       style={
         backgroundImage
           ? {
